@@ -179,4 +179,9 @@ label {
   border-radius: 25px;
   box-shadow: 1px 1px 2px 2px #6b6161;
 }
+span
+{
+  color:lightblue;
+  cursor:pointer;
+}
 </style>
