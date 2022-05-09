@@ -1,6 +1,6 @@
 <template>
   <div class="bloc-modale" v-if="revele">
-    <div class="overlay" v-on:click="toggleModale"></div>
+    <div class="overlay"></div>
     <div class="modale card">
       <div class="header-card" v-show="status == 1">
         <h1>Connexion</h1>
@@ -40,7 +40,7 @@
           </label>
           <label>
             Nom :
-            <input type="text" placeholder="Votre nom" v-model="lastName.value" v-on:change="checkInput" id="lastName">
+            <input type="text" id="lastName" placeholder="Votre nom" v-model="lastName.value" v-on:change="checkInput" >
             <p v-show="lastName.isValid==0"> Veuillez saisir votre nom</p>
           </label>
           <label>
@@ -61,7 +61,7 @@ export default {
   // props:['revele','toggleModale','actionVoulue'],
   methods: {
     toggleModale() {
-     // this.revele = !this.revele;
+      this.revele = !this.revele;
     },
     toggleStatus() {
       this.status = !this.status;
@@ -69,12 +69,13 @@ export default {
     checkInput(event){
       let element=null;
       let validator="";
-      let fieldName=event.srcElement.id;
+      
 
-        switch(fieldName){
+        switch(event.srcElement.id){
           case "email":
             element=this.email;
-            validator=new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}[a-z]{2,15}$/).test(element.value);
+            validator=new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}(fr)$/).test(element.value);
+               console.log(validator)
             break;
           case "pwd":
             element=this.pwd;
@@ -82,12 +83,16 @@ export default {
             break;
           case "firstName":
             element=this.firstName;
-            validator= ! new RegExp(/[0-9^\&\~\#\(\)\@\]\[\|\$\µ\!\§\;\\\/]/).test(element.value);// eslint-disable-line
+            //validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
+          validator=new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}[a-z]{2,15}$/).test(element.value);
+            console.log(validator)
             break;
           case "lastName":
             element=this.lastName;
-            validator= ! new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
-            console.log(validator)
+            //validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
+            validator=new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}[a-z]{2,15}$/).test(element.value);
+            //validator = !validator
+         
             break;
         }
 
@@ -99,6 +104,7 @@ export default {
          {
            element.isValid=true
          }
+        
   },
 
     sendInformationToDB()
