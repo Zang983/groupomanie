@@ -1,21 +1,15 @@
 <template>
-  <div class="navbar">
-
-      HELLO WORLD
-  </div>
+  <div class="navbar">HELLO WORLD</div>
 </template>
 <script>
 export default {
   name: "navBar",
 
-  methods: {
-},
+  methods: {},
   data() {
-    return { 
-        };
+    return {};
   },
-  beforeMount(){
-  }
+  beforeMount() {},
 };
 </script>
 <style scoped>
