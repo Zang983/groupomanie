@@ -138,11 +138,8 @@ export default {
           break;
         case "lastName":
           element = this.lastName;
-          //validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
-          validator = new RegExp(
-            /^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}[a-z]{2,15}$/
-          ).test(element.value);
-          //validator = !validator
+          validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
+          validator = !validator
 
           break;
       }
@@ -153,6 +150,7 @@ export default {
       if (element.value == "" || validator) {
         element.isValid = true;
       }
+      this.$forceUpdate();
     },
 
     sendInformationToDB() {},
@@ -211,6 +209,7 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index:2;
 }
 .overlay {
   background-color: black;
@@ -221,6 +220,7 @@ label {
   right: 0;
   width: 100%;
   height: 100%;
+
 }
 .modale {
   display: flex;
@@ -232,6 +232,7 @@ label {
   width: 50%;
   border-radius: 25px;
   box-shadow: 1px 1px 2px 2px #6b6161;
+  z-index:2;
 }
 span {
   color: lightblue;

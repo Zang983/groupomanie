@@ -1,48 +1,63 @@
+<!-- Sur les fonctions d'édition des messages : 
+- IL reste le cas d'un élément entièrement vide le comportement n'est pas celui voulu.
+- Il faut coder l'élément commentaire qui sera créer lorsqu'on appuie sur le bouton commentaire.
+- L'appuie sur le "+" près du mot commentaire devrait faire apparaître quelques commentaires avec tout en haut le champ pour notre propre commentaire.
+- Il faut coder les deux autres composants. Il s'agit dans les deux cas d'appels à la BDD, codé juste le template avec des fonctions injectant des données temporaires
+permettra d'avoir un visuel proche du rendu final.
+- Il restera à codé la partie "profil, paramètre, déconnexion"
+- Une fois ceci fait on rajoute les boutons d'administration (le bouton éditer ne sera pas disponible, le bouton supprimer ou "lock" le sera).
+- Les éléments lockés auront une bordure rouge dans la partie "mes messages"
+- On fini par l'api avec la BDD et tout sera ok il me semble, il faudra refaire un point à ce moment la et chasser les bugs.
+- Révision complète du CSS pour avoir quelque chose de plus jolis notamment au niveau du choix de couleur etc... -->
+
 <template>
-  <div class="messages_bloc">
-    <h2>Les messages sont ici :</h2>
-    <button style="margin-bottom: 3%" v-on:click="newPost()">Ecrire un nouveau post.</button>
-    <article class="user_post" v-if="this.newMessage.showIt==1">
+  <div class="posts_bloc">
+    <h2>Les posts sont ici :</h2>
+    <button style="margin-bottom: 3%" v-on:click="newPost()">
+      Ecrire un nouveau post.
+    </button>
+    <article class="user_post" v-if="this.newMessage.showIt == 1">
       <div class="header_post">
-        <div class="user_img--post">
-        </div>
-        <h4><input  v-model="newMessage.title"></h4>
-        <div class="action_post">
-        </div>
+        <div class="user_img--post"></div>
+        <h4><input v-model="newMessage.title" /></h4>
+        <div class="action_post"></div>
       </div>
       <p class="message_post">
-        <textarea v-model="newMessage.body">
-
-        </textarea>
+        <textarea v-model="newMessage.body"> </textarea>
       </p>
       <button v-on:click="post()">Envoyer</button>
     </article>
 
-    <article class="user_post" v-for="message in messages" :key="message.messages">
+    <article class="user_post" v-for="message in posts" :key="message.posts">
       <div class="header_post">
         <div class="user_img--post" :key="message.author">
-          {{ messages.author }}
+          <img src="../assets/logo.png">
+          {{ message.author }}
         </div>
-        <h4>{{ message.title }}</h4>
+        <h3 v-bind:contenteditable="message.editMode" @keydown.enter="editPost(message.id)" @keydown.esc="toggleEditPost(message.id)">
+          {{ message.title }}
+        </h3>
         <div class="action_post">
-          <button>EDITER {{ message.id }}</button>
-          <button v-on:click="deletePostFromList(message.id)">Supprimer</button>
+          <i class="fa-solid fa-pen-to-square" v-on:click="toggleEditPost(message.id)"></i>
+          <i class="fa-solid fa-trash-can" v-on:click="deletePostFromList(message.id)"></i>
         </div>
       </div>
-      <p class="message_post">
+      <p class="message_post" @keydown.enter="editPost(message.id)" @keydown.esc="toggleEditPost(message.id)"  v-bind:class='{message_postShort : !message.showAllMessage}'   v-bind:contenteditable="message.editMode">
         {{ message.body }}
       </p>
       <div class="footer_post">
-        <p>
-          {{ message.post_date }}
-          <span v-show="message.last_edit_date != ''"
-            >(Edité le : {{ message.last_edit_date }})</span
-          >
+        <p class="info_date_post">
+          {{ message.postDate }}
+          <span v-show="message.EditDate != ''">
+            (Edité le : {{ message.EditDate }})</span>
         </p>
-        <p class="post_triangle" v-on:click="showAllMessage()"></p>
+        <div class="triangle_contain">
+          <div class="post_triangle" v-if="!message.showAllMessage" v-on:click="showAllMessage(message.id)"></div>
+          <div class="post_triangle post_triangle--rotated" v-if="message.showAllMessage" v-on:click="showAllMessage(message.id)"></div>
+        </div>
         <div class="action_commentary">
           <button>+</button>
-          <button>Commentaires</button>
+          <button>Affiche les commentaires</button>
         </div>
       </div>
     </article>
@@ -54,178 +69,136 @@
 export default {
   name: "postList",
   methods: {
-    newPost()
-    {
-      this.newMessage.showIt = !this.newMessage.showIt
+    newPost() {
+      this.newMessage.showIt = !this.newMessage.showIt;
     },
     getListPost() {
       //fonction récupérant la liste des posts. Pour l'instant on créer un tableau de faux posts avec du lorem ipsum.
-      this.messages[0] = {
+      this.posts[0] = {
         body: "Bonjour, premier post",
         author: "Zangetsu",
         title: "Premier article",
-        post_date: "15 avril 2021",
-        last_edit_date: "12 mai 2021",
+        postDate: "15 avril 2021",
+        EditDate: "12 mai 2021",
+        editMode: false,
         id: 0,
         readerRate: "",
       };
-      this.messages[1] = {
+      this.posts[1] = {
         body: "Bonjour, second post",
         author: "Z@bimaru",
         title: "Le cours économique de la patate au Zimbabwé",
-        post_date: "15 juillet 2021",
-        hidden: true,
-        last_edit_date: " 12 mai 2022",
+        postDate: "15 juillet 2021",
+        showAllMessage: false,
+        editMode: false,
+        EditDate: " 12 mai 2022",
         id: 1,
         readerRate: "",
       };
-      this.messages[2] = {
-        body: "Bonjour, second post",
+      this.posts[2] = {
+        body: "Bonjour, troisième post  Accusantium, quaerat aspernatur, recusandae ipsam doloremque iste modi maiores mollitia id beatae, cumque ipsum labore corporis at blanditiis sed corrupti officia qui Provident corrupti nobis necessitatibus officia sint. Magnam officiis consequuntur incidunt doloremque cumque excepturi, porro quae eveniet commodi, deleniti accusantium debitis eum id nemo quis velit consequatur sunt facere necessitatibus voluptatum?Ad repellat quo dolores, cum odio illo molestias laboriosam temporibus possimus earum non minus, blanditiis explicabo consectetur numquam natus cumque delectus. Tenetur quos iusto quasi quidem minima saepe illum minus?Necessitatibus aliquid illum amet deleniti repellat magni natus similique iusto fugit, quisquam vitae, eaque doloribus minus modi deserunt odit. Officiis iusto temporibus harum reiciendis rem voluptatibus vel beatae pariatur tempore?Rem dolore praesentium iusto quibusdam officia sed. Quis voluptate cumque molestias, odit numquam, excepturi facilis libero facere sint sequi mollitia aut aspernatur nam sapiente dolorum? Quia quam quo",
         author: "Z@bimaru",
         title: "Le cours économique de la patate au Vénézuéla",
-        post_date: "15 aout 2021",
-        hidden: true,
-        last_edit_date: " 17 mai 2022",
+        postDate: "15 aout 2021",
+        showAllMessage: false,
+        EditDate: " 17 mai 2022",
+        editMode: false,
         id: 2,
         readerRate: "",
       };
-      this.messages[3] = {
-        body: "Bonjour, second post",
+      this.posts[3] = {
+        body: ",Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, quaerat aspernatur, recusandae ipsam doloremque iste modi maiores mollitia id beatae, cumque ipsum labore corporis at blanditiis sed corrupti officia qui Provident corrupti nobis necessitatibus officia sint. Magnam officiis consequuntur incidunt doloremque cumque excepturi, porro quae eveniet commodi, deleniti accusantium debitis eum id nemo quis velit consequatur sunt facere necessitatibus voluptatum?Ad repellat quo dolores, cum odio illo molestias laboriosam temporibus possimus earum non minus, blanditiis explicabo consectetur numquam natus cumque delectus. Tenetur quos iusto quasi quidem minima saepe illum minus?Necessitatibus aliquid illum amet deleniti repellat magni natus similique iusto fugit, quisquam vitae, eaque doloribus minus modi deserunt odit. Officiis iusto temporibus harum reiciendis rem voluptatibus vel beatae pariatur tempore?Rem dolore praesentium iusto quibusdam officia sed. Quis voluptate cumque molestias, odit numquam, excepturi facilis libero facere sint sequi mollitia aut aspernatur nam sapiente dolorum? Quia quam quos ab? Corporis!",
         author: "Z@bimaru",
-        hidden: true,
+        showAllMessage: false,
         title: "Le cours économique de la carotte au Zimbabwé",
-        post_date: "15 decembre 2021",
-        last_edit_date: " 18 mai 2022",
+        postDate: "15 decembre 2021",
+        EditDate: " 18 mai 2022",
+        editMode: false,
         id: 3,
         readerRate: "",
       };
-    this.newMessage.showIt=0;
     },
-    deletePostFromList(id_message) {
-      this.messages = this.messages.filter(
-        (message) => message.id != id_message
-      );
+    deletePostFromList(id) {
+     this.posts = this.posts.filter(post =>post.id!=id)
     },
-    showAllMessage() {},
-    editPost() {},
-    post() {
-    this.author="Zangetsu";
-     this.messages.push({
-       body : this.newMessage.body,
-       author :this.author,
-       title : this.newMessage.title,
-       post_date : this.newMessage.post_date,
-       id : this.messages.length})
-     this.newMessage.body="";
-     this.newMessage.title="";
-     this.newMessage.showIt=0
+    showAllMessage(id) {
+      this.posts[id].showAllMessage = !this.posts[id].showAllMessage
+      this.$forceUpdate();
     },
+    /*Cette fonction permet au texte d'être éditable et détecte si on appuie sur échap ce qui permet d'annuler toute modification.*/
+    toggleEditPost(id) {
+      let elementVise
+      if(event.code == "Escape")
+      {
+        if(event.target.localName=='h3')
+        {
+          elementVise= this.posts[id].title
+        }
+        else
+        {
+          elementVise=this.posts[id].body
+        }
+        event.srcElement.firstChild.textContent = elementVise
+      }
+      this.posts[id].editMode = !this.posts[id].editMode;
+      this.$forceUpdate();//on force le rafraîchissement du DOM, vueJs ne détecte pas le changement d'état.
+    },
+    editPost(id)/*Actuellement seul le DOM est modifié*/
+      {
+      this.toggleEditPost(id)
+      if(event.target.localName=='h3' && event.target.srcElement.innerText!="")
+      {
+        this.posts[id].title=event.target.srcElement.innerText
+      }
+      if(event.target.localName=="p")
+      {
+        this.posts[id].body=event.target.srcElement.innerText
+      }
 
+    },
+    post() {
+      this.author = "Zangetsu";
+      this.posts.push({
+        body: this.newMessage.body,
+        author: this.author,
+        title: this.newMessage.title,
+        postDate: this.newMessage.postDate,
+        id: this.posts.length,
+      });
+      this.newMessage.body = "";
+      this.newMessage.title = "";
+      this.newMessage.showIt = 0;
+    },
   },
+
   data() {
-    
     return {
-      messages: [
+      posts: [
         {
           body: "",
           author: "",
           title: "",
-          post_date: "",
-          last_edit_date: "",
+          postDate: "",
+          EditDate: "",
           id: 0,
-          hidden: true,
+          editMode: false,
+          showAllMessage: true,
           readerRate: "",
-        }],
-        newMessage : {
-          body:"",
-          title:"",
-          post_date:"",
-          showIt:false,
-         },
+        },
+      ],
+      newMessage: {
+        body: "",
+        title: "",
+        postDate: "",
+        showIt: false,
+      },
     };
   },
   beforeMount() {
-    this.getListPost()
+    this.getListPost();
   },
 };
 </script>
-<style lang="scss" scoped>
-.user_post {
-  display: flex;
-  flex-wrap: wrap;
-  border: 1px solid lightgray;
-  background-color: white;
-  margin-bottom: 2%;
-  border-radius: 20px;
-  box-shadow: 1px 1px 3px 3px gray;
-  padding: 0% 2%;
-  padding-bottom: 1%;
-  &:last-child {
-    margin-bottom: 0px;
-  }
-  .header_post {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    padding-bottom: 4px;
-    .user_img--post {
-      width: 30%;
-    }
-    h4 {
-      margin: 0px;
-      width: 60%;
-    }
-    .action_post {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-    }
-  }
-  .message_post {
-    line-height: 150%;
-    margin: auto;
-    margin-top: 8px;
-    max-width: 95%;
-    border-top: 1px solid blue;
-    border-bottom: 1px solid blue;
-    padding: 5px 0;
-    &Short {
-      height: 60px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-  .footer_post {
-    * {
-      margin: 0px;
-      font-size: smaller;
-    }
 
-    padding-top: 15px;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-content: flex-end;
-  }
-}
-
-.post_triangle {
-  border-top: 17px solid rgb(57, 49, 49);
-  border-right: 10px solid transparent;
-  border-left: 10px solid transparent;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &--smaller {
-    height: 0px;
-    width: 0px;
-    border-top: 10px solid rgb(57, 49, 49);
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-  }
-}
+<style lang="scss" src="./posts.scss" scoped>
 </style>
