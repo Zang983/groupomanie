@@ -121,7 +121,6 @@ export default {
           validator = new RegExp(
             /^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}(fr)$/
           ).test(element.value);
-          console.log(validator);
           break;
         case "pwd":
           element = this.pwd;
