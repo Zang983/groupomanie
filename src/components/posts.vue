@@ -91,7 +91,7 @@ permettra d'avoir un visuel proche du rendu final.
           <button  @click="toggleStatutShow(index)">Affiche les commentaires</button>
         </div>
       </div>
-      <commentaire v-bind:postId="message.id" v-bind:showComment="message.showComment"></commentaire>
+      <commentaire v-bind:postId="message.id" v-bind:showComment="message.showComment" ref="childComment"></commentaire>
     </article>
   </div>
 </template>
