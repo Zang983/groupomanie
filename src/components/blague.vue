@@ -1,5 +1,5 @@
 <template>
-  <div class="bloc-blague">
+  <div class="bloc-blague" v-if="this.joke.answer!=''"><!-- On affiche l'encadré avec la blague que si fetch arrive à en récupérer une-->
     Voici la blague: {{ joke.body }}<br />
     <button v-on:click="toggleAnswer">Voir la réponse</button>
     <button v-on:click="getJoke">Encore !</button>
@@ -22,7 +22,7 @@ export default {
       jokes.random().then((blague) => {
         this.joke.body = blague.joke;
         this.joke.answer = blague.answer;
-      });
+      }).catch();
     },
     toggleAnswer() {
       this.joke.showAnswer = !this.joke.showAnswer;

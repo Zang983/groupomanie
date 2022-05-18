@@ -56,6 +56,9 @@ permettra d'avoir un visuel proche du rendu final.
             class="fa-solid fa-trash-can"
             v-on:click="deletePostFromList(index)"
           ></i>
+          <i class="fa-solid fa-lock" v-on:click="lockPost(index)">
+
+          </i>
         </div>
       </div>
       <p
@@ -87,11 +90,11 @@ permettra d'avoir un visuel proche du rendu final.
           ></div>
         </div>
         <div class="action_commentary">
-          <button>+</button>
+          <button @click="toggleWriteComment(index)">+</button>
           <button  @click="toggleStatutShow(index)">Affiche les commentaires</button>
         </div>
       </div>
-      <commentaire v-bind:postId="message.id" v-bind:showComment="message.showComment" ref="childComment"></commentaire>
+      <commentaire v-bind:postId="message.id" v-bind:showComment="message.showComment" ref="commentaire"></commentaire>
     </article>
   </div>
 </template>
@@ -103,12 +106,16 @@ import commentaire from "./commentaire.vue";
 export default {
   name: "postList",
   components: {
-    commentaire,
+    'commentaire' : commentaire ,
   },
   methods: {
-    toggleStatutShow(index){
-      this.posts[index].showComment = !this.posts[index].showComment
-      this.$forceUpdate();
+    toggleWriteComment(index)
+    {
+      this.$refs.commentaire[index].toggleWriteComment()
+    },
+    toggleStatutShow(index)
+    {
+    this.$refs.commentaire[index].toggleStatutShow()
     },
     getAllDate() {
       let date = new Date().toLocaleDateString("fr");

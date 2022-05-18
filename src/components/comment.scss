@@ -1,4 +1,69 @@
 .commentary_bloc
 {
+    width:100%;
+}
+.commentary
+{
+    width:100%;
+    border:1px solid black;
+    margin:auto;
+    margin-bottom: 10px;
     background-color:lightblue;
+}
+.commentary:last-child
+{
+    margin:0;
+    background-color:lightblue;
+}
+.write_comment
+{
+    margin-top:10px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    min-width:100%;
+}
+.write_comment textarea
+{
+    margin:auto;
+    width:80%;
+    height:60px;
+    border-radius: 20px;
+    padding:10px 10px;
+    
+}
+i
+{
+    width:30px;
+    height:30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:black;
+    border:1px solid black;
+    border-radius:100%;
+}
+.btn--no_style
+{
+    border:none;
+    background-color:inherit
+}
+.btn--no_style:hover
+{
+    cursor:pointer;
+}
+.commentary_action
+{
+    display:flex; 
+    justify-content: flex-end;
+    gap:10px;
+    align-items: center;
+    width:100%;
+    i
+    {
+        margin-right:20px;
+        width:20px;
+        height:20px;
+        font-size:smaller;
+    }
 }
