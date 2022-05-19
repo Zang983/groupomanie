@@ -1,4 +1,4 @@
-.commentary_bloc
+.commentaries_bloc
 {
     width:100%;
 }
@@ -58,7 +58,6 @@ i
     justify-content: flex-end;
     gap:10px;
     align-items: center;
-    width:100%;
     i
     {
         margin-right:20px;
@@ -66,4 +65,31 @@ i
         height:20px;
         font-size:smaller;
     }
+}
+.header_commentary
+{
+    width:95%;
+    margin:auto;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.commentary_date
+{
+    font-size:smaller;
+}
+.commentary_author
+{
+    display:flex;
+    align-items:center;
+    width:20%;
+}
+.imgUser--commentary
+{
+  border-radius:100%;
+  border:1px blue solid;
+  width: 25px;
+  height:25px;
+  margin-right:20px;
+
 }
