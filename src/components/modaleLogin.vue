@@ -2,96 +2,35 @@
   <div class="bloc-modale" v-if="revele">
     <div class="overlay"></div>
     <div class="modale card">
-      <div class="header-card" v-show="status == 1">
-        <h1>Connexion</h1>
-        <h2>
-          Vous n'êtes pas inscrit ?
-          <span v-on:click="toggleStatus">Inscrivez-vous !</span>
-        </h2>
+      <div class="header-card">
+        <h1 v-if="status">Connexion</h1>
+        <h1 v-if="!status">Inscription</h1>
+        <h2 v-if="status"> Vous n'êtes pas inscrit ? <span v-on:click="toggleStatus">Inscrivez-vous !</span></h2>
+        <h2 v-if="!status"> Vous êtes déjà inscrit ? <span v-on:click="toggleStatus">Connectez-vous !</span></h2>
         <form>
           <label>
             Adresse mail :
-            <input
-              type="email"
-              id="email"
-              v-model="email.value"
-              v-on:change="checkInput"
-              placeholder="Veuillez saisir votre e-mail."
-            />
-            <p v-show="email.isValid == 0">
+            <input type="email" id="email" v-model="email.value" v-on:change="checkInput" placeholder="Veuillez saisir votre e-mail." />
+            <p v-if="email.isValid == 0">
               Veuillez saisir votre adresse e-mail professionnelle.
             </p>
           </label>
           <label>
             Mot de passe :
-            <input
-              type="password"
-              id="pwd"
-              v-model="pwd.value"
-              v-on:change="checkInput"
-              placeholder="Votre mot de passe."
-            />
-            <p v-show="pwd.isValid == 0">
+            <input type="password" id="pwd" v-model="pwd.value" v-on:change="checkInput" placeholder="Votre mot de passe." />
+            <p v-if="pwd.isValid == 0">
               Êtes-vous sûr de votre mot de passe?
             </p>
           </label>
-        </form>
-      </div>
-      <div class="header-card" v-show="status != 1">
-        <h1>Inscription</h1>
-        <h2>
-          Vous êtes déjà inscrit ?
-          <span v-on:click="toggleStatus">Connectez-vous !</span>
-        </h2>
-        <form>
-          <label>
-            Adresse mail :
-            <input
-              type="email"
-              v-on:change="checkInput"
-              v-model="email.value"
-              id="email"
-              placeholder="Veuillez saisir votre e-mail."
-            />
-            <p v-show="email.isValid == 0">
-              Veuillez saisir votre adresse e-mail professionnelle.
-            </p>
-          </label>
-          <label>
-            Mot de passe :
-            <input
-              type="password"
-              id="pwd"
-              v-model="pwd.value"
-              v-on:change="checkInput"
-              placeholder="Votre mot de passe."
-            />
-            <p v-show="pwd.isValid == 0">
-              Il doit contenir entre 8 et 32 caractères dont au moins une
-              majuscule, un chiffre et aucun caractère spéciaux.
-            </p>
-          </label>
-          <label>
+           <label v-if="!status">
             Nom :
-            <input
-              type="text"
-              id="lastName"
-              placeholder="Votre nom"
-              v-model="lastName.value"
-              v-on:change="checkInput"
-            />
-            <p v-show="lastName.isValid == 0">Veuillez saisir votre nom</p>
+            <input type="text" id="lastName" placeholder="Votre nom" v-model="lastName.value" v-on:change="checkInput" />
+            <p v-if="lastName.isValid == 0">Veuillez saisir votre nom</p>
           </label>
-          <label>
+          <label v-if="!status">
             Prénom :
-            <input
-              type="text"
-              placeholder="Votre prénom"
-              v-model="firstName.value"
-              v-on:change="checkInput"
-              id="firstName"
-            />
-            <p v-show="firstName.isValid == 0">Veuillez saisir votre prénom.</p>
+            <input type="text" placeholder="Votre prénom" v-model="firstName.value" v-on:change="checkInput" id="firstName" />
+            <p v-if="firstName.isValid == 0">Veuillez saisir votre prénom.</p>
           </label>
         </form>
       </div>
@@ -107,9 +46,11 @@ export default {
   methods: {
     toggleModale() {
       this.revele = !this.revele;
+   
     },
     toggleStatus() {
       this.status = !this.status;
+      this.$forceUpdate;
     },
     checkInput(event) {
       let element = null;
@@ -130,16 +71,13 @@ export default {
           break;
         case "firstName":
           element = this.firstName;
-          //validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
-          validator = new RegExp(
-            /^[a-zA-Z0-9.-_]+[@]{1}(groupomanie)[.]{1}[a-z]{2,15}$/
-          ).test(element.value);
+          validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
+          validator = !validator
           break;
         case "lastName":
           element = this.lastName;
           validator= new RegExp(/[0-9]/).test(element.value);// eslint-disable-line
           validator = !validator
-
           break;
       }
 
