@@ -13,18 +13,23 @@ permettra d'avoir un visuel proche du rendu final.
 
 <template>
   <div class="posts_bloc">
-    <h2>Les posts sont ici :</h2>
-    <button style="margin-bottom: 3%" v-on:click="newPost()">
-      Ecrire un nouveau post.
-    </button>
-    <article class="user_post" v-if="this.newMessage.showIt == 1">
-      <div class="header_post">
-        <div class="user_img--post"></div>
-        <h4><input v-model="newMessage.title" /></h4>
+    <h2>
+      Fil d'actu <i class="fa-solid fa-message" v-on:click="newPost('1')"></i>
+    </h2>
+
+    <article class="user_new_post" v-if="this.newMessage.showIt == 1">
+      <div class="header_new_post">
+        <label
+          >Titre de votre message :
+          <input v-model="newMessage.title" class="new_title"
+        /></label>
         <div class="action_post"></div>
       </div>
       <p class="message_post">
-        <textarea v-model="newMessage.body"> </textarea>
+        <label
+          >Votre message :
+          <textarea v-model="newMessage.body" class="new_message"> </textarea>
+        </label>
       </p>
       <button v-on:click="post()">Envoyer</button>
     </article>
@@ -56,9 +61,7 @@ permettra d'avoir un visuel proche du rendu final.
             class="fa-solid fa-trash-can"
             v-on:click="deletePostFromList(index)"
           ></i>
-          <i class="fa-solid fa-lock" v-on:click="lockPost(index)">
-
-          </i>
+          <i class="fa-solid fa-lock" v-on:click="lockPost(index)"> </i>
         </div>
       </div>
       <p
@@ -90,11 +93,19 @@ permettra d'avoir un visuel proche du rendu final.
           ></div>
         </div>
         <div class="action_commentary">
+          <i class="fa-solid fa-thumbs-up likeUp" @click="sendLike(1,message.id)"></i>
+          <i class="fa-solid fa-thumbs-up likeDown" @click="sendLike(0,message.id)"></i>
           <button @click="toggleWriteComment(index)">+</button>
-          <button  @click="toggleStatutShow(index)">Affiche les commentaires</button>
+          <button @click="toggleStatutShow(index)">
+            Affiche les commentaires
+          </button>
         </div>
       </div>
-      <commentaire v-bind:postId="message.id" v-bind:showComment="message.showComment" ref="commentaire"></commentaire>
+      <commentaire
+        v-bind:postId="message.id"
+        v-bind:showComment="message.showComment"
+        ref="commentaire"
+      ></commentaire>
     </article>
   </div>
 </template>
@@ -106,16 +117,14 @@ import commentaire from "./commentaire.vue";
 export default {
   name: "postList",
   components: {
-    'commentaire' : commentaire ,
+    commentaire: commentaire,
   },
   methods: {
-    toggleWriteComment(index)
-    {
-      this.$refs.commentaire[index].toggleWriteComment()
+    toggleWriteComment(index) {
+      this.$refs.commentaire[index].toggleWriteComment();
     },
-    toggleStatutShow(index)
-    {
-    this.$refs.commentaire[index].toggleStatutShow()
+    toggleStatutShow(index) {
+      this.$refs.commentaire[index].toggleStatutShow();
     },
     getAllDate() {
       let date = new Date().toLocaleDateString("fr");
@@ -123,8 +132,12 @@ export default {
       date += " à " + heure;
       return date;
     },
-    newPost() {
-      this.newMessage.showIt = !this.newMessage.showIt;
+    newPost(value) {
+      if (value != undefined) {
+        this.newMessage.showIt = !this.newMessage.showIt;
+        this.newMessage.body = "";
+        this.newMessage.title = "";
+      }
     },
     getListPost() {
       //fonction récupérant la liste des posts. Pour l'instant on créer un tableau de faux posts avec du lorem ipsum.
@@ -136,7 +149,7 @@ export default {
         editMode: false,
         id: 0,
         readerRate: "",
-        showComment:false,
+        showComment: false,
       };
       this.posts[1] = {
         body: "Bonjour, second post",
@@ -148,7 +161,7 @@ export default {
         EditDate: " 12 mai 2022",
         id: 1,
         readerRate: "",
-        showComment:false,
+        showComment: false,
       };
       this.posts[2] = {
         body: "Bonjour, troisième post  Accusantium, quaerat aspernatur, recusandae ipsam doloremque iste modi maiores mollitia id beatae, cumque ipsum labore corporis at blanditiis sed corrupti officia qui Provident corrupti nobis necessitatibus officia sint. Magnam officiis consequuntur incidunt doloremque cumque excepturi, porro quae eveniet commodi, deleniti accusantium debitis eum id nemo quis velit consequatur sunt facere necessitatibus voluptatum?Ad repellat quo dolores, cum odio illo molestias laboriosam temporibus possimus earum non minus, blanditiis explicabo consectetur numquam natus cumque delectus. Tenetur quos iusto quasi quidem minima saepe illum minus?Necessitatibus aliquid illum amet deleniti repellat magni natus similique iusto fugit, quisquam vitae, eaque doloribus minus modi deserunt odit. Officiis iusto temporibus harum reiciendis rem voluptatibus vel beatae pariatur tempore?Rem dolore praesentium iusto quibusdam officia sed. Quis voluptate cumque molestias, odit numquam, excepturi facilis libero facere sint sequi mollitia aut aspernatur nam sapiente dolorum? Quia quam quo",
@@ -160,7 +173,7 @@ export default {
         editMode: false,
         id: 2,
         readerRate: "",
-        showComment:false,
+        showComment: false,
       };
       this.posts[3] = {
         body: ",Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, quaerat aspernatur, recusandae ipsam doloremque iste modi maiores mollitia id beatae, cumque ipsum labore corporis at blanditiis sed corrupti officia qui Provident corrupti nobis necessitatibus officia sint. Magnam officiis consequuntur incidunt doloremque cumque excepturi, porro quae eveniet commodi, deleniti accusantium debitis eum id nemo quis velit consequatur sunt facere necessitatibus voluptatum?Ad repellat quo dolores, cum odio illo molestias laboriosam temporibus possimus earum non minus, blanditiis explicabo consectetur numquam natus cumque delectus. Tenetur quos iusto quasi quidem minima saepe illum minus?Necessitatibus aliquid illum amet deleniti repellat magni natus similique iusto fugit, quisquam vitae, eaque doloribus minus modi deserunt odit. Officiis iusto temporibus harum reiciendis rem voluptatibus vel beatae pariatur tempore?Rem dolore praesentium iusto quibusdam officia sed. Quis voluptate cumque molestias, odit numquam, excepturi facilis libero facere sint sequi mollitia aut aspernatur nam sapiente dolorum? Quia quam quos ab? Corporis!",
@@ -170,12 +183,32 @@ export default {
         postDate: "15 decembre 2021",
         EditDate: " 18 mai 2022",
         editMode: false,
-        showComment:false,
+        showComment: false,
         id: 3,
         readerRate: "",
       };
     },
     deletePostFromList(index) {
+      let requestPath = `http://localhost:3000/api/posts/post/delete/id=${this.posts[index].id}`;
+
+      let request = new Request(requestPath, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.posts[index.id]),
+      });
+      fetch(request)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((value) => {
+          console.log(value);
+        });
+
       this.posts.splice(index, 1);
     },
     showAllMessage(id) {
@@ -207,20 +240,80 @@ export default {
       this.posts[index].editDate = this.getAllDate();
     },
     post() {
+      let requestPath = "http://localhost:3000/api/posts/post";
+      let infoPost = {};
       this.author = "Zangetsu";
       this.editDate = "";
-      this.newMessage.showIt = 0;
-      this.posts.push({
-        body: this.newMessage.body,
-        author: this.author,
-        title: this.newMessage.title,
-        postDate: this.getAllDate(),
-        editDate: this.editDate,
-        id: this.posts.length,
-        showComment:false,
+      infoPost = {
+        author:this.author,
+        body:this.newMessage.body,
+        title:this.newMessage.title
+        
+      };
+      let request = new Request(requestPath, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(infoPost),
       });
-      this.newMessage.body = "";
-      this.newMessage.title = "";
+      fetch(request)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((value) => {
+          this.newPost(value);
+        });
+    },
+    sendLike(valeurLike,id){
+
+      if(this.like==undefined || this.like==null)
+      {
+        this.like=valeurLike;
+      }
+      else//si l'utilisateur à déjà (dis)liké le post
+      {
+        if(this.like===valeurLike)//l'utilisateur souhaite être neutre
+        {
+          valeurLike=-1;//on défini valeurLike à -1, ce qui implique la suppression du statut du like côté API
+          this.like=null;
+        }
+        if(this.like===1 && valeurLike===0) // l'utilisateur aimé le like et le dislike
+        {
+          this.like=0;
+        }
+        if(this.like===0 && valeurLike===1)//si l'utilisateur like plutôt que dislike un post.
+        {
+          this.like=1;
+        }
+      }
+
+      const infoLike ={
+        valeur:valeurLike,
+        id:id,
+      }
+      let requestPath = `http://localhost:3000/api/posts/post/like/id=${id}`;
+
+        let request = new Request(requestPath, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(infoLike),
+      });
+      fetch(request)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((value) => {
+         console.log(value);
+        });
     },
   },
 
@@ -229,7 +322,7 @@ export default {
       posts: [
         {
           body: "",
-          author: "",
+          author: "Zang",
           title: "",
           postDate: "",
           editDate: "",
@@ -237,7 +330,8 @@ export default {
           editMode: false,
           showAllMessage: true,
           readerRate: "",
-          showComment:false,
+          showComment: false,
+          like:null,
         },
       ],
       newMessage: {

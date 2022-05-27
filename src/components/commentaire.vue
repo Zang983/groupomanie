@@ -66,14 +66,17 @@ export default {
     },
     writeComment() {
       this.commentaires.heure = this.getAllDate();
-      this.idPost = this.postId;
       this.commentaires.push({
         auteur: "Zang",
         body: this.commentaires.body,
         heure: this.getAllDate(),
-        idPost: this.commentaires.length+1,
+        idCommentaire : this.commentaires.length+1,
+        idPost:this.postId,
+        editMode:false,
       });
+      
       this.commentaires.body = "";
+      this.getComment();
       this.toggleWriteComment();
       if (!this.showComment) {
         this.toggleStatutShow();
@@ -81,7 +84,7 @@ export default {
     },
     toggleEditComment(id) {
       this.commentaires[id].editMode = !this.commentaires[id].editMode;
-      console.log(this.commentaires[id].editMode)
+      this.getComment()
       this.$forceUpdate();
     },
     deleteComment(id,index){

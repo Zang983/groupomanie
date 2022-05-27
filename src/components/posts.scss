@@ -1,6 +1,77 @@
 .posts_bloc
 {
 width:60%;
+border:1px gray solid;
+padding:0px 20px;
+border-radius:50px;
+padding-bottom:2%;
+}
+h2
+{
+  text-align:center;
+  display:flex;
+  justify-content: center;
+  position:relative;
+}
+.user_new_post
+{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  background-color: white;
+  margin-bottom: 2%;
+  border-radius: 20px;
+  box-shadow: 1px 1px 3px 3px gray;
+  padding: 0% 2%;
+  padding-bottom: 1%;
+  align-items: center;
+  .header_new_post
+  {
+    margin:auto;
+    margin-top:15px;
+    text-align:center;
+    width:98%;
+    input
+    {
+      margin:10px 0px;
+      width:100%;
+    }
+  }
+  p
+  {
+    width:100%;
+    text-align:center;
+    textarea
+    {
+      margin-top:15px;
+      height:75px;
+    }
+  }
+  button
+  {
+    background-color:blue;
+    color:white;
+    border:none;
+    border-radius:20px;
+    width:200px;
+    height:50px;
+  }
+  button:hover
+  {
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.836);
+  }
+}
+.new_message
+{
+  width:100%;
+}
+.fa-message
+{
+position:absolute;
+right:3%;
+font-size:75%;
 }
 .user_post {
     display: flex;
@@ -135,4 +206,30 @@ width:60%;
   {
     border:1px solid black;
     background-color: lightgray;
+  }
+  .action_commentary
+  {
+    display:flex;
+    i
+    {      
+      border:none;
+      color:black;
+      transition-delay: 0.1s;
+    }
+    i:hover
+    {
+      font-size:120%;
+    }
+    .likeDown
+    {
+      transform:rotate(180deg)
+    }
+    .likeDown:hover
+    {
+      color:red;
+    }
+    .likeUp:hover
+    {
+      color:blue;
+    }
   }

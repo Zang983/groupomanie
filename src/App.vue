@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import modale from "./components/modaleLogin.vue";
+import modale from "./components/modale.vue";
 import blague from "./components/blague.vue";
 import navBar from "./components/navbar.vue";
 import posts from "./components/posts.vue";
@@ -42,5 +42,9 @@ export default {
 
   display:flex;
   margin-top:5%;
+}
+body
+{
+  background-color:rgba(40, 42, 52, 0.151);
 }
 </style>
