@@ -3,8 +3,6 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     host: 'localhost',
     dialect: 'mysql',
   });
-  const service = require('./service');
-
 
 const User = sequelize.define("user",{
     idUser:{ type: DataTypes.INTEGER, primaryKey: true },
@@ -28,6 +26,17 @@ User.associate = (models) =>{
     User.belongsTo(service)
 }
 
+User.associate = (models) =>{
+    User.hasMany(posts,{
+        foreignKey:'users_idUser'
+    })
+}
+
+User.associate = (models) =>{
+    User.hasMany(commentaire,{
+        foreignKey:'users_idUser'
+    })
+}
 
 
 module.exports=User;
@@ -53,4 +62,3 @@ module.exports=User;
 //       REFERENCES `mydb`.`Services` (`idService`)
 //       ON DELETE NO ACTION
 //       ON UPDATE NO ACTION);
-  

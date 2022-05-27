@@ -19,4 +19,13 @@ const Post = sequelize.define("post",{
     }, 
 );
 
+Post.associate = (models) =>{
+    Post.belongsTo(users)
+}
+Post.associate = (models) =>{
+    Post.hasMany(commentaire,{
+        foreignKey:'posts_idPosts'
+    })
+}
+
 module.exports=Post;

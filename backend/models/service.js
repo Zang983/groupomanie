@@ -3,7 +3,6 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     host: 'localhost',
     dialect: 'mysql',
   });
-const user = require('./user');
 
 
   const Service = sequelize.define("service",{

@@ -17,4 +17,10 @@ const Commentaire = sequelize.define("commentaire",{
     }, 
 );
 
+Commentaire.associate = (models) =>{
+    Commentaire.belongsTo(users)
+}
+Commentaire.associate = (models) =>{
+    Commentaire.belongsTo(post)
+}
 module.exports=Commentaire;

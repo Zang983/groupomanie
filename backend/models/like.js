@@ -3,17 +3,26 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     host: 'localhost',
     dialect: 'mysql',
   });
+  const user=require ("./user")
+  const commentaire= require("./commentaires")
 
 
-const Commentaire = sequelize.define("like",{
-    idCommentaire:{ type: DataTypes.INTEGER, primaryKey: true },
-    contenu:DataTypes.TEXT,
-    lock:DataTypes.BOOLEAN,
+const like = sequelize.define('like',{
+    users_idUser:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:user,
+            key:'idUser'
+        }
     },
-    {
-        tableName:"users",
-        timestamps: false ,
-    }, 
-);
+    Commentaires_idCommentaire:{
+        type:DataTypes.INTEGER,
+        references:{
+            model:commentaire,
+            key:'idCommentaire'
+        }
+    }
 
-module.exports=Commentaire;
+    
+})
+module.exports=like;
