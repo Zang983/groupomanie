@@ -108,11 +108,17 @@ export default {
       });
       fetch(request)
         .then(function (res) {
-          if (res.ok) {
             return res.json();
+          })
+        .then((value) => {
+          if(value.token!=undefined)
+          {
+           this.toggleModale(value); 
           }
-        })
-        .then((value) => {this.toggleModale(value);});
+          //ICI IL FAUDRA RECUPERER LE TOKEN ET L'ID USER ET LE METTRE DANS LE STORE
+          console.log(value)
+          });
+          
     },
     toggleStatus() {
       this.status = !this.status;
@@ -161,7 +167,7 @@ export default {
   data() {
     return {
       status: true, //defini si on est en mode connexion ou inscription
-      revele: false, //pour savoir si on révèle la modale
+      revele: false,//pour savoir si on révèle la modale
       /* Définition des différents champs du formulaire pour voir s'ils sont valide ou non.*/
       email: {
         value: "",

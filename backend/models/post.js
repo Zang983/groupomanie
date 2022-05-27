@@ -5,12 +5,14 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
   });
 
 
+
 const Post = sequelize.define("post",{
     idPosts:{ type: DataTypes.INTEGER, primaryKey: true },
     titre:DataTypes.STRING,
     contenu:DataTypes.TEXT,
     url_image:DataTypes.STRING,
     lock:DataTypes.BOOLEAN,
+    users_idUser:DataTypes.INTEGER, defaultValue:2
     },
     {
         tableName:"posts",
@@ -20,7 +22,11 @@ const Post = sequelize.define("post",{
 );
 
 Post.associate = (models) =>{
-    Post.belongsTo(users)
+    Post.belongsTo(users,{
+        foreignKey:"users_idUser",
+        targetKey:"idUsers",
+        defaultValue:3
+    })
 }
 Post.associate = (models) =>{
     Post.hasMany(commentaire,{

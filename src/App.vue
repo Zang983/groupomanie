@@ -1,3 +1,21 @@
+<!--
+
+      -------------------- TO DO LIST --------------------
+      Finir les différentes requêtes BACKEND
+      Faire la navBar et voir si l'utilisation de vue Router est pertinent.
+      Modifier la liste des membres pour classer selon les services.
+      Coder l'affichage CE.
+      Faire la partie "configuration de compte" avec : 
+        -> Choix de l'avatar.
+        -> Changement de service (liste d'option selon les services présents)
+        -> Changement de MDP
+      Voir pour l'utilisation de cookies pour stocker le JWT pour le maintien de la session
+      Finir de lié les différents boutons des posts aux actions BACKEND.
+      Rajouter les boutons "editer", "supprimer" et "lock" aux commentaires.
+      Revoir tout les noms de classes et variables.
+      Refaire tout le style CSS sous SASS en 7-1
+      
+-->
 <template>
   <div id="app">
   <modale></modale>

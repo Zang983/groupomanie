@@ -28,13 +28,17 @@ User.associate = (models) =>{
 
 User.associate = (models) =>{
     User.hasMany(posts,{
-        foreignKey:'users_idUser'
+        foreignKey:'users_idUser',
+        allowNull: false,
+        defaultValue:3
     })
 }
 
 User.associate = (models) =>{
     User.hasMany(commentaire,{
-        foreignKey:'users_idUser'
+        foreignKey:'users_idUser',
+        allowNull: false,
+        defaultValue: 3
     })
 }
 

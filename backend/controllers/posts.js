@@ -1,4 +1,4 @@
-const user = require('../models/post');
+const post = require('../models/post');
 
 exports.sendPost = (req, res, next) => {
 
@@ -6,7 +6,7 @@ exports.sendPost = (req, res, next) => {
     {
         return res.status(400).json({message:"Informations manquantes"})
     }
-    console.log(req.body)
+    post.create({idPost:'',titre:req.body.title,contenu:req.body.body,lock:0,users_idUser:2})
     return res.status(200).json({message:"OK"})
 
 }
