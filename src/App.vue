@@ -31,6 +31,7 @@
 </template>
 
 <script>
+
 import modale from "./components/modale.vue";
 import blague from "./components/blague.vue";
 import navBar from "./components/navbar.vue";
