@@ -113,10 +113,11 @@ export default {
         .then((value) => {
           if(value.token!=undefined)
           {
-           this.toggleModale(value); 
+           this.toggleModale(value);
+           this.$store.commit('saveIdUser',value.userId)
+           this.$store.commit('levelPermission',value.isAdmin)
+           console.log(this.$store.state.access)
           }
-          //ICI IL FAUDRA RECUPERER LE TOKEN ET L'ID USER ET LE METTRE DANS LE STORE
-          console.log(value)
           });
           
     },

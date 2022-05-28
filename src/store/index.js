@@ -5,11 +5,21 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    idUser:""
+    idUser:"",
+    access:""
   },
   getters: {
   },
   mutations: {
+    saveIdUser(state,idUserFromDb)
+    {
+      state.idUser=idUserFromDb
+    },
+    levelPermission(state,permissionFromDb)
+    {
+      state.access=permissionFromDb
+    }
+
   },
   actions: {
   },
