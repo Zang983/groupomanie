@@ -19,10 +19,12 @@ export default {
 
   methods: {
     getJoke() {
+    
       jokes.random().then((blague) => {
         this.joke.body = blague.joke;
         this.joke.answer = blague.answer;
       }).catch();
+      
     },
     toggleAnswer() {
       this.joke.showAnswer = !this.joke.showAnswer;
@@ -43,4 +45,5 @@ export default {
 };
 </script>
 <style scoped>
+
 </style>

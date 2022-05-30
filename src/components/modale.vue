@@ -76,9 +76,8 @@ dans le partie "app.vue" transmettre une variable "props" avec un v-show sur tou
 export default {
   name: "fenetre_modale",
   methods: {
-    toggleModale(
-      value //On récupère le retour de la promesse, si la requête de connexion ou d'inscription à échouée, la modale reste en premier plan.
-    ) {
+    toggleModale(value) //On récupère le retour de la promesse, si la requête de connexion ou d'inscription à échouée, la modale reste en premier plan. 
+    {
       if (value != undefined) {
         this.revele = !this.revele;
       }
@@ -114,9 +113,9 @@ export default {
           if(value.token!=undefined)
           {
            this.toggleModale(value);
+           this.$emit('showModaleOff')
            this.$store.commit('saveIdUser',value.userId)
            this.$store.commit('levelPermission',value.isAdmin)
-           console.log(this.$store.state.access)
           }
           });
           

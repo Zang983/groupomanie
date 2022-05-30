@@ -1,0 +1,254 @@
+.user_new_post
+{
+  margin-bottom:35px;
+  input,textarea {
+    width: calc(100% - 22px);
+    border:1px solid rgba(0, 0, 255, 0.299);
+    margin:0px;
+    padding:0px;
+    font-size:120%;
+    padding-left:20px;
+  }
+  input
+  {
+    height:50px;
+  }
+  p
+  {
+    height:250px; 
+    background-color:blakc;
+    border:none;
+    margin:0px;
+    padding:0px; 
+  }
+}
+.posts_bloc {
+  width: 60%;
+  min-width: 60%;
+  max-width: 60%;
+  border: 1px gray solid;
+  padding: 0px 20px;
+  border-radius: 50px;
+  padding-bottom: 2%;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  i:hover {
+    cursor: pointer;
+  }
+
+  .user_post {
+    width: 100%;
+    min-width:100%;
+    max-width:100%;
+    margin-bottom: 40px;
+    border-radius: 20px;
+    &_locked
+    {
+      border-radius:0px 0px 20px 20px;
+      background-color: rgba(255, 0, 0, 0.569);
+    }
+  }
+}
+
+.header_post {
+  background-color: rgba(128, 128, 128, 0.389);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 7px 10px;
+
+  .user_img--post {
+    display: flex;
+    align-items: center;
+    font-size: 120%;
+    font-weight: bold;
+    margin-right: 10px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 100%;
+      background-color: white;
+      margin-right: 20px;
+    }
+  }
+
+  h3 {
+    font-size: 140%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%)
+  }
+
+  .action_post {
+    display: flex;
+    justify-content: space-around;
+    width: 20%;
+
+    i {
+      height: 35px;
+      width: 35px;
+      display: flex;
+      align-items: center;
+      border-radius: 50px;
+      background-color: white;
+      justify-content: center;
+    }
+  }
+}
+
+textarea
+{
+  width:100%;
+  border:none;
+  padding:0px;
+  height:250px;
+  font-size:120%;
+  margin:0px;
+}
+input{
+  font-size:120%;
+  width:70%;
+}
+.message_post {
+  max-width: 100%;
+  margin: 0px;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid blue;
+  border-bottom: 1px solid blue;
+  line-height: 150%;
+  &Short {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}
+
+.footer_post {
+  height: 50px;
+  background-color: rgba(128, 128, 128, 0.389);
+  position: relative;
+  font-size: small;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 20px 20px;
+
+  .info_date_post {
+    margin-left: 10px;
+    font-size: small;
+  }
+
+}
+
+.user_post_locked {
+  .header_post
+  {
+    border-radius:0px 0px 0px 0px;
+
+  }
+
+}
+
+.post_triangle {
+  position: absolute;
+  top: calc(50% - 4px);
+  left: calc(50% - 10px);
+  border-top: 17px solid rgb(57, 49, 49);
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__rotated {
+    transform: rotate(60deg)
+  }
+
+  &--smaller {
+    height: 0px;
+    width: 0px;
+    border-top: 10px solid rgb(57, 49, 49);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+  }
+}
+
+.action_commentary {
+  display: flex;
+  align-items: center;
+  padding-right:10px;
+
+  i {
+    border: none;
+    color: black;
+    transition-delay: 0.1s;
+    margin-right: 10px;
+  }
+
+  i:hover {
+    font-size: 120%;
+  }
+
+  .likeDown {
+    transform: rotate(180deg)
+  }
+
+  .likeDown:hover {
+    color: red;
+  }
+
+  .likeUp:hover {
+    color: blue;
+  }
+}
+.send_block
+{
+    display:flex;
+    align-items:center;
+    height:35px;
+    width:100%;
+    .send_button,.send_picture{
+    color:white;
+    font-size:120%;
+    }
+    .send_button
+    {
+      height:35px;
+      background-color:blue;
+      width:80%
+    }
+    .send_picture
+    {
+      height:35px;
+      width:20%;
+      color:black;
+    }
+    button:hover, i:hover
+    {
+      cursor:pointer;
+      filter:brightness(0.8);
+    }
+    i
+    {
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content: center;
+      height:calc(100% - 4px)
+
+    }
+
+}

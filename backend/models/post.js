@@ -11,8 +11,8 @@ const Post = sequelize.define("post",{
     titre:DataTypes.STRING,
     contenu:DataTypes.TEXT,
     url_image:DataTypes.STRING,
-    lock:DataTypes.BOOLEAN,
-    users_idUser:DataTypes.INTEGER, defaultValue:2
+    lockStatus:DataTypes.BOOLEAN,
+    users_idUser:{type :DataTypes.INTEGER, defaultValue:2},
     },
     {
         tableName:"posts",

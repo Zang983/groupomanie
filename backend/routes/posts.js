@@ -9,7 +9,8 @@ const postCtrl = require('../controllers/posts')
 router.post('/post',postCtrl.sendPost);
 router.delete('/post/delete/:id',postCtrl.deletePost);
 router.get('/post/:page',postCtrl.getPosts);
-router.put('/post/:id',postCtrl.updateAPost);
+router.put('/post/lock',postCtrl.lockAPost);
+router.put('/post/update/:id',postCtrl.updateAPost);
 router.post('/post/like/:id',postCtrl.likeAPost);
 
 

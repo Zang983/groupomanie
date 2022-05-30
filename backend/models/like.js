@@ -21,8 +21,7 @@ const like = sequelize.define('like',{
             model:commentaire,
             key:'idCommentaire'
         }
-    }
-
-    
-})
+    },
+},
+)
 module.exports=like;

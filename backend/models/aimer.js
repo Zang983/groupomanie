@@ -4,12 +4,13 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     dialect: 'mysql',
   });
   const user=require ("./user")
-  const posts= require("./post")
+  const post= require("./post")
 
 
 const aimer = sequelize.define('aimer',{
     users_idUser:{
         type:DataTypes.INTEGER,
+        primaryKey:true,
         references:{
             model:user,
             key:'idUser'
@@ -21,6 +22,19 @@ const aimer = sequelize.define('aimer',{
             model:post,
             key:'idPosts'
         }
+    },
+    valeur:DataTypes.BOOLEAN,
+},    {
+    tableName:"aimer",
+    timestamps: false ,
+},
+{
+indexes: [
+    {
+        unique: true,
+        fields: ['users_idUser', 'posts_idPosts']
     }
-})
+]
+},
+ )
 module.exports=aimer;
