@@ -1,10 +1,25 @@
 <template>
-  <div class="ce_posts"> 
-    <h2>Messages de votre CE</h2>
-    <div class="body_CE" v-for="(annonce,index) of listAnnonce" :key="index">
-      <p>{{annonce.body}}</p>
-    </div>
+  <div class="ce_posts_container">
+    <h2>Annonce C.E.
+      <i class="fa-solid fa-message" v-on:click="newAnnounce()"></i>
+    </h2>
+    <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
+      <p class="date_ce">
+        Du : {{ annonce.dateDebut }} Au : {{ annonce.dateFin }}
+      </p>
+      <p class="message_post_ce">{{ annonce.message }}</p>
 
+      <p class="administration_ce">
+        <i
+          class="fa-solid fa-pen-to-square edit_button_ce"
+          v-on:click="editMessageCE(index)"
+        ></i>
+        <i
+          class="fa-solid fa-trash-can delete_button_ce"
+          v-on:click="deleteMessageCE(index)"
+        ></i>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -13,27 +28,43 @@
 export default {
   name: "annonceCe",
 
-  methods: {},
+  methods: {
+    getAnnonceList() {
+      let requestPath = "http://localhost:3000/api/ceMessage/all";
+      let promiseThis = this;
+      this.annonceList = [];
+
+      fetch(requestPath)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then(function (value) {
+          promiseThis.annonceList = value.resultat;
+          for (let message in promiseThis.annonceList) {
+            promiseThis.annonceList[message].dateDebut = new Date(
+              promiseThis.annonceList[message].dateDebut
+            ).toLocaleDateString("fr");
+            promiseThis.annonceList[message].dateFin = new Date(
+              promiseThis.annonceList[message].dateFin
+            ).toLocaleDateString("fr");
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+      this.$forceUpdate();
+    },
+  },
 
   data() {
     return {
-      listAnnonce:[
-        {
-          body:"Vos chèque vacances sont disponibles, veuillez passer les prendre.",
-          dateDebut:"15 mai 2022",
-          dateFin:"20 juillet 2022",
-          id:0,
-        },
-        {
-          body:"Promotion dans différents parcs à thèmes,  veuillez passer au CE pour plus d'info !",
-          dateDebut:"15 avril 2022",
-          dateFin:"15 juillet 2022",
-          id:1
-        }
-
-      ],
-    }
-
+      annonceList: [],
+    };
+  },
+  beforeMount() {
+    this.getAnnonceList();
   },
 };
 </script>

@@ -43,15 +43,22 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
     user.findOne({
       where:
       {email:req.body.email}
-    
     })
     .then(user=>{
+      let isAdmin="";
       if(user===null)
       {
         res.status(404).json({message:"E-mail ou mot de passe incorrect"})
       }
       else
       {
+        if(user.droits==="00001")
+        {
+          isAdmin=1
+        }
+        else{
+          isAdmin = 0;
+        }
         bcrypt.compare(req.body.pwd, user.password)
         .then(valid => {
           if (!valid) {
@@ -59,7 +66,7 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
           }
           res.status(200).json({
             userId: user.idUser,
-            isAdmin:user.droits,
+            isAdmin:isAdmin,
             token: jwt.sign(
               { userId:user.idUser},
               'AuheoO11nNej47Gr,eiUHog@ru::ohga5',

@@ -1,5 +1,4 @@
 <!--
-
       -------------------- TO DO LIST --------------------
 
       Finir les différentes requêtes BACKEND !
@@ -18,7 +17,7 @@
       Finir de lié les différents boutons des posts aux actions BACKEND.
       Rajouter les boutons "editer", "supprimer" et "lock" aux commentaires.
       Revoir tout les noms de classes et variables.
-      
+
       -------------------- BUG LIST --------------------
       lors de l'écriture d'un nouveau post, l'affichage ne se refresh pas.
         piste envisagée -> vm.$set || Vue.set mais ne fonctionne pas, à voir pourquoi.
@@ -66,7 +65,7 @@ export default {
   },
   data() {
     return {
-      show: true,
+      show: false,
     };
   },
 };

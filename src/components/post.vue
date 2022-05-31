@@ -26,7 +26,7 @@
     </p>
     <div v-show="modeEdit">
       <textarea class="textarea__edit" v-model="newBody"></textarea>
-      <br />
+      <br>
       <div class="send_block"><button @click="editPost(id)" class="send_button">Éditer mon message</button>
       <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
     </div>

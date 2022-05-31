@@ -1,8 +1,47 @@
-.ce_posts
+.ce_posts_container
 {
     width:20%;
     border:1px solid blue;
     margin-left:5%;
     height:500px;
     background-color:white;
+    overflow-y: scroll;
+    overflow-x:hidden;
+  
+}
+.post_CE
+{
+    border:1px solid lightblue;
+    margin-bottom : 20px;  
+    position:relative;
+}
+h2
+{
+    text-align:center;
+}
+.date_ce
+{
+    width:95%;
+    margin:auto;
+    font-size:80%;
+    font-weight:bold;
+}
+.administration_ce
+{
+    bottom:0px;
+    width:100%;
+    border:1px solid red;
+    margin:0px; 
+    display:flex;
+    justify-content: flex-end;
+    
+}
+i
+{
+    font-size:15px;
+    margin-right:10px;
+}
+i:hover
+{
+    cursor:pointer;
 }

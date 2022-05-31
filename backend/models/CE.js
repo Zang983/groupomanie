@@ -16,3 +16,4 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
         timestamps: false ,
     }, 
 );
+module.exports=messageCE;

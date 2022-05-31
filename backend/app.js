@@ -1,5 +1,6 @@
 const express = require('express');
 const postsRoutes = require('./routes/posts');
+const ceRoutes= require('./routes/messageCE');
 const userRoutes = require('./routes/user');
 const path = require('path');
 const { Sequelize } = require('sequelize');
@@ -26,4 +27,5 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/posts', postsRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/api/',ceRoutes)
 module.exports = app;
