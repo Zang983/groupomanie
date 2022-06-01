@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-bind:class="{user_post_locked:statusLock}" >
     <div class="header_post">
       <div class="user_img--post">
         <img src="../assets/logo.png" alt="Avatar de l'utilisateur" />
@@ -83,6 +83,7 @@ export default {
   data() {
     return {
       modeEdit:this.editMode,
+      statusLock:this.lockStatus,
       newBody:this.body,
       newTitle:this.title,
       showAll:false,
@@ -112,7 +113,12 @@ export default {
     deletePostFromList(index)
     {
       this.$emit('deletePostFromList',index)
-    }
+    },
+    lockPost(index,id)
+    {
+      this.statusLock = !this.statusLock
+      this.$emit('lockPost',index,id)
+    },
   },
 
 };

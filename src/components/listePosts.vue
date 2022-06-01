@@ -19,7 +19,7 @@
             <div class="send_block"><button v-on:click="post()" class="send_button">Envoyer</button>
       <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
     </article>
-      <article class="user_post" v-bind:class="{user_post_locked:message.lockStatus}"   v-for="(message, index) in posts" :key="index">
+      <article class="user_post"   v-for="(message, index) in posts" :key="message.statusLock">
       <post
       v-bind:index="index"
       v-bind:lockStatus="message.lockStatus"
@@ -36,6 +36,7 @@
       v-bind:editMode="editMode"
       @editPost="editPost"
       @deletePostFromList="deletePostFromList"
+      @lockPost="lockPost"
       ></post>
       </article>
   </div>
@@ -53,13 +54,12 @@ export default {
   },
   methods: {
     lockPost(index,id){
-
      let requestPath = "http://localhost:3000/api/posts/post/lock";
       let infoPost={
         idPosts:id,
         lockStatus:!this.posts[index].lockStatus
       }
-      let promiseThis =this;
+
 
       let request = new Request(requestPath, {
         method: "PUT",
@@ -72,12 +72,10 @@ export default {
       fetch(request)
         .then(function (res){
           if (res.ok) {
-            console.log(res)
-            promiseThis.posts[index].statusLock= !promiseThis.posts[index].statusLock
             return res.json();
           }
         })  
-        this.$emit("updateListPost")
+        
     },
     newPost() {
      
@@ -157,7 +155,7 @@ export default {
              promiseThis.posts.splice(index, 1);
           }
         })
-        this.$emit("updateListPost")
+       
      
     },
      editPost(id,newTitle,newBody) {
@@ -265,7 +263,7 @@ export default {
   data() {
     return {
       editMode:"",
-      posts: [],
+      posts: {},
       newMessage: {
         body: "",
         title: "",
