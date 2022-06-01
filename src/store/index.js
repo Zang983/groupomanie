@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     idUser:"",
-    access:""
+    access:"",
+    userName:"",
   },
   getters: {
   },
@@ -18,8 +19,12 @@ export default new Vuex.Store({
     levelPermission(state,permissionFromDb)
     {
       state.access=permissionFromDb
-    }
+    },
+    saveUserName(state,userName)
+    {
+      state.userName=userName
 
+    },
   },
   actions: {
   },

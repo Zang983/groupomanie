@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const users=require('./user')
 const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     host: 'localhost',
     dialect: 'mysql',
@@ -12,7 +13,7 @@ const Post = sequelize.define("post",{
     contenu:DataTypes.TEXT,
     url_image:DataTypes.STRING,
     lockStatus:DataTypes.BOOLEAN,
-    users_idUser:{type :DataTypes.INTEGER, defaultValue:2},
+    users_idUser:{type :DataTypes.INTEGER, defaultValue:1},
     },
     {
         tableName:"posts",
@@ -21,17 +22,14 @@ const Post = sequelize.define("post",{
     }, 
 );
 
-Post.associate = (models) =>{
-    Post.belongsTo(users,{
-        foreignKey:"users_idUser",
-        targetKey:"idUsers",
-        defaultValue:3
-    })
-}
+
 Post.associate = (models) =>{
     Post.hasMany(commentaire,{
         foreignKey:'posts_idPosts'
     })
 }
+/* partie TEST*/
+
+
 
 module.exports=Post;

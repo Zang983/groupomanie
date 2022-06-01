@@ -1,6 +1,7 @@
 const annonce = require('../models/CE');
 const { Sequelize} = require('sequelize');
 const { Op } = require("sequelize");
+
 exports.sendCE = (req, res, next) => {
 
 
@@ -25,6 +26,7 @@ exports.getCE = (req, res, next) => {
     .catch(error=>res.status(500).json({message:error}))
 }
 exports.updateCE = (req, res, next) => {
+    
 
 }
 

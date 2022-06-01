@@ -46,6 +46,8 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
     })
     .then(user=>{
       let isAdmin="";
+
+    
       if(user===null)
       {
         res.status(404).json({message:"E-mail ou mot de passe incorrect"})
@@ -66,6 +68,8 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
           }
           res.status(200).json({
             userId: user.idUser,
+            firstName : user.firstName,
+            lastName:user.lastName,
             isAdmin:isAdmin,
             token: jwt.sign(
               { userId:user.idUser},

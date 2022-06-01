@@ -17,6 +17,7 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
 
 Service.associate = (models) =>{
     Service.hasMany(user,{
-        foreignKey:'Services_idService'
+        foreignKey:'Services_idService',
+        allowNull:true,
     })
 }

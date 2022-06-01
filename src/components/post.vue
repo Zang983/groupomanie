@@ -21,7 +21,7 @@
         <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i>
       </div>
     </div>
-    <p class="message_post" v-bind:class="{message_postShort: !showAll,}" v-show="!editMode">
+    <p class="message_post" v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
       {{ this.newBody }}<br />
     </p>
     <div v-show="modeEdit">

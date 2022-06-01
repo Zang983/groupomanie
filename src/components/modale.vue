@@ -116,6 +116,9 @@ export default {
            this.$emit('showModaleOff')
            this.$store.commit('saveIdUser',value.userId)
            this.$store.commit('levelPermission',value.isAdmin)
+           let userName=value.firstName + " " + value.lastName;
+           this.$store.commit('saveUserName',userName)
+           console.log(this.$store.state.userName)
           }
           });
           

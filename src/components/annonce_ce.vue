@@ -4,15 +4,22 @@
       <i class="fa-solid fa-message" v-on:click="newAnnounce()"></i>
     </h2>
     <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
-      <p class="date_ce">
+      <p class="date_ce" v-show="!annonce.editMode">
         Du : {{ annonce.dateDebut }} Au : {{ annonce.dateFin }}
       </p>
-      <p class="message_post_ce">{{ annonce.message }}</p>
+      <p>
+        Date de début : <input type="date" v-model="annonce.newDateDebut"/>
+        Date de fin : <input type="date" v-model="annonce.newDateFin"/>
+      </p>
+      <button @click="editMessageCE(annonce.index)">Envoyer</button>
+      <p class="message_post_ce" v-show="!annonce.editMode">{{ annonce.message }}</p>
+      <textarea class="message_post_ce" v-show="annonce.editMode" v-model="annonce.message"></textarea>
+
 
       <p class="administration_ce">
         <i
           class="fa-solid fa-pen-to-square edit_button_ce"
-          v-on:click="editMessageCE(index)"
+          v-on:click="toggleEditMode(index)"
         ></i>
         <i
           class="fa-solid fa-trash-can delete_button_ce"
@@ -29,6 +36,12 @@ export default {
   name: "annonceCe",
 
   methods: {
+    toggleEditMode(index)
+    {
+      this.annonceList[index].editMode= !this.annonceList[index].editMode
+
+      this.$forceUpdate()
+    },
     getAnnonceList() {
       let requestPath = "http://localhost:3000/api/ceMessage/all";
       let promiseThis = this;
@@ -43,19 +56,40 @@ export default {
         .then(function (value) {
           promiseThis.annonceList = value.resultat;
           for (let message in promiseThis.annonceList) {
-            promiseThis.annonceList[message].dateDebut = new Date(
-              promiseThis.annonceList[message].dateDebut
-            ).toLocaleDateString("fr");
-            promiseThis.annonceList[message].dateFin = new Date(
-              promiseThis.annonceList[message].dateFin
-            ).toLocaleDateString("fr");
+            promiseThis.annonceList[message].editMode=false;
           }
         })
         .catch(function (err) {
           console.log(err);
         });
-      this.$forceUpdate();
     },
+    // deleteMessageCE(id){
+    //   let requestPath = "http://localhost:3000"
+    // },
+    editMessageCE(index){
+
+      // let id=this.annonceList[index].idCE
+      // let requestPath = `http://localhost:3000/api/ceMessage/${id}`;
+      // let infoPost={
+      // }
+      console.log("OK : " + this.annonceList[index].newDateDebut)
+      // let request = new Request(requestPath, {
+      //   method: "PUT",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(infoPost),
+      // });
+      // fetch(request)
+      //   .then(function (res){
+      //     if (res.ok) {
+      //       return res.json();
+      //     }
+      //   })
+    }
+
+
   },
 
   data() {

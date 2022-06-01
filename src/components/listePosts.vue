@@ -3,7 +3,6 @@
     <h2>
       Fil d'actu <i class="fa-solid fa-message" v-on:click="newPost('1')"></i>
     </h2>
-
     <article class="user_new_post" v-if="this.newMessage.showIt == 1">
       <div class="header_new_post">
         <label
@@ -20,8 +19,8 @@
             <div class="send_block"><button v-on:click="post()" class="send_button">Envoyer</button>
       <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
     </article>
-      <article class="user_post" v-bind:class="{user_post_locked:message.lockStatus}"  v-for="(message, index) in posts" :key="index">
-      <post 
+      <article class="user_post" v-bind:class="{user_post_locked:message.lockStatus}"   v-for="(message, index) in posts" :key="index">
+      <post
       v-bind:index="index"
       v-bind:lockStatus="message.lockStatus"
       v-bind:body="message.body"
@@ -121,7 +120,7 @@ export default {
               lockStatus:"",
             };
             newMessage.body = message.contenu;
-            newMessage.author = "Zangetsu";
+            newMessage.author = message.auteur;
             newMessage.title=message.titre;
             newMessage.postDate=message.dateCreation;
             newMessage.editDate=message.dateDernierEdit;
@@ -162,9 +161,7 @@ export default {
         });
      
     },
-    /*Cette fonction permet au texte d'être éditable et détecte si on appuie sur échap ce qui permet d'annuler toute modification.*/
-
-    editPost(id,newTitle,newBody) {
+     editPost(id,newTitle,newBody) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let infoPost={
         idPosts:id,
@@ -192,13 +189,14 @@ export default {
     post() {
       let requestPath = "http://localhost:3000/api/posts/post";
       let infoPost = {};
-      this.author = "Zangetsu";
+      this.author = this.$store.state.userName;
       this.editDate = "";
       infoPost = {
         author: this.author,
         body: this.newMessage.body,
         title: this.newMessage.title,
-        users_idUser:this.$store.state.idUser
+        users_idUser:this.$store.state.idUser,
+        userName:this.$store.state.userName
       };
       let request = new Request(requestPath, {
         method: "POST",
