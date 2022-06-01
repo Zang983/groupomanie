@@ -24,35 +24,50 @@ exports.sendPost = (req, res, next) => {
 
 }
 exports.deletePost = (req, res, next) => {
-    post.destroy({
-        where: {
-            [Op.and]: [
-                { idPosts: req.body.id },
-                { users_idUser: req.body.userId }
-            ]
-        }
-    })
-        .then(result => {
-            if (result === 1) {
-                res.status(200).json("Message supprimé")
+      
+    console.log("ID : " + req.body.id)
+    post.findOne({where:{idPosts:req.body.id}})
+        .then(result=>{
+            console.log(result)
+            if(!result.lockStatus)
+            {
+                console.log("ici")
+                post.destroy({
+                    where: {
+                        [Op.and]: [
+                            { idPosts: req.body.id },
+                            { users_idUser: req.body.userId }
+                        ]
+                    }
+                })
+                    .then(result => {
+                        if (result === 1) {
+                          return  res.status(200).json("Message supprimé")
+                        }
+                        else {
+                           return res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
+                        }
+            
+                    })
             }
-            else {
-                res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
+            else
+            {
+                return res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
             }
+        }).catch(error =>res.status(501).json("Le serveur n'a pas compris votre demande") )
+        
 
-        })
 }
 exports.getPosts = (req, res, next) => {
     let admin = 1;
    // post.hasOne(users)
     if (admin) {
+        // const result = sequelize2.query("SELECT * FROM posts AND * FROM idUser INNER JOIN users ON users_idUser=idUser ")
         post.findAll({
            // include:users,
-        })
-       // const result = sequelize2.query("SELECT * FROM posts AND * FROM idUser INNER JOIN users ON users_idUser=idUser ")
-            .then(Post => { res.status(200).json(Post) })
-            .catch(error => res.status(500).json(error));
-
+        }).then(Post => { res.status(200).json(Post) })
+        .catch(error => res.status(500).json({ error }));
+       
     }
     else {
         post.findAll({
@@ -65,7 +80,7 @@ exports.getPosts = (req, res, next) => {
             }
         })
             .then(Post => { res.status(200).json(Post) })
-            .catch(error => res.status(500).json({ erreur: 'Problème' }));
+            .catch(error => res.status(500).json({ error }));
     }
 
 }

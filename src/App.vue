@@ -32,7 +32,7 @@
     <navBar></navBar>
       <div class="hbody">
         <membersList></membersList>
-        <posts></posts>
+        <posts @updateListPost="updateListPost" :key="listPostVersion"></posts>
         <cePosts></cePosts>
       </div>
     </div>
@@ -59,12 +59,18 @@ export default {
     membersList,
   },
   methods: {
+    updateListPost(){
+        this.listPostVersion =+1;
+        console.log("C'est update normalement" + this.listPostVersion)
+      
+    },
     showModaleOff() {
       this.show = true;
     },
   },
   data() {
     return {
+      listPostVersion:1,
       show: false,
     };
   },

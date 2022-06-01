@@ -10,18 +10,8 @@ exports.deleteCE = (req, res, next) => {
 
 }
 exports.getCE = (req, res, next) => {
-    let date_actuelle = new Date();
-    let requete = annonce.findAll({
-        order: [
-            ['dateDebut', 'DESC'],
-            Sequelize.col('dateDebut', 'DESC'),
-        ],
-        where:{
-            dateFin:{
-            [Op.gt]:date_actuelle
-            } 
-        }
-    })
+
+    let requete = annonce.findAll()
     .then(resultat=>res.status(200).json({resultat}))
     .catch(error=>res.status(500).json({message:error}))
 }

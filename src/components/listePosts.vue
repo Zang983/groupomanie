@@ -77,20 +77,14 @@ export default {
             return res.json();
           }
         })  
-        this.$forceUpdate()
+        this.$emit("updateListPost")
     },
-    getAllDate() {
-      let date = new Date().toLocaleDateString("fr");
-      let heure = new Date().toLocaleTimeString("fr");
-      date += " à " + heure;
-      return date;
-    },
-    newPost(value) {
-      if (value != undefined) {
+    newPost() {
+     
         this.newMessage.showIt = !this.newMessage.showIt;
         this.newMessage.body = "";
         this.newMessage.title = "";
-      }
+      
     },
     getListPost() {
       let requestPath = "http://localhost:3000/api/posts/post/page=1";
@@ -136,10 +130,9 @@ export default {
         .catch(function (err) {
           console.log(err);
         });
-        this.$forceUpdate()         
+         
     },
     deletePostFromList(index) {
-      console.log("okkkk")
       let requestPath = `http://localhost:3000/api/posts/post/delete/id=${this.posts[index].id}`;
       let corps={
         id:this.posts[index].id,
@@ -164,6 +157,7 @@ export default {
              promiseThis.posts.splice(index, 1);
           }
         })
+        this.$emit("updateListPost")
      
     },
      editPost(id,newTitle,newBody) {
@@ -197,7 +191,7 @@ export default {
       this.author = this.$store.state.userName;
       this.editDate = "";
       infoPost = {
-        author: this.author,
+        author: this.$store.state.userName,
         body: this.newMessage.body,
         title: this.newMessage.title,
         users_idUser:this.$store.state.idUser,
@@ -211,15 +205,19 @@ export default {
         },
         body: JSON.stringify(infoPost),
       });
+
       fetch(request)
         .then(function (res) {
           if (res.ok) {
             return res.json();
           }
         })
-        .then((value) => {
-          this.newPost(value);
+        .then(()=> {
+          this.getListPost()
+          this.newPost()
         });
+        
+        
     },
     sendLike(valeurLike, id) {
       if (this.like == undefined || this.like == null) {
