@@ -116,12 +116,6 @@ exports.updateAPost = (req, res, next) => {
 }
 
 exports.likeAPost = (req, res, next) => {
-    if (req.body.valeur === 0) {
-        valeur = false;
-    }
-    if (req.body.valeur === 1) {
-        valeur = true;
-    }
     if (req.body.valeur === -1) {
         console.log("On supprimes")
         aimer.destroy({
@@ -129,16 +123,27 @@ exports.likeAPost = (req, res, next) => {
                 users_idUser: req.body.idUser,
                 posts_idPosts: req.body.idPost
             }
-        }).then(res.status(200).json({ message: "Vote supprimé" }))
-            .catch(res.status(404).json({ message: "Vote non existant" }))
+        }).then(()=> {return res.status(200).json({ message: "Vote supprimé" })})
+            .catch(()=> {return res.status(404).json({ message: "Vote non existant" })})
     }
     if (req.body.valeur === 0 || req.body.valeur === 1) {
+        let valeur=false;
+        if(req.body.valeur===1)
+        {
+            valeur=true;
+        }
         aimer.create({
             users_idUser: req.body.idUser,
             posts_idPosts: req.body.idPost,
-            valeur: valeur
-        }).then(res.status(200).json({ message: "Vote enregistré" }))
-            .catch(res.status(500).json({ message: "Problème d'enregistrement du vote" }))
+            valeur:valeur,
+        }).then(()=> {return res.status(200).json({ message: "Vote enregistré" })})
+            .catch( ()=> {
+                aimer.update({valeur:valeur},
+                    {where:{
+                        users_idUser:req.body.idUser,
+                        posts_idPosts:req.body.idPost
+                    }}).then(()=>{return res.status(201).json({message:"Mise à jour de votre vote enregistrée"})})
+                return res.status(500).json({ message: "Problème d'enregistrement du vote" })})
     }
 
 }

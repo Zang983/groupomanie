@@ -73,8 +73,6 @@ export default {
     "id",
     "postDate",
     "editDate",
-    //"showAllMessage",
-    "like",
     "userId",
     "urlImage",
     "editMode"
@@ -118,6 +116,47 @@ export default {
     {
       this.statusLock = !this.statusLock
       this.$emit('lockPost',index,id)
+    },
+    sendLike(valeurLike, id) {
+      if (this.like == undefined || this.like == null) {
+        this.like = valeurLike;
+      } //si l'utilisateur à déjà (dis)liké le post
+      else {
+        if (this.like === valeurLike) {
+          //l'utilisateur souhaite être neutre
+          valeurLike = -1; //on défini valeurLike à -1, ce qui implique la suppression du statut du like côté API
+          this.like = null;
+        }
+        if (this.like === 1 && valeurLike === 0) {
+          // l'utilisateur aimé le like et le dislike
+          this.like = 0;
+        }
+        if (this.like === 0 && valeurLike === 1) {
+          //si l'utilisateur like plutôt que dislike un post.
+          this.like = 1;
+        }
+      }
+      const infoLike = {
+        valeur: valeurLike,
+        idPost: id,
+        idUser:this.$store.state.idUser
+      };
+      let requestPath = `http://localhost:3000/api/posts/post/like/id=${id}`;
+
+      let request = new Request(requestPath, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(infoLike),
+      });
+      fetch(request)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        })
     },
   },
 
