@@ -23,11 +23,11 @@ const Post = sequelize.define("post",{
 );
 
 
-Post.associate = (models) =>{
-    Post.hasMany(commentaire,{
-        foreignKey:'posts_idPosts'
-    })
-}
+// Post.associate = (models) =>{
+//     Post.hasMany(commentaire,{
+//         foreignKey:'posts_idPosts'
+//     })
+// }
 /* partie TEST*/
 
 

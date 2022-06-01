@@ -27,20 +27,20 @@ const User = sequelize.define("user",{
 //     })
 // }
 
-User.associate = (models) =>{
-    User.hasMany(posts,{
-        foreignKey:'users_idUser',
-        allowNull: true,
-    })
-}
+// User.associate = (models) =>{
+//     User.hasMany(posts,{
+//         foreignKey:'users_idUser',
+//         allowNull: true,
+//     })
+// }
 
-User.associate = (models) =>{
-    User.hasMany(commentaire,{
-        foreignKey:'users_idUser',
-        allowNull: false,
-        defaultValue: 3
-    })
-}
+// User.associate = (models) =>{
+//     User.hasMany(commentaire,{
+//         foreignKey:'users_idUser',
+//         allowNull: false,
+//         defaultValue: 3
+//     })
+// }
 /* partie TEST*/
 
 

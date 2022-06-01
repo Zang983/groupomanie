@@ -1,8 +1,12 @@
-const { Sequelize, InvalidConnectionError } = require('sequelize');
+const { Sequelize} = require('sequelize');
 const post = require('../models/post');
 const aimer = require('../models/aimer')
 const users= require ('../models/user')
 const Op = Sequelize.Op
+const sequelize2 = new Sequelize("mydb", 'root', 'zangetsu91', {
+    host: 'localhost',
+    dialect: 'mysql',
+  });
 
 exports.sendPost = (req, res, next) => {
 
@@ -40,11 +44,12 @@ exports.deletePost = (req, res, next) => {
 }
 exports.getPosts = (req, res, next) => {
     let admin = 1;
-    post.hasOne(users)
+   // post.hasOne(users)
     if (admin) {
         post.findAll({
            // include:users,
         })
+       // const result = sequelize2.query("SELECT * FROM posts AND * FROM idUser INNER JOIN users ON users_idUser=idUser ")
             .then(Post => { res.status(200).json(Post) })
             .catch(error => res.status(500).json(error));
 

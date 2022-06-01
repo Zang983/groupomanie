@@ -109,6 +109,10 @@ export default {
       this.$emit('editPost',id,this.newTitle,this.newBody)
       this.toggleEditPost();
     },
+    deletePostFromList(index)
+    {
+      this.$emit('deletePostFromList',index)
+    }
   },
 
 };

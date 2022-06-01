@@ -35,6 +35,7 @@
       v-bind:urlImage="message.urlImage"
       v-bind:editMode="editMode"
       @editPost="editPost"
+      @deletePostFromList="deletePostFromList"
       ></post>
       </article>
   </div>
@@ -138,11 +139,15 @@ export default {
         this.$forceUpdate()         
     },
     deletePostFromList(index) {
+      console.log("okkkk")
       let requestPath = `http://localhost:3000/api/posts/post/delete/id=${this.posts[index].id}`;
       let corps={
         id:this.posts[index].id,
         userId:this.$store.state.idUser,
       }
+      
+      console.log(corps.id+ "   ")
+      
       let request = new Request(requestPath, {
         method: "DELETE",
         headers: {
@@ -158,7 +163,7 @@ export default {
           {
              promiseThis.posts.splice(index, 1);
           }
-        });
+        })
      
     },
      editPost(id,newTitle,newBody) {
