@@ -54,7 +54,7 @@
       ></post>
     </div>
     <div>
-      <span v-for="page in nombrePage" v-bind:key="page" class="pagination" v-on:click="getListPost(page)" > {{page}}</span>
+      <span v-for="page in nombrePage" v-bind:key="page" class="pagination" v-on:click="getListPost(page)" v-bind:class="{pageActuelle:page===pageActuelle}" > {{page}}</span>
     </div>
   </div>
 </template>
