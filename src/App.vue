@@ -28,8 +28,8 @@
   <div id="app">
     <modale @showModaleOff="showModaleOff" v-if="!show"></modale>
     <div id="hideBeforeConnexion" v-if="show == true">
-    <banniere></banniere>
-    <navBar></navBar>
+      <banniere></banniere>
+      <navBar></navBar>
       <div class="hbody">
         <membersList></membersList>
         <posts @updateListPost="updateListPost" :key="listPostVersion"></posts>
@@ -47,7 +47,6 @@ import posts from "./components/listePosts.vue";
 import cePosts from "./components/annonce_ce.vue";
 import membersList from "./components/members_list.vue";
 
-
 export default {
   name: "App",
   components: {
@@ -59,8 +58,8 @@ export default {
     membersList,
   },
   methods: {
-    updateListPost(){
-        this.listPostVersion =+1;
+    updateListPost() {
+      this.listPostVersion = +1;
     },
     showModaleOff() {
       this.show = true;
@@ -68,7 +67,7 @@ export default {
   },
   data() {
     return {
-      listPostVersion:1,
+      listPostVersion: 1,
       show: false,
     };
   },
@@ -83,24 +82,20 @@ export default {
 }
 
 body {
- 
-  margin:0px;
-  min-width:100%;
-  font-size:1.35em;
+  margin: 0px;
+  min-width: 100%;
+  font-size: 1.35em;
   background-color: rgba(40, 42, 52, 0.151);
 }
 
-      .send_button
-    {
-      height:35px;
-      background-color:blue;
-      width:80%;
-      color:white;
-        &__full_size
-        {
-          width:100%;
-        }
-    }
-
+.send_button {
+  height: 35px;
+  background-color: blue;
+  width: 80%;
+  color: white;
+  &__full_size {
+    width: 100%;
+  }
+}
 
 </style>

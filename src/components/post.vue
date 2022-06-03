@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="{user_post_locked:statusLock}" >
+  <article v-bind:class="{user_post_locked:statusLock}" >
     <div class="header_post">
       <div class="user_img--post">
         <img src="../assets/logo.png" alt="Avatar de l'utilisateur" />
@@ -16,7 +16,7 @@
         ></i>
         <i
           class="fa-solid fa-trash-can"
-          v-on:click="deletePostFromList(index)"
+          v-on:click="deletePostFromList(index,id)"
         ></i>
         <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i>
       </div>
@@ -58,7 +58,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script>
@@ -108,9 +108,9 @@ export default {
       this.$emit('editPost',id,this.newTitle,this.newBody)
       this.toggleEditPost();
     },
-    deletePostFromList(index)
+    deletePostFromList(index,id)
     {
-      this.$emit('deletePostFromList',index)
+      this.$emit('deletePostFromList',index,id)
     },
     lockPost(index,id)
     {

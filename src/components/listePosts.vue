@@ -7,38 +7,55 @@
       <div class="header_new_post">
         <label
           >Titre de votre message :
-          <input v-model="newMessage.title" class="new_title" placeholder="Votre titre"
+          <input
+            v-model="newMessage.title"
+            class="new_title"
+            placeholder="Votre titre"
         /></label>
         <div class="action_post"></div>
       </div>
       <p class="message_post">
         <label>
-          <textarea v-model="newMessage.body" class="new_message" placeholder="Votre message :"> </textarea>
+          <textarea
+            v-model="newMessage.body"
+            class="new_message"
+            placeholder="Votre message :"
+          >
+          </textarea>
         </label>
       </p>
-            <div class="send_block"><button v-on:click="post()" class="send_button">Envoyer</button>
-      <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
+      <div class="send_block">
+        <button v-on:click="post()" class="send_button">Envoyer</button>
+        <button class="send_picture"><i class="fa-solid fa-image"></i></button>
+      </div>
     </article>
-      <article class="user_post"   v-for="(message, index) in posts" :key="message.statusLock">
+    <div
+      class="user_post"
+      v-for="(message, index) in posts"
+      :key="message.statusLock"
+    >
       <post
-      v-bind:index="index"
-      v-bind:lockStatus="message.lockStatus"
-      v-bind:body="message.body"
-      v-bind:title="message.title"
-      v-bind:author="message.author"
-      v-bind:id="message.id"
-      v-bind:postDate="message.postDate"
-      v-bind:editDate="message.editDate"
-      v-bind:showAllMessage="message.showAllMessage"
-      v-bind:like="message.like"
-      v-bind:userId="message.userId"
-      v-bind:urlImage="message.urlImage"
-      v-bind:editMode="editMode"
-      @editPost="editPost"
-      @deletePostFromList="deletePostFromList"
-      @lockPost="lockPost"
+        v-bind:index="index"
+        v-bind:lockStatus="message.lockStatus"
+        v-bind:body="message.body"
+        v-bind:title="message.title"
+        v-bind:author="message.author"
+        v-bind:id="message.id"
+        v-bind:postDate="message.postDate"
+        v-bind:editDate="message.editDate"
+        v-bind:showAllMessage="message.showAllMessage"
+        v-bind:like="message.like"
+        v-bind:userId="message.userId"
+        v-bind:urlImage="message.urlImage"
+        v-bind:editMode="editMode"
+        @editPost="editPost"
+        @deletePostFromList="deletePostFromList"
+        @lockPost="lockPost"
       ></post>
-      </article>
+    </div>
+    <div>
+      <span v-for="page in nombrePage" v-bind:key="page" class="pagination" v-on:click="getListPost(page)" > {{page}}</span>
+    </div>
   </div>
 </template>
 
@@ -50,17 +67,15 @@ export default {
   name: "postList",
 
   components: {
-    post
+    post,
   },
   methods: {
-    lockPost(index,id){
-     let requestPath = "http://localhost:3000/api/posts/post/lock";
-      let infoPost={
-        idPosts:id,
-        lockStatus:!this.posts[index].lockStatus
-      }
-
-
+    lockPost(index, id) {
+      let requestPath = "http://localhost:3000/api/posts/post/lock";
+      let infoPost = {
+        idPosts: id,
+        lockStatus: !this.posts[index].lockStatus,
+      };
       let request = new Request(requestPath, {
         method: "PUT",
         headers: {
@@ -69,36 +84,33 @@ export default {
         },
         body: JSON.stringify(infoPost),
       });
-      fetch(request)
-        .then(function (res){
-          if (res.ok) {
-            return res.json();
-          }
-        })  
+      fetch(request).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+      });
     },
     newPost() {
-     
-        this.newMessage.showIt = !this.newMessage.showIt;
-        this.newMessage.body = "";
-        this.newMessage.title = "";
-      
+      this.newMessage.showIt = !this.newMessage.showIt;
+      this.newMessage.body = "";
+      this.newMessage.title = "";
     },
-    getListPost() {
-      let requestPath = "http://localhost:3000/api/posts/post/page=1";
+    getListPost(page) {
+      let requestPath = `http://localhost:3000/api/posts/post/page=${page}`;
       let promiseThis = this;
-      this.posts=[]
-
-
+      this.posts = [];
 
       fetch(requestPath)
         .then(function (res) {
           if (res.ok) {
+            promiseThis.pageActuelle=page
             return res.json();
           }
         })
         .then(function (value) {
-            for (let message of value) {
-              let newMessage = {
+
+          for (let message of value.Post) {
+            let newMessage = {
               body: "",
               author: "Zang",
               title: "",
@@ -110,62 +122,58 @@ export default {
               readerRate: "",
               showComment: false,
               like: null,
-              userId:"",
-              urlImage:"",
-              lockStatus:"",
+              userId: "",
+              urlImage: "",
+              lockStatus: "",
             };
             newMessage.body = message.contenu;
             newMessage.author = message.auteur;
-            newMessage.title=message.titre;
-            newMessage.postDate=message.dateCreation;
-            newMessage.editDate=message.dateDernierEdit;
-            newMessage.id=message.idPosts;
-            newMessage.urlImage=message.url_image;
-            newMessage.idUser=message.users_idUser;
-            newMessage.lockStatus=message.lockStatus;
-            newMessage.like=message.likeStatus;
-            promiseThis.posts.push(newMessage);   
+            newMessage.title = message.titre;
+            newMessage.postDate = message.dateCreation;
+            newMessage.editDate = message.dateDernierEdit;
+            newMessage.id = message.idPosts;
+            newMessage.urlImage = message.url_image;
+            newMessage.idUser = message.users_idUser;
+            newMessage.lockStatus = message.lockStatus;
+            newMessage.like = message.likeStatus;
+            promiseThis.posts.push(newMessage);
+            promiseThis.nombrePage = value.nombrePage / 5;
+            promiseThis.nombrePage = Math.ceil(value.nombrePage / 5);
           }
+          
         })
         .catch(function (err) {
           console.log(err);
         });
-         
     },
-    deletePostFromList(index) {
-      let requestPath = `http://localhost:3000/api/posts/post/delete/id=${this.posts[index].id}`;
-      let corps={
-        id:this.posts[index].id,
-        userId:this.$store.state.idUser,
-      }
+    deletePostFromList(index, id) {
+      let requestPath = `http://localhost:3000/api/posts/post/delete/id=${id}`;
+      let corps = {
+        id: id,
+        userId: this.$store.state.idUser,
+      };
       let request = new Request(requestPath, {
         method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body:JSON.stringify(corps)
+        body: JSON.stringify(corps),
       });
-      let promiseThis=this;
       fetch(request)
-        .then(function (res){
-          if(res.ok)
-          {
-             promiseThis.posts.splice(index, 1);
-          }
+        .then(() => {
+          this.getListPost(this.pageActuelle);
         })
-       
-     
+        .catch((error) => console.log(error));
     },
-     editPost(id,newTitle,newBody) {
+    editPost(id, newTitle, newBody) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
-      let infoPost={
-        idPosts:id,
-        newTitle:newTitle,
-        newBody:newBody,
-        idUser:this.$store.state.idUser
-      
-      }
+      let infoPost = {
+        idPosts: id,
+        newTitle: newTitle,
+        newBody: newBody,
+        idUser: this.$store.state.idUser,
+      };
       let request = new Request(requestPath, {
         method: "PUT",
         headers: {
@@ -174,13 +182,12 @@ export default {
         },
         body: JSON.stringify(infoPost),
       });
-      fetch(request)
-        .then(function (res){
-          if (res.ok) {
-            return res.json();
-          }
-        })
-      this.editMode=false;
+      fetch(request).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+      });
+      this.editMode = false;
     },
     post() {
       let requestPath = "http://localhost:3000/api/posts/post";
@@ -191,8 +198,8 @@ export default {
         author: this.$store.state.userName,
         body: this.newMessage.body,
         title: this.newMessage.title,
-        users_idUser:this.$store.state.idUser,
-        userName:this.$store.state.userName
+        users_idUser: this.$store.state.idUser,
+        userName: this.$store.state.userName,
       };
       let request = new Request(requestPath, {
         method: "POST",
@@ -209,19 +216,19 @@ export default {
             return res.json();
           }
         })
-        .then(()=> {
-          this.getListPost()
-          this.newPost()
+        .then(() => {
+          this.getListPost(0);
+          this.newPost();
           this.$emit("updateListPost");
         });
-        
-        
     },
   },
 
   data() {
     return {
-      editMode:"",
+      pageActuelle: 1,
+      nombrePage: 0,
+      editMode: "",
       posts: {},
       newMessage: {
         body: "",
@@ -232,7 +239,7 @@ export default {
     };
   },
   beforeMount() {
-    this.getListPost();
+    this.getListPost(1);
   },
 };
 </script>

@@ -2,6 +2,7 @@
   <div class="ce_posts_container">
     <h2>
       Annonce C.E.
+          <button v-on:click="getAnnonceList()" class="refresh_button"><i class="fa-solid fa-arrows-rotate"></i></button>
       <i
         class="fa-solid fa-message"
         v-if="this.$store.state.access"
