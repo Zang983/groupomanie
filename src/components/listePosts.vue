@@ -138,9 +138,6 @@ export default {
         id:this.posts[index].id,
         userId:this.$store.state.idUser,
       }
-      
-      console.log(corps.id+ "   ")
-      
       let request = new Request(requestPath, {
         method: "DELETE",
         headers: {
@@ -215,6 +212,7 @@ export default {
         .then(()=> {
           this.getListPost()
           this.newPost()
+          this.$emit("updateListPost");
         });
         
         

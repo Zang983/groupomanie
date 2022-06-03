@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="logo"></div>
-            <img src="../assets/logo.png">
+            <img src="../assets/logo/icon-left-font-monochrome-black.svg">
         <blague></blague>
         <ul>
             <li>Paramètres</li>
@@ -30,22 +30,6 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style src="./banniere.scss" lang="scss">
 
-header
-{
-    display:flex;
-    justify-content:space-between;
-    align-items: center;
-}
-ul
-{
-    width:15%;
-    display:flex;
-    justify-content: space-between;
-}
-li
-{
-    list-style-type:none;
-}
 </style>

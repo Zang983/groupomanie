@@ -61,8 +61,6 @@ export default {
   methods: {
     updateListPost(){
         this.listPostVersion =+1;
-        console.log("C'est update normalement" + this.listPostVersion)
-      
     },
     showModaleOff() {
       this.show = true;
@@ -77,13 +75,32 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .hbody {
   display: flex;
   margin-top: 5%;
+  justify-content: space-around;
 }
+
 body {
+ 
+  margin:0px;
+  min-width:100%;
   font-size:1.35em;
   background-color: rgba(40, 42, 52, 0.151);
 }
+
+      .send_button
+    {
+      height:35px;
+      background-color:blue;
+      width:80%;
+      color:white;
+        &__full_size
+        {
+          width:100%;
+        }
+    }
+
+
 </style>

@@ -25,13 +25,10 @@ exports.sendPost = (req, res, next) => {
 }
 exports.deletePost = (req, res, next) => {
       
-    console.log("ID : " + req.body.id)
     post.findOne({where:{idPosts:req.body.id}})
         .then(result=>{
-            console.log(result)
             if(!result.lockStatus)
             {
-                console.log("ici")
                 post.destroy({
                     where: {
                         [Op.and]: [

@@ -9,7 +9,7 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
   const messageCE = sequelize.define("CE",{
     idCE:{ type: DataTypes.INTEGER, primaryKey: true },
     visible:DataTypes.BOOLEAN,
-    message:DataTypes.STRING,
+    message:DataTypes.TEXT,
     users_idUser:DataTypes.INTEGER,
     },
     {

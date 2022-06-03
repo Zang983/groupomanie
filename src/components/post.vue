@@ -22,7 +22,7 @@
       </div>
     </div>
     <p class="message_post" v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
-      {{ this.newBody }}<br />
+      <pre>{{ this.newBody }}</pre>
     </p>
     <div v-show="modeEdit">
       <textarea class="textarea__edit" v-model="newBody"></textarea>
