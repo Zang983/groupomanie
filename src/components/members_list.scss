@@ -2,5 +2,18 @@
 {
     width:15%;
     background-color:white;
+    border-radius:20px;
     height:500px;
+    padding-left:10px;
+    text-align:center;
+}
+.member
+{
+    text-align:left;
+}
+.member:hover
+{
+    text-decoration:underline;
+    color:blue;
+    cursor:pointer;
 }

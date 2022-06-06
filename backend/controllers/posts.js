@@ -144,7 +144,7 @@ exports.likeAPost = (req, res, next) => {
             users_idUser: req.body.idUser,
             posts_idPosts: req.body.idPost,
             valeur: valeur,
-        }).then(value => {console.log(value.json);})
+        }).then(()=>res.status(201).json({message:"Vote bien pris en compte"}))
             .catch(() => {
                 aimer.update({ valeur: valeur },
                     {

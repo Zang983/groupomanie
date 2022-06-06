@@ -39,8 +39,6 @@ exports.getComments = (req, res, next) => {
 
 }
 exports.updateAComment = (req, res, next) => {
-
-        console.log(req.params)
         let id=req.params.id.split("=")[1]
         commentaire.update({
             contenu: req.body.nouveauCommentaire,
@@ -53,8 +51,6 @@ exports.updateAComment = (req, res, next) => {
             .catch(error => res.status(500).json({ error }))
 }
 exports.likeAComment = (req, res, next) => {
-    console.log(req.body)
-
     if (req.body.valeur === -1) {
         aimer.destroy({
             where: {
@@ -73,7 +69,7 @@ exports.likeAComment = (req, res, next) => {
             users_idUser: req.body.idUser,
             Commentaires_idCommentaire: req.body.idCommentaire,
             valeur: valeur,
-        }).then(value => { console.log(value.json); })
+        }).then(()=> res.status(201).json("Vote pris en compte") )
             .catch(() => {
                 aimer.update({ valeur: valeur },
                     {
@@ -91,7 +87,6 @@ exports.likeAComment = (req, res, next) => {
 }
 
 exports.lockCommentaire = (req, res, next) => {
-    console.log(req.body)
     commentaire.update({ lockStatus: req.body.lockStatus }, {
         where: { idCommentaire: req.body.idCommentaire }
     })

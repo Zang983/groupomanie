@@ -82,6 +82,14 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
     })
   };
 
+  exports.userList = (req,res,next)=>{
+    user.findAll({
+     
+      attributes:['firstName','lastName','idUser']
+    }).then(result=>res.status(200).json(result))
+    .catch(error=>res.status(500).json(error))
+
+  }
   
   exports.profil = (req, res, next) => {
     /*Faire une requête renvoyant les informations du profil demandé.

@@ -1,6 +1,3 @@
-<!-- FINI L'API !!!!!!!!!!!!!! 
-dans le partie "app.vue" transmettre une variable "props" avec un v-show sur tout le contenu hors modale.
--->
 <template>
   <div class="bloc-modale" v-if="!revele">
     <div class="overlay"></div>
@@ -118,7 +115,6 @@ export default {
            this.$store.commit('levelPermission',value.isAdmin)
            let userName=value.firstName + " " + value.lastName;
            this.$store.commit('saveUserName',userName)
-           console.log(this.$store.state.userName)
           }
           });
           

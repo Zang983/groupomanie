@@ -1,10 +1,4 @@
-<!-- TO DO LIST
-  Mise en  forme des commentaires à faire.
-jointure à ajouter sur la requête get.
-ajout des boutons d'interraction (like/dislike/editer/supprimer/locker)
-ajout des routes correspondantes. 
-faire un composant "commentaire" celui-ci gérant la liste des commentaires comme pour les posts
--->
+
 
 
 <template>
@@ -129,7 +123,6 @@ export default {
     },
     lockCommentaire(index,id){
         let requestPath = `http://localhost:3000/api/comment/lock/id=${this.postId}`;
-        console.log(this.listeCommentaire[index].lockStatus)
         let promiseThis=this
       let infoPost = {
         idCommentaire: id,
@@ -152,7 +145,6 @@ export default {
 
     },
     editCommentaire(id, nouveauContenu) {
-      console.log(id)
       let requestPath = `http://localhost:3000/api/comment/id=${id}`;
       let infoPost = {
         nouveauCommentaire: nouveauContenu,
