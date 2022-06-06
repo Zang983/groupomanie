@@ -4,12 +4,13 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
     dialect: 'mysql',
   });
   const user=require ("./user")
-  const commentaire= require("./commentaires")
+  const commentaire= require("./commentaire")
 
 
 const like = sequelize.define('like',{
     users_idUser:{
         type:DataTypes.INTEGER,
+        primaryKey:true,
         references:{
             model:user,
             key:'idUser'
@@ -22,6 +23,21 @@ const like = sequelize.define('like',{
             key:'idCommentaire'
         }
     },
+    lockStatus:{
+        type:DataTypes.BOOLEAN,
+    },
+    valeur:DataTypes.BOOLEAN,
+},    {
+    tableName:"like",
+    timestamps: false ,
 },
-)
+{
+indexes: [
+    {
+        unique: true,
+        fields: ['users_idUser', 'Commentaires_idCommentaire']
+    }
+]
+},
+ )
 module.exports=like;

@@ -1,0 +1,20 @@
+
+.commentaire
+{
+    width:95%;
+    margin-top:15px;
+    font-size:130%;
+    border-radius: 20px;
+    padding:8px;
+}
+
+.commentaire:nth-child(even)
+{
+    border:1px solid lightblue;
+    background-color:lightgray
+}
+.commentaire:nth-child(odd)
+{
+    border:1px solid lightgray;
+    background-color:lightblue
+}

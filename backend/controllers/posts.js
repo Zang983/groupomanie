@@ -20,7 +20,7 @@ exports.sendPost = (req, res, next) => {
         lockStatus: 0,
         users_idUser: req.body.users_idUser,
     })
-    return res.status(200).json({ message: "OK" })
+    return res.status(200).json({ message: "Post créer" })
 
 }
 exports.deletePost = (req, res, next) => {
@@ -53,6 +53,8 @@ exports.deletePost = (req, res, next) => {
 
 
 }
+
+/* Refactoriser, pas besoin du if/else modifier la valeur du lockStatus selon le droit admin */
 exports.getPosts = (req, res, next) => {
 
     let admin = 1;
@@ -62,8 +64,6 @@ exports.getPosts = (req, res, next) => {
     {
         page--;
     }
-    
-    console.log(page)
     post.count()
         .then((value) => {
             nombrePage = value;
@@ -73,7 +73,6 @@ exports.getPosts = (req, res, next) => {
                 post.findAll({ offset: page * 5, limit: 5 })
                     .then(Post => { res.status(200).json({ Post, nombrePage }) })
                     .catch(error => res.status(500).json({ error }));
-
             }
             else {
                 post.findAll({
@@ -145,7 +144,7 @@ exports.likeAPost = (req, res, next) => {
             users_idUser: req.body.idUser,
             posts_idPosts: req.body.idPost,
             valeur: valeur,
-        }).then(() => { return res.status(200).json({ message: "Vote enregistré" }) })
+        }).then(value => {console.log(value.json);})
             .catch(() => {
                 aimer.update({ valeur: valeur },
                     {
@@ -153,8 +152,9 @@ exports.likeAPost = (req, res, next) => {
                             users_idUser: req.body.idUser,
                             posts_idPosts: req.body.idPost
                         }
-                    }).then(() => { return res.status(201).json({ message: "Mise à jour de votre vote enregistrée" }) })
-                return res.status(500).json({ message: "Problème d'enregistrement du vote" })
+                    }).then(() => { res.status(201).json({ message: "Vote bien pris en compte" }) })
+                    .catch(()=> res.status(500).json({ message: "Problème d'enregistrement du vote" }))
+                   
             })
     }
 

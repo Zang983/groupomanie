@@ -23,6 +23,9 @@ const aimer = sequelize.define('aimer',{
             key:'idPosts'
         }
     },
+    lockStatus:{
+        type:DataTypes.BOOLEAN,
+    },
     valeur:DataTypes.BOOLEAN,
 },    {
     tableName:"aimer",

@@ -4,7 +4,7 @@
       Annonce C.E.
           <button v-on:click="getAnnonceList()" class="refresh_button"><i class="fa-solid fa-arrows-rotate"></i></button>
       <i
-        class="fa-solid fa-message"
+        class="fa-solid fa-envelope"
         v-if="this.$store.state.access"
         v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
       ></i>
@@ -20,7 +20,7 @@
     </div>
     <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
       <p class="message_post_ce" v-show="!annonce.editMode">
-        <pre>{{ annonce.message }}</pre>
+        {{ annonce.message }}
       </p>
       <textarea
         class="message_post_ce"

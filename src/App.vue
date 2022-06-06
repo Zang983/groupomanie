@@ -1,28 +1,20 @@
 <!--
       -------------------- TO DO LIST --------------------
-
-      Finir les différentes requêtes BACKEND !
-        - Requête like
-        - Requête editPOst
-      /!\ Finir l'association dans les tables like et aimer 
-      Rajouter l'authentification middleware
-      Faire la navBar et voir si l'utilisation de vue Router est pertinent.
-      Modifier la liste des membres pour classer selon les services.
-      Coder l'affichage CE.
-      Faire la partie "configuration de compte" avec : 
-        -> Choix de l'avatar.
-        -> Changement de service (liste d'option selon les services présents)
-        -> Changement de MDP
-      Voir pour l'utilisation de cookies pour stocker le JWT pour le maintien de la session
-      Finir de lié les différents boutons des posts aux actions BACKEND.
-      Rajouter les boutons "editer", "supprimer" et "lock" aux commentaires.
-      Revoir tout les noms de classes et variables.
-
-      -------------------- BUG LIST --------------------
-      lors de l'écriture d'un nouveau post, l'affichage ne se refresh pas.
-        piste envisagée -> vm.$set || Vue.set mais ne fonctionne pas, à voir pourquoi.
-      Lors du vérrouillge d'un post, l'actualisation du dom ne se fait pas.
-
+      Faire la barre de navigation/requêtes.
+      Liste des membres
+        -> créer une modale "carte de visite".
+      Composant POST :
+        -> Empêcher l'édition des messages locker des deux côtés.
+      Composant Paramètres : 
+        -> Créer une modale permettant :
+          -> L'édition d'un petit message de présentation.
+          -> Le changement de service.
+          -> Le changement du mdp | adresse mail.
+          -> La suppression du compte.
+      Mettre en place le middleware d'identification.
+      Mettre en place le middleware des images.
+      Créer le composant gérant les commentaires (via une modale ?)
+      Modifier tout le côté back en rajoutant les vérifications de droits.
 -->
 <template>
   <div id="app">

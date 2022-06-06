@@ -49,21 +49,24 @@
           v-on:click="showAllMessage()"
         ></div>
       </div>
-      <div class="action_commentary">
+      <div class="likeAndCommentary">
         <i class="fa-solid fa-thumbs-up likeUp" @click="sendLike(1, id)"></i>
         <i class="fa-solid fa-thumbs-up likeDown" @click="sendLike(0, id)"></i>
-        <button @click="toggleWriteComment(index)">+</button>
-        <button @click="toggleStatutShow(index)">
-          Affiche les commentaires
-        </button>
+        <i class="fa-solid fa-message" @click="showComments(index)" ></i>
+        <commentList v-if="commentVisibility" v-bind:postId="id" v-on:showComments="showComments()"></commentList>
       </div>
     </div>
   </article>
 </template>
 
 <script>
+import commentList from "./listeCommentaire.vue"
 export default {
+    
   name: "UniquePost",
+    components: {
+    commentList,
+  },
   props: [
     "index",
     "lockStatus",
@@ -87,18 +90,17 @@ export default {
       showAll:false,
       postDateFr:new Date(this.postDate).toLocaleDateString("fr") + ' à ' + new Date(this.postDate).toTimeString().slice(0,8),
       editDateFr:new Date(this.editDate).toLocaleDateString("fr") + ' à ' + new Date(this.postDate).toTimeString().slice(0,8),
+      commentVisibility:false,
     };
   },
   methods: {
+    showComments(){
+      this.commentVisibility= !this.commentVisibility;
+
+    },
     showAllMessage() {
       this.showAll = !this.showAll;
       this.$forceUpdate();
-    },
-    toggleWriteComment(index) {
-      this.$refs.commentaire[index].toggleWriteComment();
-    },
-    toggleStatutShow(index) {
-      this.$refs.commentaire[index].toggleStatutShow();
     },
      toggleEditPost() {
       this.modeEdit = !this.modeEdit;

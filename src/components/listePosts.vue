@@ -1,7 +1,8 @@
 <template>
   <div class="posts_bloc">
     <h2>
-      Fil d'actu <i class="fa-solid fa-message" v-on:click="newPost('1')"></i>
+      Fil d'actu 
+      <i class="fa-solid fa-envelope"  v-on:click="newPost"></i>
     </h2>
     <article class="user_new_post" v-if="this.newMessage.showIt == 1">
       <div class="header_new_post">
@@ -53,7 +54,7 @@
         @lockPost="lockPost"
       ></post>
     </div>
-    <div>
+    <div class="blocPagination" v-if="nombrePage>1">
       <span v-for="page in nombrePage" v-bind:key="page" class="pagination" v-on:click="getListPost(page)" v-bind:class="{pageActuelle:page===pageActuelle}" > {{page}}</span>
     </div>
   </div>
@@ -120,7 +121,6 @@ export default {
               editMode: false,
               showAllMessage: true,
               readerRate: "",
-              showComment: false,
               like: null,
               userId: "",
               urlImage: "",
@@ -217,7 +217,7 @@ export default {
           }
         })
         .then(() => {
-          this.getListPost(0);
+          this.getListPost(this.pageActuelle);
           this.newPost();
           this.$emit("updateListPost");
         });

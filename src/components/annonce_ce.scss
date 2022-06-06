@@ -9,19 +9,20 @@
     overflow-y:auto;
     flex-direction: column;
     align-items: center;
-    position:relative;
+
 }
 .post_CE
 {
     border:1px solid lightblue;
     background-color:rgba(211, 211, 211, 0.168);
     margin-bottom : 20px;  
-    position:relative;
+
     width:98%;
     p
     {
-        margin:5px 5px;
+        max-width:100%;
         text-align:center;
+        white-space:break-spaces;
     }
 }
 h2
@@ -66,9 +67,6 @@ textarea
 }
 .refresh_button
 {
-    position:absolute;
-    top:20px;
-    left:20px;
     color:lightgray;
     background-color:inherit;
     border:none;

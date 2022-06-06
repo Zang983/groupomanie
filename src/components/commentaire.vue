@@ -1,176 +1,114 @@
-<!--
-  Il faut : Préparer la fonction permettant d'afficher le formulaire ajoutant un commentaire (faire une réf sur le parent posts.vue).
-  Faire une fonction permettant l'édit d'un commentaire.
-  Faire une fonction permettant : le like/dislike | le lock | la suppression 
--->
 <template>
-  <div class="commentaries_bloc">
-    <!-- Partie permettant d'écrire le commentaire -->
-    <div class="write_comment" v-if="toggleWrite">
-      <textarea placeholder="Votre commentaire" v-model="commentaires.body">
-      </textarea>
-      <button class="btn--no_style" @click="writeComment()">
-        <i class="fa-solid fa-envelope-circle-check"></i>
-      </button>
-    </div>
-    <!-- Affichage des commentaires.-->
-    <div v-if="showComment">
-      <div class="commentary" v-for="(comment,index) of listComment" :key="comment.id">
-        <div class="header_commentary">
-          <p class="commentary_author">
-            <img src="../assets/logo.png" alt="Avatar de l'utilisateur" class="imgUser--commentary"/>
-            {{ comment.auteur }}
-          </p>
-          <p class="commentary_date">{{ comment.heure }}</p>
-          <p class="commentary_action">
-            <button class="btn--no_style" @click="toggleEditComment(comment.idCommentaire)">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn--no_style">
-              <i class="fa-solid fa-trash-can" @click="deleteComment(comment.idCommentaire,index)"></i>
-            </button>
-          </p>
-        </div>
-        <p v-bind:contenteditable="comment.editMode">
-          {{ comment.body }}
-        </p>
+  <div class="commentaire" v-bind:class="{user_post_locked:locked}">
+    <div class="enTeteCommentaire">
+      {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}<span v-if="this.commentaireDateFr!=this.editCommentaireDateFr"> (édité le :
+      {{ this.editCommentaireDateFr }})</span>
+      <div class="interractionCommentaire">
+        <i class="fa-solid fa-lock" v-on:click="lockCommentaire()"> </i>
+        <i
+          class="fa-solid fa-trash-can"
+          v-on:click="deleteCommentaire()"></i>
+        <i
+          class="fa-solid fa-pen-to-square"
+          v-on:click="toggleEditCommentaire"></i>
       </div>
+    </div>
+    <div class="contenuCommentaire" v-if="!editMode">{{ nouveauCommentaire }}</div>
+    <div class="modificationCommentaire"  v-if="editMode"><textarea
+        class="nouveau_commentaire"
+        v-model="nouveauCommentaire"
+      ></textarea>
+      <button class="send_button" v-on:click="editCommentaire">Éditer</button></div>
+
+    <div class="interractionLike">
+      <i
+        class="fa-solid fa-thumbs-up likeUp"
+        @click="likeCommentaire(1, message.idCommentaire)"></i>
+      <i
+        class="fa-solid fa-thumbs-up likeDown"
+        @click="likeCommentaire(0, message.idCommentaire)"></i>
     </div>
   </div>
 </template>
 
-
 <script>
 export default {
-  name: "CommentList",
-  props: ["postId"],
+  name: "commentaireUnique",
+  props: ["message", "index"],
 
-  methods: {
-    toggleStatutShow() {
-      this.showComment = !this.showComment;
-      this.getComment();
-    },
-    toggleWriteComment() {
-      this.toggleWrite = !this.toggleWrite;
-    },
-    getComment() {
-      this.listComment = this.commentaires.filter(
-        (commentaire) => commentaire.idPost === this.postId
-      );
-    },
-    getAllDate() {
-      let date = new Date().toLocaleDateString("fr");
-      let heure = new Date().toLocaleTimeString("fr");
-      date += " à " + heure;
-      return date;
-    },
-    writeComment() {
-      this.commentaires.heure = this.getAllDate();
-      this.commentaires.push({
-        auteur: "Zang",
-        body: this.commentaires.body,
-        heure: this.getAllDate(),
-        idCommentaire : this.commentaires.length+1,
-        idPost:this.postId,
-        editMode:false,
-      });
-      
-      this.commentaires.body = "";
-      this.getComment();
-      this.toggleWriteComment();
-      if (!this.showComment) {
-        this.toggleStatutShow();
-      }
-    },
-    toggleEditComment(id) {
-      this.commentaires[id].editMode = !this.commentaires[id].editMode;
-      this.getComment()
-      this.$forceUpdate();
-    },
-    deleteComment(id,index){
-      this.listComment.splice(index,1)
-    },
-    // editComment(index) {
-    //   let elementVise;
-    //   if (event.code == "Escape") {
-    //     if (event.target.localName == "p") {
-    //       console.log(index + elementVise);
-    //     }
-    //     // else {
-
-    //     // }
-    //     //event.srcElement.firstChild.textContent = elementVise;
-    //   }
-    // },
-  },
-  computed: {},
   data() {
     return {
-      listComment: [],
-      showComment: false,
-      toggleWrite: false,
-      commentaires: [
-        {
-          auteur: "Jean",
-          body: "je trouve que tu as totalement raison",
-          heure: "5 juillet 2020 à 18h20",
-          idCommentaire: 0,
-          idPost: 3,
-          editMode: false,
-        },
-        {
-          auteur: "ADMIN",
-          body: "Pas mal le post !",
-          heure: "8 juillet 2020 à 18h20",
-          idCommentaire: 1,
-          idPost: 1,
-          editMode: false,
-        },
-        {
-          auteur: "Ed",
-          body: "je trouve que tu as totalement raison",
-          heure: "5 mai 2020 à 16h20",
-          idCommentaire: 2,
-          idPost: 1,
-          editMode: false,
-        },
-        {
-          auteur: "Marine",
-          body: "je pense que tu as tort",
-          heure: "5 septembre 2022 à 06h20",
-          idCommentaire: 3,
-          idPost: 0,
-          editMode: false,
-        },
-        {
-          auteur: "MIka",
-          body: "C'est de la merde",
-          heure: "5 septembre 2022 à 03h22",
-          idCommentaire: 4,
-          idPost: 0,
-          editMode: false,
-        },
-        {
-          auteur: "Jacky",
-          body: "Ou est Michel?",
-          heure: "15 septembre 2022 à 06h20",
-          idCommentaire: 5,
-          idPost: 3,
-          editMode: false,
-        },
-        {
-          auteur: "Michel",
-          body: "DTC",
-          heure: "5 septembre 2022 à 16h20",
-          idCommentaire: 6,
-          idPost: 2,
-          editMode: false,
-        },
-      ],
+      nouveauCommentaire:this.message.contenu,
+      locked: false,
+      editMode: this.message.statutEditMode,
+      commentaireDateFr:
+        new Date(this.message.dateCreation).toLocaleDateString("fr") +
+        " à " +
+        new Date(this.message.dateCreation).toTimeString().slice(0, 8),
+      editCommentaireDateFr:
+        new Date(this.message.dateDernierEdit).toLocaleDateString("fr") +
+        " à " +
+        new Date(this.message.dateDernierEdit).toTimeString().slice(0, 8),
     };
+  },
+  methods: {
+    toggleEditCommentaire() {
+      this.editMode = !this.editMode;
+    },
+    deleteCommentaire() {
+      this.$emit("deleteCommentaire", this.message.idCommentaire, this.index);
+    },
+    likeCommentaire(valeurLike, id) {
+      if (this.like == undefined || this.like == null) {
+        this.like = valeurLike;
+      } //si l'utilisateur à déjà (dis)liké le post
+      else {
+        if (this.like === valeurLike) {
+          //l'utilisateur souhaite être neutre
+          valeurLike = -1; //on défini valeurLike à -1, ce qui implique la suppression du statut du like côté API
+          this.like = null;
+        }
+        if (this.like === 1 && valeurLike === 0) {
+          // l'utilisateur aimé le like et le dislike
+          this.like = 0;
+        }
+        if (this.like === 0 && valeurLike === 1) {
+          //si l'utilisateur like plutôt que dislike un post.
+          this.like = 1;
+        }
+      }
+      const infoLike = {
+        valeur: valeurLike,
+        idCommentaire: id,
+        idUser: this.$store.state.idUser,
+      };
+      let requestPath = `http://localhost:3000/api/comment/like/id=${id}`;
+
+      let request = new Request(requestPath, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(infoLike),
+      });
+      fetch(request).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+      });
+    },
+    lockCommentaire() {
+      this.locked = !this.locked;
+      this.$emit("lockCommentaire", this.index, this.message.idCommentaire);
+    },
+    editCommentaire() {
+      this.$emit("editCommentaire", this.message.idCommentaire,this.nouveauCommentaire);
+      this.toggleEditCommentaire();
+    },
   },
 };
 </script>
 
-<style lang="scss" src="./comment.scss" scoped>
+<style lang="scss" src="./commentaire.scss">
 </style>
