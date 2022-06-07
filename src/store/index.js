@@ -8,6 +8,8 @@ export default new Vuex.Store({
     idUser:"",
     access:"",
     userName:"",
+    token:"",
+    numeroRequete:0,
   },
   getters: {
   },
@@ -23,7 +25,14 @@ export default new Vuex.Store({
     saveUserName(state,userName)
     {
       state.userName=userName
-
+    },
+    requeteDemandee(state, numero)
+    {
+      state.numeroRequete=numero;
+    },
+    saveToken(state, token)
+    {
+      state.token=token;
     },
   },
   actions: {

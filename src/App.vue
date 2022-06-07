@@ -21,7 +21,7 @@
     <modale @showModaleOff="showModaleOff" v-if="!show"></modale>
     <div id="hideBeforeConnexion" v-if="show == true">
       <banniere></banniere>
-      <navBar></navBar>
+
       <div class="hbody">
         <membersList></membersList>
         <posts @updateListPost="updateListPost" :key="listPostVersion"></posts>
@@ -34,7 +34,6 @@
 <script>
 import modale from "./components/modale.vue";
 import banniere from "./components/banniere.vue";
-import navBar from "./components/navbar.vue";
 import posts from "./components/listePosts.vue";
 import cePosts from "./components/annonce_ce.vue";
 import membersList from "./components/members_list.vue";
@@ -44,7 +43,6 @@ export default {
   components: {
     modale,
     banniere,
-    navBar,
     posts,
     cePosts,
     membersList,

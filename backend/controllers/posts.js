@@ -2,6 +2,8 @@ const { Sequelize } = require('sequelize');
 const post = require('../models/post');
 const aimer = require('../models/aimer')
 const users = require('../models/user')
+
+
 const Op = Sequelize.Op
 const sequelize2 = new Sequelize("mydb", 'root', 'zangetsu91', {
     host: 'localhost',
@@ -9,6 +11,10 @@ const sequelize2 = new Sequelize("mydb", 'root', 'zangetsu91', {
 });
 
 exports.sendPost = (req, res, next) => {
+
+    console.log(req.body)
+    let imageUrl= `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    console.log(imageUrl)
 
     if (req.body.author === undefined || req.body.body == "" || req.body.title == "") {
         return res.status(400).json({ message: "Informations manquantes" })
@@ -19,6 +25,7 @@ exports.sendPost = (req, res, next) => {
         contenu: req.body.body,
         lockStatus: 0,
         users_idUser: req.body.users_idUser,
+        url_image:imageUrl
     })
     return res.status(200).json({ message: "Post créer" })
 
@@ -56,10 +63,10 @@ exports.deletePost = (req, res, next) => {
 
 /* Refactoriser, pas besoin du if/else modifier la valeur du lockStatus selon le droit admin */
 exports.getPosts = (req, res, next) => {
-
     let admin = 1;
     let nombrePage = 0;
     let page = req.params.page.split("=")[1]
+    console.log(req.params)
     if(page>0)
     {
         page--;

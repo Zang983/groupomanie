@@ -1,8 +1,7 @@
 <template>
   <div class="commentaire" v-bind:class="{user_post_locked:locked}">
     <div class="enTeteCommentaire">
-      {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}<span v-if="this.commentaireDateFr!=this.editCommentaireDateFr"> (édité le :
-      {{ this.editCommentaireDateFr }})</span>
+      {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}
       <div class="interractionCommentaire">
         <i class="fa-solid fa-lock" v-on:click="lockCommentaire()"> </i>
         <i

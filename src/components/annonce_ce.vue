@@ -5,7 +5,7 @@
           <button v-on:click="getAnnonceList()" class="refresh_button"><i class="fa-solid fa-arrows-rotate"></i></button>
       <i
         class="fa-solid fa-envelope"
-        v-if="this.$store.state.access"
+      
         v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
       ></i>
     </h2>

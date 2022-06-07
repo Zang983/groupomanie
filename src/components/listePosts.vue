@@ -26,8 +26,9 @@
         </label>
       </p>
       <div class="send_block">
-        <button v-on:click="post()" class="send_button">Envoyer</button>
-        <button class="send_picture"><i class="fa-solid fa-image"></i></button>
+        <button v-on:click="post()" class="send_button" >Envoyer</button>
+        <input type="file" id="send_picture" accept=".jpeg,.jpg,png">
+        <!-- <i class="fa-solid fa-image"></i> -->
       </div>
     </article>
     <div
@@ -66,7 +67,7 @@ import post from "./post.vue";
 
 export default {
   name: "postList",
-
+  props:['changementRequete'],
   components: {
     post,
   },
@@ -97,9 +98,11 @@ export default {
       this.newMessage.title = "";
     },
     getListPost(page) {
-      let requestPath = `http://localhost:3000/api/posts/post/page=${page}`;
+      let numeroRequete=this.$store.state.numeroRequete;
+      let requestPath = `http://localhost:3000/api/posts/post/requete=${numeroRequete}/page=${page}`;
       let promiseThis = this;
       this.posts = [];
+
 
       fetch(requestPath)
         .then(function (res) {
@@ -109,7 +112,6 @@ export default {
           }
         })
         .then(function (value) {
-
           for (let message of value.Post) {
             let newMessage = {
               body: "",
@@ -193,21 +195,17 @@ export default {
       let requestPath = "http://localhost:3000/api/posts/post";
       let infoPost = {};
       this.author = this.$store.state.userName;
-      this.editDate = "";
-      infoPost = {
-        author: this.$store.state.userName,
-        body: this.newMessage.body,
-        title: this.newMessage.title,
-        users_idUser: this.$store.state.idUser,
-        userName: this.$store.state.userName,
-      };
+      let image=document.querySelector('#send_picture').files[0]
+
+      infoPost = new FormData();
+      infoPost.append("author", this.$store.state.userName);
+      infoPost.append("body",this.newMessage.title);
+      infoPost.append("title",this.newMessage.title);
+      infoPost.append("users_idUser",this.$store.state.idUser);
+      infoPost.append("image",image);
       let request = new Request(requestPath, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoPost),
+        body: infoPost
       });
 
       fetch(request)

@@ -108,12 +108,13 @@ export default {
           })
         .then((value) => {
           if(value.token!=undefined)
-          {
+          {/* A adapter selon le retour de la fonction login coté back*/
            this.toggleModale(value);
            this.$emit('showModaleOff')
-           this.$store.commit('saveIdUser',value.userId)
+           this.$store.commit('saveIdUser',value.user.idUser)
            this.$store.commit('levelPermission',value.isAdmin)
-           let userName=value.firstName + " " + value.lastName;
+           this.$store.commit('saveToken',value.token)
+           let userName=value.user.firstName + " " + value.user.lastName;
            this.$store.commit('saveUserName',userName)
           }
           });

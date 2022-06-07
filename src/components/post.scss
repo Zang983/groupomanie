@@ -246,3 +246,15 @@ input{
     }
 
 }
+.image_post
+{
+  text-align:center;
+  width:100%; 
+
+}
+.image_post img
+{
+  object-fit: contain;
+  max-width:50%;
+  max-height:400px;
+}

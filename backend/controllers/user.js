@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const user = require('../models/user');
+let uid = require('uid-safe')
+
+xsrfToken = uid.sync(18);
 
 
 /*
@@ -45,9 +48,7 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
       {email:req.body.email}
     })
     .then(user=>{
-      let isAdmin="";
-
-    
+      let isAdmin=0;
       if(user===null)
       {
         res.status(404).json({message:"E-mail ou mot de passe incorrect"})
@@ -58,23 +59,18 @@ On compare le hash du mot de passe indiqué et celui enregistré si c'est valide
         {
           isAdmin=1
         }
-        else{
-          isAdmin = 0;
-        }
         bcrypt.compare(req.body.pwd, user.password)
         .then(valid => {
           if (!valid) {
             return res.status(401).json({ error: 'E-mail ou mot de passe incorrect' });
           }
           res.status(200).json({
-            userId: user.idUser,
-            firstName : user.firstName,
-            lastName:user.lastName,
-            isAdmin:isAdmin,
+            user:{idUser:user.idUser,firstName:user.firstName,lastName:user.lastName,},
             token: jwt.sign(
-              { userId:user.idUser},
+              {userId:user.idUser,isAdmin:isAdmin},
               'AuheoO11nNej47Gr,eiUHog@ru::ohga5',
-              { expiresIn: '24h' }
+              { expiresIn: '24h' },
+              {xsrfToken:xsrfToken}
             )
           });
         })

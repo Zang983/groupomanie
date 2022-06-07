@@ -5,9 +5,7 @@
         <img src="../assets/logo.png" alt="Avatar de l'utilisateur" />
         {{this.author}}
       </div>
-      <h3 v-show="!modeEdit">
-        {{ this.newTitle }}
-      </h3>
+      <h3 v-show="!modeEdit">{{ this.newTitle }}</h3>
       <input type="text" v-show="modeEdit" v-model="newTitle" />
       <div class="action_post">
         <i
@@ -21,20 +19,23 @@
         <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i>
       </div>
     </div>
-    <p class="message_post" v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
+    <div class="message_post">
+
+    <p class="image_post" v-if="this.urlImage!=undefined"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article"></p>
+    <p v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
       <pre>{{ this.newBody }}</pre>
-    </p>
+    </p></div>
+    <!-- MODE EDIT -->
     <div v-show="modeEdit">
       <textarea class="textarea__edit" v-model="newBody"></textarea>
       <br>
       <div class="send_block"><button @click="editPost(id)" class="send_button">Éditer mon message</button>
       <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
     </div>
+    <!-- FIN DU MODE EDIT -->
     <div class="footer_post">
       <p class="info_date_post">
-         Écrit le : <strong>{{ postDateFr }}</strong><br>
-        <span v-if="editDateFr">Dernière édition : <strong>{{editDateFr}}</strong></span>
-
+         Écrit le : <strong>{{ postDateFr }}</strong>
       </p>
       <div class="triangle_contain">
         <div
@@ -116,6 +117,7 @@ export default {
     },
     lockPost(index,id)
     {
+      console.log()
       this.statusLock = !this.statusLock
       this.$emit('lockPost',index,id)
     },
