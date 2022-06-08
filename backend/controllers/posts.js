@@ -4,19 +4,13 @@ const aimer = require('../models/aimer')
 const users = require('../models/user')
 const fs = require("fs");
 
-
 const Op = Sequelize.Op
-const sequelize2 = new Sequelize("mydb", 'root', 'zangetsu91', {
-    host: 'localhost',
-    dialect: 'mysql',
-});
 
 exports.sendPost = (req, res, next) => {
 
-    let imageUrl="";
-    if(req.file!=undefined)
-    {
-    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    let imageUrl = "";
+    if (req.file != undefined) {
+        imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     }
     if (req.body.author === undefined || req.body.body == "" || req.body.title == "") {
         return res.status(400).json({ message: "Informations manquantes" })
@@ -33,20 +27,14 @@ exports.sendPost = (req, res, next) => {
 
 }
 exports.deletePost = (req, res, next) => {
-
     post.findOne({ where: { idPosts: req.body.id } })
         .then(result => {
             if (!result.lockStatus) {
-                if(result.url_image!="")
-                {
-                    
-                        let urlImage="./images" + result.url_image.split("/images")[1]
-                        fs.unlink(urlImage, (err) => {
-                            if (err) throw err;
-                            console.log("File deleted!");
-                        })
-                        
-                    
+                let urlImage = "./images" + result.url_image.split("/images")[1]
+                if (result.url_image != "" && fs.existsSync(urlImage)) {
+                    fs.unlink(urlImage, (err) => {
+                        console.log("File deleted!");
+                    })
                 }
                 post.destroy({
                     where: {
@@ -63,17 +51,13 @@ exports.deletePost = (req, res, next) => {
                         else {
                             return res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
                         }
-
                     })
             }
             else {
                 return res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
             }
         }).catch(error => res.status(501).json("Le serveur n'a pas compris votre demande"))
-
-
 }
-
 /* Refactoriser, pas besoin du if/else modifier la valeur du lockStatus selon le droit admin */
 exports.getPosts = (req, res, next) => {
     let admin = 1;
@@ -119,7 +103,6 @@ exports.lockAPost = (req, res, next) => {
         .then(Post => { res.status(200).json({ message: "Vérouillage du sujet modifié" }) })
         .catch(error => res.status(500).json({ erreur: 'Problème' }));
 }
-
 exports.updateAPost = (req, res, next) => {
     if (req.body.supprimeImage) {
         post.findOne({
@@ -130,13 +113,12 @@ exports.updateAPost = (req, res, next) => {
             })
             .then(resultat => {
                 if (!resultat.url_image == "") {
-                    let urlImage="./images" + resultat.url_image.split("/images")[1]
-                    console.log(urlImage)
+                    let urlImage = "./images" + resultat.url_image.split("/images")[1]
+                    if (fs.existsSync(urlImage))
+                    {
                     fs.unlink(urlImage, (err) => {
                         if (err) throw err;
-                        console.log("File deleted!");
-                    })
-                    
+                    })}
                 }
             })
         post.update({
@@ -160,9 +142,6 @@ exports.updateAPost = (req, res, next) => {
                 })
                 .then(resultat => imageUrl = resultat.url_image)
         }
-
-
-
         post.update({
             titre: req.body.title,
             contenu: req.body.body,
@@ -175,11 +154,7 @@ exports.updateAPost = (req, res, next) => {
         }).then(result => res.status(201).json({ result }))
             .catch(error => res.status(500).json({ error }))
     }
-
-
-
 }
-
 exports.likeAPost = (req, res, next) => {
     if (req.body.valeur === -1) {
         aimer.destroy({

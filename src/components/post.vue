@@ -20,8 +20,10 @@
       </div>
     </div>
     <div class="message_post">
-    <p class="image_post" v-if="this.urlImage!=undefined && this.urlImage!=''"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article"></p>
-    <button v-on:click="deleteImage">Supprimer l'image</button>
+    <p class="image_post" v-if="this.urlImage!=undefined && this.urlImage!=''"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article">        
+     <i            class="fa-solid fa-trash-can supprimerImage"
+          v-on:click="deleteImage"
+        ></i></p>
     <p v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
       <pre>{{ this.newBody }}</pre>
     </p></div>
@@ -39,19 +41,6 @@
       <p class="info_date_post">
          Écrit le : <strong>{{ postDateFr }}</strong>
       </p>
-      <!-- <div class="triangle_contain">
-        <div
-          class="post_triangle"
-          v-if="!showAllMessage"
-          v-on:click="showAllMessage()"
-        ></div>
-        <div
-          class="post_triangle"
-          v-if="showAllMessage"
-          v-bind:class="{post_triangle__rotated:!showAll}"
-          v-on:click="showAllMessage()"
-        ></div>
-      </div> -->
       <div class="likeAndCommentary">
         <i class="fa-solid fa-thumbs-up likeUp" @click="sendLike(1, id)"></i>
         <i class="fa-solid fa-thumbs-up likeDown" @click="sendLike(0, id)"></i>
@@ -114,10 +103,10 @@ export default {
       this.modeEdit = !this.modeEdit;
     },
     editPost() {
-      let image = ""
-      let bouton=document.querySelectorAll(".send_picture")[this.index]
-      image=bouton.files
-      this.$emit("editPost", this.id, this.newTitle, this.newBody,image);
+      let image = "";
+      let bouton = document.querySelectorAll(".send_picture")[this.index];
+      image = bouton.files;
+      this.$emit("editPost", this.id, this.newTitle, this.newBody, image);
       this.toggleEditPost();
     },
     deleteImage() {
