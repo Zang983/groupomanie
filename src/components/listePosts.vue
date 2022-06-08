@@ -1,8 +1,8 @@
 <template>
   <div class="posts_bloc">
     <h2>
-      Fil d'actu 
-      <i class="fa-solid fa-envelope"  v-on:click="newPost"></i>
+      Fil d'actu
+      <i class="fa-solid fa-envelope" v-on:click="newPost"></i>
     </h2>
     <article class="user_new_post" v-if="this.newMessage.showIt == 1">
       <div class="header_new_post">
@@ -26,8 +26,8 @@
         </label>
       </p>
       <div class="send_block">
-        <button v-on:click="post()" class="send_button" >Envoyer</button>
-        <input type="file" id="send_picture" accept=".jpeg,.jpg,png">
+        <button v-on:click="post()" class="send_button">Envoyer</button>
+        <input type="file" id="send_picture" accept=".jpeg,.jpg,png" />
         <!-- <i class="fa-solid fa-image"></i> -->
       </div>
     </article>
@@ -53,10 +53,19 @@
         @editPost="editPost"
         @deletePostFromList="deletePostFromList"
         @lockPost="lockPost"
+        @deleteImage="deleteImage"
       ></post>
     </div>
-    <div class="blocPagination" v-if="nombrePage>1">
-      <span v-for="page in nombrePage" v-bind:key="page" class="pagination" v-on:click="getListPost(page)" v-bind:class="{pageActuelle:page===pageActuelle}" > {{page}}</span>
+    <div class="blocPagination" v-if="nombrePage > 1">
+      <span
+        v-for="page in nombrePage"
+        v-bind:key="page"
+        class="pagination"
+        v-on:click="getListPost(page)"
+        v-bind:class="{ pageActuelle: page === pageActuelle }"
+      >
+        {{ page }}</span
+      >
     </div>
   </div>
 </template>
@@ -67,7 +76,7 @@ import post from "./post.vue";
 
 export default {
   name: "postList",
-  props:['changementRequete'],
+  props: ["changementRequete"],
   components: {
     post,
   },
@@ -98,16 +107,15 @@ export default {
       this.newMessage.title = "";
     },
     getListPost(page) {
-      let numeroRequete=this.$store.state.numeroRequete;
+      let numeroRequete = this.$store.state.numeroRequete;
       let requestPath = `http://localhost:3000/api/posts/post/requete=${numeroRequete}/page=${page}`;
       let promiseThis = this;
       this.posts = [];
 
-
       fetch(requestPath)
         .then(function (res) {
           if (res.ok) {
-            promiseThis.pageActuelle=page
+            promiseThis.pageActuelle = page;
             return res.json();
           }
         })
@@ -142,7 +150,6 @@ export default {
             promiseThis.nombrePage = value.nombrePage / 5;
             promiseThis.nombrePage = Math.ceil(value.nombrePage / 5);
           }
-          
         })
         .catch(function (err) {
           console.log(err);
@@ -168,21 +175,38 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    editPost(id, newTitle, newBody) {
+    deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
-      let infoPost = {
-        idPosts: id,
-        newTitle: newTitle,
-        newBody: newBody,
-        idUser: this.$store.state.idUser,
-      };
+      let infoPost = new FormData();
+        infoPost.append("idPost", id);
+        infoPost.append("supprimeImage",1);
+
       let request = new Request(requestPath, {
         method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoPost),
+        body: infoPost,
+      });
+      fetch(request).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+      });
+    },
+    editPost(id, newTitle, newBody,image) {
+      let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
+      let infoPost = {};
+      console.log(newBody);
+      this.author = this.$store.state.userName;
+      infoPost = new FormData();
+      infoPost.append("idPost", id);
+      infoPost.append("author", this.$store.state.userName);
+      infoPost.append("body", newBody);
+      infoPost.append("title", newTitle);
+      infoPost.append("users_idUser", this.$store.state.idUser);
+      infoPost.append("image", image[0]);
+      console.log(image)
+      let request = new Request(requestPath, {
+        method: "PUT",
+        body: infoPost,
       });
       fetch(request).then(function (res) {
         if (res.ok) {
@@ -195,17 +219,17 @@ export default {
       let requestPath = "http://localhost:3000/api/posts/post";
       let infoPost = {};
       this.author = this.$store.state.userName;
-      let image=document.querySelector('#send_picture').files[0]
+      let image = document.querySelector("#send_picture").files[0];
 
       infoPost = new FormData();
       infoPost.append("author", this.$store.state.userName);
-      infoPost.append("body",this.newMessage.title);
-      infoPost.append("title",this.newMessage.title);
-      infoPost.append("users_idUser",this.$store.state.idUser);
-      infoPost.append("image",image);
+      infoPost.append("body", this.newMessage.body);
+      infoPost.append("title", this.newMessage.title);
+      infoPost.append("users_idUser", this.$store.state.idUser);
+      infoPost.append("image", image);
       let request = new Request(requestPath, {
         method: "POST",
-        body: infoPost
+        body: infoPost,
       });
 
       fetch(request)

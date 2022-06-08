@@ -12,7 +12,7 @@ router.post('/post',multer,postCtrl.sendPost);
 router.delete('/post/delete/:id',postCtrl.deletePost);
 router.get('/post/:requete/:page',postCtrl.getPosts);
 router.put('/post/lock',postCtrl.lockAPost);
-router.put('/post/update/:id',postCtrl.updateAPost);
+router.put('/post/update/:id',multer,postCtrl.updateAPost);
 router.post('/post/like/:id',postCtrl.likeAPost);
 
 

@@ -1,21 +1,3 @@
-<!--
-      -------------------- TO DO LIST --------------------
-      Faire la barre de navigation/requêtes.
-      Liste des membres
-        -> créer une modale "carte de visite".
-      Composant POST :
-        -> Empêcher l'édition des messages locker des deux côtés.
-      Composant Paramètres : 
-        -> Créer une modale permettant :
-          -> L'édition d'un petit message de présentation.
-          -> Le changement de service.
-          -> Le changement du mdp | adresse mail.
-          -> La suppression du compte.
-      Mettre en place le middleware d'identification.
-      Mettre en place le middleware des images.
-      Créer le composant gérant les commentaires (via une modale ?)
-      Modifier tout le côté back en rajoutant les vérifications de droits.
--->
 <template>
   <div id="app">
     <modale @showModaleOff="showModaleOff" v-if="!show"></modale>

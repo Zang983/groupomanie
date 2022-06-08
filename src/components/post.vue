@@ -20,24 +20,26 @@
       </div>
     </div>
     <div class="message_post">
-
-    <p class="image_post" v-if="this.urlImage!=undefined"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article"></p>
+    <p class="image_post" v-if="this.urlImage!=undefined && this.urlImage!=''"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article"></p>
+    <button v-on:click="deleteImage">Supprimer l'image</button>
     <p v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
       <pre>{{ this.newBody }}</pre>
     </p></div>
     <!-- MODE EDIT -->
     <div v-show="modeEdit">
       <textarea class="textarea__edit" v-model="newBody"></textarea>
-      <br>
-      <div class="send_block"><button @click="editPost(id)" class="send_button">Éditer mon message</button>
-      <button class="send_picture"><i class="fa-solid fa-image"></i></button></div>
+      <div class="send_block">
+        <button v-on:click="editPost(id)" class="send_button">Éditer mon message {{index}}</button>
+        <input type="file" class="send_picture" accept=".jpeg,.jpg,png">
+      <!-- <button class="send_picture"><i class="fa-solid fa-image"></i></button> -->
+      </div>
     </div>
     <!-- FIN DU MODE EDIT -->
     <div class="footer_post">
       <p class="info_date_post">
          Écrit le : <strong>{{ postDateFr }}</strong>
       </p>
-      <div class="triangle_contain">
+      <!-- <div class="triangle_contain">
         <div
           class="post_triangle"
           v-if="!showAllMessage"
@@ -49,7 +51,7 @@
           v-bind:class="{post_triangle__rotated:!showAll}"
           v-on:click="showAllMessage()"
         ></div>
-      </div>
+      </div> -->
       <div class="likeAndCommentary">
         <i class="fa-solid fa-thumbs-up likeUp" @click="sendLike(1, id)"></i>
         <i class="fa-solid fa-thumbs-up likeDown" @click="sendLike(0, id)"></i>
@@ -61,11 +63,10 @@
 </template>
 
 <script>
-import commentList from "./listeCommentaire.vue"
+import commentList from "./listeCommentaire.vue";
 export default {
-    
   name: "UniquePost",
-    components: {
+  components: {
     commentList,
   },
   props: [
@@ -79,47 +80,55 @@ export default {
     "editDate",
     "userId",
     "urlImage",
-    "editMode"
+    "editMode",
   ],
 
   data() {
     return {
-      modeEdit:this.editMode,
-      statusLock:this.lockStatus,
-      newBody:this.body,
-      newTitle:this.title,
-      showAll:false,
-      postDateFr:new Date(this.postDate).toLocaleDateString("fr") + ' à ' + new Date(this.postDate).toTimeString().slice(0,8),
-      editDateFr:new Date(this.editDate).toLocaleDateString("fr") + ' à ' + new Date(this.postDate).toTimeString().slice(0,8),
-      commentVisibility:false,
+      modeEdit: this.editMode,
+      statusLock: this.lockStatus,
+      newBody: this.body,
+      newTitle: this.title,
+      showAll: false,
+      postDateFr:
+        new Date(this.postDate).toLocaleDateString("fr") +
+        " à " +
+        new Date(this.postDate).toTimeString().slice(0, 8),
+      editDateFr:
+        new Date(this.editDate).toLocaleDateString("fr") +
+        " à " +
+        new Date(this.postDate).toTimeString().slice(0, 8),
+      commentVisibility: false,
     };
   },
   methods: {
-    showComments(){
-      this.commentVisibility= !this.commentVisibility;
-
+    showComments() {
+      this.commentVisibility = !this.commentVisibility;
     },
     showAllMessage() {
       this.showAll = !this.showAll;
       this.$forceUpdate();
     },
-     toggleEditPost() {
+    toggleEditPost() {
+      //let file=document.querySelector(".send_button").files[0];
       this.modeEdit = !this.modeEdit;
     },
-    editPost(id)
-    {
-      this.$emit('editPost',id,this.newTitle,this.newBody)
+    editPost() {
+      let image = ""
+      let bouton=document.querySelectorAll(".send_picture")[this.index]
+      image=bouton.files
+      this.$emit("editPost", this.id, this.newTitle, this.newBody,image);
       this.toggleEditPost();
     },
-    deletePostFromList(index,id)
-    {
-      this.$emit('deletePostFromList',index,id)
+    deleteImage() {
+      this.$emit("deleteImage", this.id);
     },
-    lockPost(index,id)
-    {
-      console.log()
-      this.statusLock = !this.statusLock
-      this.$emit('lockPost',index,id)
+    deletePostFromList(index, id) {
+      this.$emit("deletePostFromList", index, id);
+    },
+    lockPost(index, id) {
+      this.statusLock = !this.statusLock;
+      this.$emit("lockPost", index, id);
     },
     sendLike(valeurLike, id) {
       if (this.like == undefined || this.like == null) {
@@ -143,7 +152,7 @@ export default {
       const infoLike = {
         valeur: valeurLike,
         idPost: id,
-        idUser:this.$store.state.idUser
+        idUser: this.$store.state.idUser,
       };
       let requestPath = `http://localhost:3000/api/posts/post/like/id=${id}`;
 
@@ -155,18 +164,14 @@ export default {
         },
         body: JSON.stringify(infoLike),
       });
-      fetch(request)
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-        })
+      fetch(request).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+      });
     },
   },
-
 };
-
-
 </script>
 
 <style lang="scss" src="./post.scss">

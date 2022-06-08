@@ -2,6 +2,7 @@ const { Sequelize } = require('sequelize');
 const post = require('../models/post');
 const aimer = require('../models/aimer')
 const users = require('../models/user')
+const fs = require("fs");
 
 
 const Op = Sequelize.Op
@@ -12,10 +13,11 @@ const sequelize2 = new Sequelize("mydb", 'root', 'zangetsu91', {
 
 exports.sendPost = (req, res, next) => {
 
-    console.log(req.body)
-    let imageUrl= `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    console.log(imageUrl)
-
+    let imageUrl="";
+    if(req.file!=undefined)
+    {
+    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
     if (req.body.author === undefined || req.body.body == "" || req.body.title == "") {
         return res.status(400).json({ message: "Informations manquantes" })
     }
@@ -25,7 +27,7 @@ exports.sendPost = (req, res, next) => {
         contenu: req.body.body,
         lockStatus: 0,
         users_idUser: req.body.users_idUser,
-        url_image:imageUrl
+        url_image: imageUrl
     })
     return res.status(200).json({ message: "Post créer" })
 
@@ -35,6 +37,17 @@ exports.deletePost = (req, res, next) => {
     post.findOne({ where: { idPosts: req.body.id } })
         .then(result => {
             if (!result.lockStatus) {
+                if(result.url_image!="")
+                {
+                    
+                        let urlImage="./images" + result.url_image.split("/images")[1]
+                        fs.unlink(urlImage, (err) => {
+                            if (err) throw err;
+                            console.log("File deleted!");
+                        })
+                        
+                    
+                }
                 post.destroy({
                     where: {
                         [Op.and]: [
@@ -67,8 +80,7 @@ exports.getPosts = (req, res, next) => {
     let nombrePage = 0;
     let page = req.params.page.split("=")[1]
     console.log(req.params)
-    if(page>0)
-    {
+    if (page > 0) {
         page--;
     }
     post.count()
@@ -109,25 +121,61 @@ exports.lockAPost = (req, res, next) => {
 }
 
 exports.updateAPost = (req, res, next) => {
-    // if(req.body.idUsers===undefined)
-    // {
-
-    //res.status(401).json({message:"Vous n'êtes pas connecté"})
-    // }
-    // else
-    // {
-    post.update({
-        titre: req.body.newTitle,
-        contenu: req.body.newBody,
-        dateDernierEdit: Sequelize.fn('NOW')
-    }, {
-        where: {
-            idPosts: req.body.idPosts,
-            //users_idUser:req.body.idUsers 
+    if (req.body.supprimeImage) {
+        post.findOne({
+            attributes: ["url_image"],
+        },
+            {
+                where: { idPosts: req.body.idPost }
+            })
+            .then(resultat => {
+                if (!resultat.url_image == "") {
+                    let urlImage="./images" + resultat.url_image.split("/images")[1]
+                    console.log(urlImage)
+                    fs.unlink(urlImage, (err) => {
+                        if (err) throw err;
+                        console.log("File deleted!");
+                    })
+                    
+                }
+            })
+        post.update({
+            url_image: "",
+        }, {
+            where: { idposts: req.body.idPost }
+        })
+    }
+    else {
+        /* Si on édite le post : on vérifie si une nouvelle image est envoyée si oui on récupère le nom en imageUrl sinon on récupère l'ancien path dans la BDD*/
+        let imageUrl = "";
+        if (req.file != undefined) {
+            imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         }
-    }).then(result => res.status(201).json({ result }))
-        .catch(error => res.status(500).json({ error }))
-    // }
+        else {
+            post.findOne({
+                attributes: ["url_image"],
+            },
+                {
+                    where: { idPosts: req.body.idPost }
+                })
+                .then(resultat => imageUrl = resultat.url_image)
+        }
+
+
+
+        post.update({
+            titre: req.body.title,
+            contenu: req.body.body,
+            url_image: imageUrl,
+            dateDernierEdit: Sequelize.fn('NOW')
+        }, {
+            where: {
+                idPosts: req.body.idPost,
+            }
+        }).then(result => res.status(201).json({ result }))
+            .catch(error => res.status(500).json({ error }))
+    }
+
 
 
 }
@@ -151,7 +199,7 @@ exports.likeAPost = (req, res, next) => {
             users_idUser: req.body.idUser,
             posts_idPosts: req.body.idPost,
             valeur: valeur,
-        }).then(()=>res.status(201).json({message:"Vote bien pris en compte"}))
+        }).then(() => res.status(201).json({ message: "Vote bien pris en compte" }))
             .catch(() => {
                 aimer.update({ valeur: valeur },
                     {
@@ -160,8 +208,8 @@ exports.likeAPost = (req, res, next) => {
                             posts_idPosts: req.body.idPost
                         }
                     }).then(() => { res.status(201).json({ message: "Vote bien pris en compte" }) })
-                    .catch(()=> res.status(500).json({ message: "Problème d'enregistrement du vote" }))
-                   
+                    .catch(() => res.status(500).json({ message: "Problème d'enregistrement du vote" }))
+
             })
     }
 
