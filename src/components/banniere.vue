@@ -4,25 +4,41 @@
             <img src="../assets/logo/icon-left-font-monochrome-black.svg">
         <blague></blague>
         <ul>
-            <li>Paramètres</li>
-            <li>Se déconnecter</li>
+            <li v-on:click="toggleParametre">Paramètres</li>
+            <li v-on:click="showModale">Se déconnecter</li>
         </ul>
+        <parametre v-if="parametreVisible" 
+        @fermeture="toggleParametre"
+        @showModale="showModale"></parametre>
     </header>
+    
 </template>
 <script>
 import blague from "./blague.vue";
+import parametre from "./parametre.vue"
 
 export default {
   name: "V-banniere",
 
     components: {
         blague,
+        parametre,
     },
 
   methods: {
+    toggleParametre()
+    {
+      console.log(this.$store.state.avatar)
+      this.parametreVisible = !this.parametreVisible
+    },
+    showModale()
+    {
+      this.$emit("showModale")
+    }
 },
   data() {
       return {
+        parametreVisible:false
 
       }
   },

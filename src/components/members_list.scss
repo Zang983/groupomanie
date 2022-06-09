@@ -6,14 +6,32 @@
     height:500px;
     padding-left:10px;
     text-align:center;
+    position:relative;
 }
 .member
 {
     text-align:left;
+
 }
 .member:hover
 {
     text-decoration:underline;
     color:blue;
     cursor:pointer;
+}
+.carte_visite
+{
+    border:1px solid lightblue;
+    position:absolute;
+    left:100%;
+    background-color:white;
+    box-shadow:2px 2px 3px 3px gray;
+    padding:10px;
+    margin:10px;
+    top:20%;
+    z-index:1;
+}
+.fermeture_modale:hover
+{
+cursor:pointer
 }

@@ -114,6 +114,13 @@ export default {
            this.$store.commit('saveIdUser',value.user.idUser)
            this.$store.commit('levelPermission',value.isAdmin)
            this.$store.commit('saveToken',value.token)
+           this.$store.commit('saveFirstname',value.user.firstName)
+           this.$store.commit('saveLastname',value.user.lastName)
+           this.$store.commit('saveEmail',value.user.email)
+           this.$store.commit('saveTelephone',value.user.telephone)
+           this.$store.commit('saveAvatar',value.user.url_avatar)
+           this.$store.commit('saveDescription',value.user.description)
+           console.log(value)
            let userName=value.user.firstName + " " + value.user.lastName;
            this.$store.commit('saveUserName',userName)
           }
@@ -161,8 +168,6 @@ export default {
       }
       this.$forceUpdate();
     },
-
-    sendInformationToDB() {},
   },
   data() {
     return {

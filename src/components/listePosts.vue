@@ -194,7 +194,6 @@ export default {
     editPost(id, newTitle, newBody,image) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let infoPost = {};
-      console.log(newBody);
       this.author = this.$store.state.userName;
       infoPost = new FormData();
       infoPost.append("idPost", id);
@@ -203,7 +202,6 @@ export default {
       infoPost.append("title", newTitle);
       infoPost.append("users_idUser", this.$store.state.idUser);
       infoPost.append("image", image[0]);
-      console.log(image)
       let request = new Request(requestPath, {
         method: "PUT",
         body: infoPost,

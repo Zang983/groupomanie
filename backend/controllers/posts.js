@@ -33,7 +33,6 @@ exports.deletePost = (req, res, next) => {
                 let urlImage = "./images" + result.url_image.split("/images")[1]
                 if (result.url_image != "" && fs.existsSync(urlImage)) {
                     fs.unlink(urlImage, (err) => {
-                        console.log("File deleted!");
                     })
                 }
                 post.destroy({
@@ -41,8 +40,7 @@ exports.deletePost = (req, res, next) => {
                         [Op.and]: [
                             { idPosts: req.body.id },
                             { users_idUser: req.body.userId }
-                        ]
-                    }
+                        ]}
                 })
                     .then(result => {
                         if (result === 1) {
@@ -63,7 +61,6 @@ exports.getPosts = (req, res, next) => {
     let admin = 1;
     let nombrePage = 0;
     let page = req.params.page.split("=")[1]
-    console.log(req.params)
     if (page > 0) {
         page--;
     }

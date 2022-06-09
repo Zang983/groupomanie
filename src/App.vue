@@ -2,7 +2,7 @@
   <div id="app">
     <modale @showModaleOff="showModaleOff" v-if="!show"></modale>
     <div id="hideBeforeConnexion" v-if="show == true">
-      <banniere></banniere>
+      <banniere @showModale="showModale"></banniere>
 
       <div class="hbody">
         <membersList></membersList>
@@ -32,6 +32,9 @@ export default {
   methods: {
     updateListPost() {
       this.listPostVersion = +1;
+    },
+    showModale(){
+      this.show=false; 
     },
     showModaleOff() {
       this.show = true;

@@ -4,6 +4,7 @@ const ceRoutes= require('./routes/messageCE');
 const userRoutes = require('./routes/user');
 const commentRoutes=require('./routes/comments')
 const path = require('path');
+const cookieParser = require('cookie-parser')
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
   host: 'localhost',
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+app.use(cookieParser())
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/posts', postsRoutes);
 app.use('/api/auth/', userRoutes);

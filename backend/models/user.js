@@ -13,8 +13,8 @@ const User = sequelize.define("user",{
     fonction:DataTypes.STRING,
     telephone:{type : DataTypes.STRING,defaultValue:"0100000000"},
     email:DataTypes.STRING,
-    Services_idService:{type: DataTypes.INTEGER},
     droits:{type : DataTypes.STRING,defaultValue:"00001"},
+    userDescription:DataTypes.TEXT,
     },
     {
         tableName:"users",
@@ -22,10 +22,6 @@ const User = sequelize.define("user",{
     }, 
 );
 
-// User.associate = (models) =>{
-//     User.belongsTo(service,{
-//     })
-// }
 
 // User.associate = (models) =>{
 //     User.hasMany(posts,{
@@ -41,7 +37,6 @@ const User = sequelize.define("user",{
 //         defaultValue: 3
 //     })
 // }
-/* partie TEST*/
 
 
 
