@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-const user = require('../models/user');
 const fs = require("fs");
+const db = require("../models/config");
 
 
 /*
@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
   }
   bcrypt.hash(pwd, 10)
     .then(hash => {
-      user.create({ firstName: firstName, lastName: lastName, password: hash, email: email })
+      db.user.create({ firstName: firstName, lastName: lastName, password: hash, email: email })
         .then(() => { res.status(201).json({ message: "Utilisateur créé" }) })
     })
     .catch(() => {
@@ -38,7 +38,7 @@ On vérifie le retour de la requête.
 On compare le hash du mot de passe indiqué et celui enregistré si c'est valide on génère un JWT.
 */
 exports.login = (req, res, next) => {
-  user.findOne({
+  db.user.findOne({
     where:
       { email: req.body.email }
   })
@@ -48,7 +48,7 @@ exports.login = (req, res, next) => {
         res.status(404).json({ message: "E-mail ou mot de passe incorrect" })
       }
       else {
-        if (user.droits === "00001") {
+        if (db.user.droits === "00001") {
           isAdmin = 1
         }
         bcrypt.compare(req.body.pwd, user.password)
@@ -60,7 +60,10 @@ exports.login = (req, res, next) => {
             res.cookie("test", "BONJOUR")
 
             res.status(200).json({
-              user: { idUser: user.idUser, firstName: user.firstName, lastName: user.lastName, email: user.email, telephone: user.telephone, url_avatar: user.url_avatar, description: user.userDescription },
+              user: { idUser: user.idUser, firstName: user.firstName, lastName: user.lastName,
+                 email: user.email, telephone: user.telephone, url_avatar: user.url_avatar,
+                  description: user.userDescription,
+                  access:user.droits },
               token: jwt.sign(
                 { userId: user.idUser, isAdmin: isAdmin },
                 'AuheoO11nNej47Gr,eiUHog@ru::ohga5',
@@ -73,7 +76,7 @@ exports.login = (req, res, next) => {
 };
 
 exports.userList = (req, res, next) => {
-  user.findAll({
+  db.user.findAll({
     attributes: ['firstName', 'lastName', 'idUser']
   }).then(result => res.status(200).json(result))
     .catch(error => res.status(500).json(error))
@@ -84,7 +87,7 @@ exports.profil = (req, res, next) => {
   /*Faire une requête renvoyant les informations du profil demandé.
   */
   let userId = req.params.id.split("=")[1]
-  user.findOne({
+  db.user.findOne({
     attributes: ["email", "firstName", "lastName", "telephone", "url_avatar"],
     where: {
       idUser: userId
@@ -100,14 +103,14 @@ exports.parametre = (req, res, next) => {
     if (new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd1)) {
       bcrypt.hash(req.body.pwd1, 10)
         .then(hash => {
-          user.update({ password: hash, }, { where: { idUser: userId } })
+          db.user.update({ password: hash, }, { where: { idUser: userId } })
             .catch(error => res.status(500).json({ error }))
         })
     }
   }
 
   if (req.file === undefined) {
-    user.update({
+    db.user.update({
       firstName: req.body.firstname,
       lastName: req.body.lastname,
       userDescription: req.body.userDescription,
@@ -118,7 +121,7 @@ exports.parametre = (req, res, next) => {
   }
   else {
     let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    user.update({
+    db.user.update({
       userName: req.body.firstname,
       lastName: req.body.lastname,
       userDescription: req.body.userDescription,
@@ -134,7 +137,7 @@ exports.parametre = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   let userId = req.params.id.split("=")[1]
-  user.findOne({
+  db.user.findOne({
     attributes: ["url_avatar"],
     where: { idUser: userId }
   })
@@ -148,7 +151,7 @@ exports.delete = (req, res, next) => {
         }
       }
     })
-  user.destroy({ where: { idUser: userId } })
+  db.user.destroy({ where: { idUser: userId } })
     .then(() => res.status(200).json({ message: "Compte effacé" }))
     .catch(error => res.status(500).json({ error }))
   res.status(200).json({ message: "Compte effacé" })
@@ -158,7 +161,7 @@ exports.delete = (req, res, next) => {
 exports.deleteAvatar = (req, res, next) => {
   let userId = req.params.id.split("=")[1]
 
-  user.findOne({
+  db.user.findOne({
     attributes: ["url_avatar"],
     where: { idUser: userId }
   })
@@ -172,7 +175,7 @@ exports.deleteAvatar = (req, res, next) => {
         }
       }
     })
-  user.update({
+  db.user.update({
     url_avatar: ""
   }, { where: { idUser: userId } }).then(() => res.status(200).json({ message: "Avatar supprimé" })).catch(error => res.status().json({ error }))
 }

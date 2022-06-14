@@ -11,17 +11,20 @@
         <i
           class="fa-solid fa-pen-to-square"
           v-on:click="toggleEditPost()"
+          v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
         ></i>
         <i
           class="fa-solid fa-trash-can"
           v-on:click="deletePostFromList(index,id)"
+          v-if="this.userId === this.$store.state.idUser || this.$store.state.access==='00001'" 
         ></i>
-        <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i>
+
+        <!-- <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i> -->
       </div>
     </div>
     <div class="message_post">
     <p class="image_post" v-if="this.urlImage!=undefined && this.urlImage!=''"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article">        
-     <i            class="fa-solid fa-trash-can supprimerImage"
+     <i class="fa-solid fa-trash-can supprimerImage"
           v-on:click="deleteImage"
         ></i></p>
     <p v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
@@ -74,6 +77,7 @@ export default {
 
   data() {
     return {
+      idUser:this.userId,
       modeEdit: this.editMode,
       statusLock: this.lockStatus,
       newBody: this.body,

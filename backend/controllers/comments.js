@@ -1,15 +1,14 @@
+const db = require("../models/config");
 const { Sequelize } = require('sequelize');
-const commentaire = require('../models/commentaire');
-const aimer = require('../models/like')
 const Op = Sequelize.Op
 
 exports.sendComment = (req, res, next) => {
     if (req.body.body != '')/* Faire les vérifications au niveau des droits.*/ {
-        commentaire.create({
+        db.commentaire.create({
             contenu: req.body.body,
             lockStatus: false,
-            posts_idPosts: req.body.idPost,
-            users_idUser: req.body.idUser,
+            idPost: req.body.idPost,
+            idUser: req.body.idUser,
         }).then(() => res.status(201).json({ message: "Commentaire enregistré" }))
             .catch(error => res.status(500).json({ error }))
     }
@@ -18,10 +17,10 @@ exports.sendComment = (req, res, next) => {
     }
 }
 exports.deleteComment = (req, res, next) => {
-    commentaire.destroy({
+    db.commentaire.destroy({
         where: {
             idCommentaire: req.body.id,
-            users_idUser: req.body.userId
+            idUser: req.body.userId
         }
     }).then(() => res.status(201).json({ message: "Commentaire supprimé" }))
         .catch(error => res.status(401).json({ error }))
@@ -29,10 +28,11 @@ exports.deleteComment = (req, res, next) => {
 exports.getComments = (req, res, next) => {
     postId = req.params.postId.split("=")[1]
 
-    commentaire.findAll({
+    db.commentaire.findAll({
+        include:[{model:db.user, attributes:["firstname","lastname"]}],
         where: {
-            posts_idPosts: postId
-        }
+            idPost: postId
+        },
     })
         .then(reponse => res.status(200).json(reponse))
         .catch(error => res.status(500).json({ error }))
@@ -40,7 +40,7 @@ exports.getComments = (req, res, next) => {
 }
 exports.updateAComment = (req, res, next) => {
         let id=req.params.id.split("=")[1]
-        commentaire.update({
+        db.commentaire.update({
             contenu: req.body.nouveauCommentaire,
             dateDernierEdit: Sequelize.fn('NOW')
         }, {
@@ -52,10 +52,10 @@ exports.updateAComment = (req, res, next) => {
 }
 exports.likeAComment = (req, res, next) => {
     if (req.body.valeur === -1) {
-        aimer.destroy({
+        db.like.destroy({
             where: {
-                users_idUser: req.body.idUser,
-                Commentaires_idCommentaire: req.body.idCommentaire
+                idUser: req.body.idUser,
+                idCommentaire: req.body.idCommentaire
             }
         }).then(() => { return res.status(200).json({ message: "Vote supprimé" }) })
             .catch(() => { return res.status(404).json({ message: "Vote non existant" }) })
@@ -65,31 +65,27 @@ exports.likeAComment = (req, res, next) => {
         if (req.body.valeur === 1) {
             valeur = true;
         }
-        aimer.create({
-            users_idUser: req.body.idUser,
-            Commentaires_idCommentaire: req.body.idCommentaire,
+        db.like.create({
+            idUser: req.body.idUser,
+            idCommentaire: req.body.idCommentaire,
             valeur: valeur,
         }).then(()=> res.status(201).json("Vote pris en compte") )
             .catch(() => {
-                aimer.update({ valeur: valeur },
+                db.like.update({ valeur: valeur },
                     {
                         where: {
-                            users_idUser: req.body.idUser,
-                            Commentaires_idCommentaire: req.body.idCommentaire
+                            idUser: req.body.idUser,
+                            idCommentaire: req.body.idCommentaire
                         }
-                    }).then(() => { res.status(201).json({ message: "Vote bien pris en compte" }) })
-                    .catch(() => res.status(500).json({ message: "Problème d'enregistrement du vote" }))
-
+                    }).then(() => {res.status(201).json({ message: "Vote bien pris en compte" }) })
+                    .catch(error =>{console.log(error); res.status(500).json({ message: "Problème d'enregistrement du vote" })})
             })
     }
-
-
 }
-
-exports.lockCommentaire = (req, res, next) => {
-    commentaire.update({ lockStatus: req.body.lockStatus }, {
-        where: { idCommentaire: req.body.idCommentaire }
-    })
-        .then(() => { res.status(200).json({ message: "Vérouillage du sujet modifié" }) })
-        .catch(error => res.status(500).json({ error }));
-}
+// exports.lockCommentaire = (req, res, next) => {
+//     db.commentaire.update({ lockStatus: req.body.lockStatus }, {
+//         where: { idCommentaire: req.body.idCommentaire }
+//     })
+//         .then(() => { res.status(200).json({ message: "Vérouillage du sujet modifié" }) })
+//         .catch(error => res.status(500).json({ error }));
+// }

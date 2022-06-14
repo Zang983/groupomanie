@@ -123,7 +123,7 @@ export default {
           for (let message of value.Post) {
             let newMessage = {
               body: "",
-              author: "Zang",
+              author: "",
               title: "",
               postDate: "",
               editDate: "",
@@ -137,13 +137,13 @@ export default {
               lockStatus: "",
             };
             newMessage.body = message.contenu;
-            newMessage.author = message.auteur;
+            newMessage.author = message.user.firstname + " " + message.user.lastname;
             newMessage.title = message.titre;
             newMessage.postDate = message.dateCreation;
             newMessage.editDate = message.dateDernierEdit;
-            newMessage.id = message.idPosts;
+            newMessage.id = message.idPost;
             newMessage.urlImage = message.url_image;
-            newMessage.idUser = message.users_idUser;
+            newMessage.userId = message.idUser;
             newMessage.lockStatus = message.lockStatus;
             newMessage.like = message.likeStatus;
             promiseThis.posts.push(newMessage);

@@ -51,9 +51,11 @@ export default {
         .then((reponse) => {
           this.listeCommentaire=[]
           for (let commentaire of reponse) {
+            console.log(commentaire)
             let nouveauCommentaire = {
-              auteur:
-                "Zangetsu" /* A MODIFIER QUAND LES JOINTURES SERONT FAITES */,
+              auteur:commentaire.user.firstname + " " + commentaire.user.lastname
+                 /* A MODIFIER QUAND LES JOINTURES SERONT FAITES */,
+              userId:commentaire.idUser,
               idCommentaire: commentaire.idCommentaire,
               contenu: commentaire.contenu,
               dateCreation: commentaire.dateCreation,

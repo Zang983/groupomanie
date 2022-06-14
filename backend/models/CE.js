@@ -6,24 +6,38 @@ const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
   });
 
 
-  const messageCE = sequelize.define("CE",{
+//   const messageCE = sequelize.define("CE",{
+//     idCE:{ type: DataTypes.INTEGER, primaryKey: true },
+//     visible:DataTypes.BOOLEAN,
+//     message:DataTypes.TEXT,
+//     users_idUser:DataTypes.INTEGER,
+//     },
+//     {
+//         tableName:"CE",
+//         timestamps: false ,
+//     }, 
+// );
+
+// messageCE.associate = (models) =>{
+//   messageCE.hasOne(users,{
+//       foreignKey:"users_idUser",
+//       targetKey:"idUsers",
+//       defaultValue:1
+//   })
+// }
+
+// module.exports=messageCE;
+
+module.exports = (sequelize, DataTypes) => {
+  const messageCE = sequelize.define("messageCE", {
     idCE:{ type: DataTypes.INTEGER, primaryKey: true },
     visible:DataTypes.BOOLEAN,
     message:DataTypes.TEXT,
-    users_idUser:DataTypes.INTEGER,
+    idUser:DataTypes.INTEGER,
     },
-    {
-        tableName:"CE",
-        timestamps: false ,
-    }, 
-);
-
-messageCE.associate = (models) =>{
-  messageCE.hasOne(users,{
-      foreignKey:"users_idUser",
-      targetKey:"idUsers",
-      defaultValue:1
-  })
+      {
+          tableName: "CE",
+          timestamps: false
+      })
+  return messageCE
 }
-
-module.exports=messageCE;

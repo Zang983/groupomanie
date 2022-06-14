@@ -1,13 +1,13 @@
-const annonce = require('../models/CE');
+const db = require("../models/config");
 const { Sequelize } = require('sequelize');
 const { Op } = require("sequelize");
 
 exports.sendCE = (req, res, next) => {
-    if (req.body.idUser === 1 && req.body.body != '') {
-        annonce.create({
+    if (req.body.idUser === 1 && req.body.body != '') {//modifier la condition
+        db.annonce.create({
             idCE: "",
             message: req.body.body,
-            users_idUser: req.body.idUser,
+            idUser: req.body.idUser,
             visible: true
         }).then(() => { res.status(200).json(message = "Annonce créée") })
             .catch(error => res.status(500).json(error))
@@ -15,15 +15,12 @@ exports.sendCE = (req, res, next) => {
     else {
         return res.status(401).json({ message: "Droits insuffisant ou message inexistant" })
     }
-
-
-
 }
 
 exports.deleteCE = (req, res, next) => {
     if (req.body.access)//("A modifier avec la valeur contenue dans le token")
     {
-        annonce.destroy({
+        db.annonce.destroy({
             where: {
                 idCE: req.body.id
             }
@@ -37,7 +34,7 @@ exports.deleteCE = (req, res, next) => {
 }
 
 exports.getCE = (req, res, next) => {
-    annonce.findAll()
+    db.annonce.findAll()
         .then(resultat => res.status(200).json({ resultat }))
         .catch(error => res.status(500).json({ message: error }))
 }
@@ -45,7 +42,7 @@ exports.getCE = (req, res, next) => {
 exports.updateCE = (req, res, next) => {
     if (req.body.access && req.body.message != "")//a modifier avec la valeur contenue dans le token
     {
-        annonce.update({
+        db.annonce.update({
             message: req.body.message,
         }, {
             where: {

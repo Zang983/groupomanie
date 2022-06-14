@@ -3,12 +3,14 @@
     <div class="enTeteCommentaire">
       {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}
       <div class="interractionCommentaire">
-        <i class="fa-solid fa-lock" v-on:click="lockCommentaire()"> </i>
+        <!-- <i class="fa-solid fa-lock" v-on:click="lockCommentaire()"> </i> -->
         <i
-          class="fa-solid fa-trash-can"
+          class="fa-solid fa-trash-can" 
+           v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
           v-on:click="deleteCommentaire()"></i>
         <i
           class="fa-solid fa-pen-to-square"
+          v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
           v-on:click="toggleEditCommentaire"></i>
       </div>
     </div>
@@ -33,10 +35,11 @@
 <script>
 export default {
   name: "commentaireUnique",
-  props: ["message", "index"],
+  props: ["message", "index",],
 
   data() {
     return {
+      idUser:this.message.userId,
       nouveauCommentaire:this.message.contenu,
       locked: false,
       editMode: this.message.statutEditMode,

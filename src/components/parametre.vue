@@ -80,7 +80,9 @@ export default {
         method: "PUT",
         body: infoRequete,
       });
-      fetch(request).then(() => console.log("oki"));
+      fetch(request)
+      .then(() => {alert("Vos modifications sont enregistrées");this.fermeture()})
+      .catch(error=>console.log(error))
     },
     supprimerCompte() {
       let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;

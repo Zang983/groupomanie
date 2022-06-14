@@ -7,6 +7,6 @@ router.delete('/comment/:id',commentCtrl.deleteComment);
 router.get('/comment/:postId',commentCtrl.getComments);
 router.put('/comment/:id',commentCtrl.updateAComment);
 router.post('/comment/like/:id',commentCtrl.likeAComment);
-router.put('/comment/lock/:id',commentCtrl.lockCommentaire);
+// router.put('/comment/lock/:id',commentCtrl.lockCommentaire);
 
 module.exports = router;

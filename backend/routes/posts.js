@@ -11,7 +11,7 @@ const multer = require('../middleware/multer-config')
 router.post('/post',multer,postCtrl.sendPost);
 router.delete('/post/delete/:id',postCtrl.deletePost);
 router.get('/post/:requete/:page',postCtrl.getPosts);
-router.put('/post/lock',postCtrl.lockAPost);
+// router.put('/post/lock',postCtrl.lockAPost);
 router.put('/post/update/:id',multer,postCtrl.updateAPost);
 router.post('/post/like/:id',postCtrl.likeAPost);
 
