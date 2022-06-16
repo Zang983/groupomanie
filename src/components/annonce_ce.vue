@@ -2,10 +2,11 @@
   <div class="ce_posts_container">
     <h2>
       Annonce C.E.
-          <button v-on:click="getAnnonceList()" class="refresh_button"><i class="fa-solid fa-arrows-rotate"></i></button>
+      <button v-on:click="getAnnonceList()" class="refresh_button">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
       <i
         class="fa-solid fa-envelope"
-      
         v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
       ></i>
     </h2>
@@ -51,6 +52,7 @@
 
 
 <script>
+import axios from "axios";
 export default {
   name: "annonceCe",
 
@@ -61,28 +63,20 @@ export default {
         idUser: this.$store.state.idUser,
         body: this.nouvelleAnnonce,
       };
-
-      let request = new Request(requestPath, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoAnnonce),
-      });
       let promiseThis = this;
-      fetch(request)
-        .then(function (res) {
-          if (res.ok) {
-            promiseThis.toggleNouvelleAnnonce =
-              !promiseThis.toggleNouvelleAnnonce;
-            promiseThis.annonceList.push({
-              idCe: "",
-              message: promiseThis.nouvelleAnnonce,
-              visible: 1,
-            });
-            promiseThis.nouvelleAnnonce = "";
-          }
+      axios
+        .post(requestPath, infoAnnonce, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {
+          promiseThis.toggleNouvelleAnnonce =
+            !promiseThis.toggleNouvelleAnnonce;
+          promiseThis.annonceList.push({
+            idCe: "",
+            message: promiseThis.nouvelleAnnonce,
+            visible: 1,
+          });
+          promiseThis.nouvelleAnnonce = "";
         })
         .catch((error) => {
           console.log(error);
@@ -98,14 +92,12 @@ export default {
       let promiseThis = this;
       this.annonceList = [];
 
-      fetch(requestPath)
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
+      axios
+        .get(requestPath, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
         })
-        .then(function (value) {
-          promiseThis.annonceList = value.resultat;
+        .then((value) => {
+          promiseThis.annonceList = value.data.resultat;
           for (let message in promiseThis.annonceList) {
             promiseThis.annonceList[message].editMode = false;
           }
@@ -122,45 +114,35 @@ export default {
         userId: this.$store.state.idUser,
         access: this.$store.state.access,
       };
-      let request = new Request(requestPath, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(corps),
-      });
       let promiseThis = this;
-      fetch(request).then(function (res) {
-        if (res.ok) {
+
+      axios
+        .delete(requestPath, {
+          data: { corps },
+          headers: { Authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {
           promiseThis.annonceList.splice(index, 1);
-        }
-      });
+        });
     },
-    editMessageCE(index){
-    let requestPath = `http://localhost:3000/api/ceMessage/${this.annonceList[index].idCE}`;
-    let infoAnnonce={
-      idCE:this.annonceList[index].idCE,
-      access:this.$store.state.access,
-      message:this.annonceList[index].message,
-    }
-    let request = new Request(requestPath, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(infoAnnonce),
-    });
-    let promiseThis=this;
-    fetch(request)
-      .then(function (res){
-        if (res.ok) {
+    editMessageCE(index) {
+      let requestPath = `http://localhost:3000/api/ceMessage/${this.annonceList[index].idCE}`;
+      let promiseThis = this;
+      let infoAnnonce = {
+        idCE: this.annonceList[index].idCE,
+        access: this.$store.state.access,
+        message: this.annonceList[index].message,
+      };
+
+      axios
+        .put(requestPath, infoAnnonce, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {
           promiseThis.toggleEditMode(index);
-          return res.json();
-        }
-      }).catch(error=>console.log(error))
-    }
+        })
+        .catch((error) => console.log(error));
+    },
   },
 
   data() {

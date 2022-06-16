@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "commentaireUnique",
   props: ["message", "index",],
@@ -89,16 +90,9 @@ export default {
         idUser: this.$store.state.idUser,
       };
       let requestPath = `http://localhost:3000/api/comment/like/id=${id}`;
-
-      let request = new Request(requestPath, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoLike),
-      });
-      fetch(request).then(function (res) {
+      axios.post(requestPath, infoLike, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        }).then(function (res) {
         if (res.ok) {
           return res.json();
         }

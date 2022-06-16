@@ -17,10 +17,11 @@ exports.sendComment = (req, res, next) => {
     }
 }
 exports.deleteComment = (req, res, next) => {
+    console.log(req.body)
     db.commentaire.destroy({
         where: {
-            idCommentaire: req.body.id,
-            idUser: req.body.userId
+            idCommentaire: req.body.corps.id,
+            idUser: req.body.corps.userId
         }
     }).then(() => res.status(201).json({ message: "Commentaire supprimé" }))
         .catch(error => res.status(401).json({ error }))

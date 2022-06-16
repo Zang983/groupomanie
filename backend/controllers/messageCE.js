@@ -18,11 +18,12 @@ exports.sendCE = (req, res, next) => {
 }
 
 exports.deleteCE = (req, res, next) => {
-    if (req.body.access)//("A modifier avec la valeur contenue dans le token")
+    console.log(req.body)
+    if (req.body.corps.access)//("A modifier avec la valeur contenue dans le token")
     {
         db.annonce.destroy({
             where: {
-                idCE: req.body.id
+                idCE: req.body.corps.id
             }
         }).then(() => res.status(201).json({ message: "Annonce supprimée" }))
             .catch(() => res.status(500).json({ message: "Erreur lors de la suppression de l'annonce" }))

@@ -38,13 +38,13 @@ db.post.hasMany(db.aimer,{foreignKey:"idPost",onDelete:"cascade"})
 db.aimer.belongsTo(db.post,{foreignKey:"idPost"})
 
 db.user.hasMany(db.aimer,{foreignKey:"idUser",onDelete:"cascade"})
-db.aimer.belongsTo(db.user,{foreignKey:"idUser"})
+db.aimer.belongsTo(db.user,{foreignKey:"idUser",onDelete:"cascade"})
 
 db.commentaire.hasMany(db.like,{foreignKey:"idCommentaire",onDelete:"cascade"})
-db.like.belongsTo(db.commentaire,{foreignKey:"idCommentaire"})
+db.like.belongsTo(db.commentaire,{foreignKey:"idCommentaire",onDelete:"cascade"})
 
 db.user.hasMany(db.like,{foreignKey:"idUser",onDelete:"cascade"})
-db.like.belongsTo(db.user,{foreignKey:"idUser"})
+db.like.belongsTo(db.user,{foreignKey:"idUser",onDelete:"cascade"})
 
 
 module.exports=db

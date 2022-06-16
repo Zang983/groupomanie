@@ -25,25 +25,29 @@ exports.sendPost = (req, res, next) => {
 
 }
 exports.deletePost = (req, res, next) => {
-    let userId = req.body.userId
-    db.post.findOne({ where: { idPost: req.body.id } })
+    let userId = req.body.corps.userId
+    console.log(req.body.corps)
+
+
+   
+    db.post.findOne({ where: { idPost: req.body.corps.id } })
         .then(result => {
                 let urlImage = "./images" + result.url_image.split("/images")[1]
                 if (result.url_image != "" && fs.existsSync(urlImage)) {
                     fs.unlink(urlImage, (err) => {
                     })
                 }
-
                 db.post.destroy({
                     where: {
                         [Op.and]: [
-                            { idPost: req.body.id },
+                            { idPost: req.body.corps.id },
                             { idUser: userId }
                         ]
                     }
-                })
-
-})}
+                }).then(()=>res.status(204).json({message:"Post effacé"}))
+                .catch(error=>res.status(500).jsons({error}))
+})
+}
 /* Refactoriser, pas besoin du if/else modifier la valeur du lockStatus selon le droit admin */
 exports.getPosts = (req, res, next) => {
     let nombrePage = 0;
@@ -64,7 +68,7 @@ exports.getPosts = (req, res, next) => {
                     offset: page * 5, limit: 5,
 
                 })
-                    .then(Post => { res.status(200).json({ Post, nombrePage }) })
+                    .then(Post => {console.log(Post); res.status(200).json({ Post, nombrePage }) })
                     .catch(error => { console.log(error); res.status(500).json({ error }) });
         })
 

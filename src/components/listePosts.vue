@@ -73,6 +73,7 @@
 
 <script>
 import post from "./post.vue";
+import axios from "axios";
 
 export default {
   name: "postList",
@@ -112,33 +113,17 @@ export default {
       let promiseThis = this;
       this.posts = [];
 
-      fetch(requestPath)
-        .then(function (res) {
-          if (res.ok) {
-            promiseThis.pageActuelle = page;
-            return res.json();
-          }
+      axios
+        .get(requestPath, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
         })
         .then(function (value) {
-          for (let message of value.Post) {
-            let newMessage = {
-              body: "",
-              author: "",
-              title: "",
-              postDate: "",
-              editDate: "",
-              id: 0,
-              editMode: false,
-              showAllMessage: true,
-              readerRate: "",
-              like: null,
-              userId: "",
-              urlImage: "",
-              lockStatus: "",
-            };
+          for (let message of value.data.Post) {
+            let newMessage = {};
 
             newMessage.body = message.contenu;
-            newMessage.author = message.user.firstname + " " + message.user.lastname;
+            newMessage.author =
+              message.user.firstname + " " + message.user.lastname;
             newMessage.title = message.titre;
             newMessage.postDate = message.dateCreation;
             newMessage.editDate = message.dateDernierEdit;
@@ -147,11 +132,9 @@ export default {
             newMessage.userId = message.idUser;
             newMessage.lockStatus = message.lockStatus;
             newMessage.like = -1;
-            for(let like of message.aimers)
-            {
-              if(like.idUser===promiseThis.$store.state.idUser)
-              {
-                newMessage.like = like.valeur
+            for (let like of message.aimers) {
+              if (like.idUser === promiseThis.$store.state.idUser) {
+                newMessage.like = like.valeur;
               }
             }
             promiseThis.posts.push(newMessage);
@@ -169,15 +152,11 @@ export default {
         id: id,
         userId: this.$store.state.idUser,
       };
-      let request = new Request(requestPath, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(corps),
-      });
-      fetch(request)
+      axios
+        .delete(requestPath, {
+          data: { corps },
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
         .then(() => {
           this.getListPost(this.pageActuelle);
         })
@@ -186,20 +165,20 @@ export default {
     deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let infoPost = new FormData();
-        infoPost.append("idPost", id);
-        infoPost.append("supprimeImage",1);
+      infoPost.append("idPost", id);
+      infoPost.append("supprimeImage", 1);
 
-      let request = new Request(requestPath, {
-        method: "PUT",
-        body: infoPost,
-      });
-      fetch(request).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-      });
+      axios
+        .put(requestPath, infoPost, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        });
     },
-    editPost(id, newTitle, newBody,image) {
+    editPost(id, newTitle, newBody, image) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let infoPost = {};
       this.author = this.$store.state.userName;
@@ -210,15 +189,16 @@ export default {
       infoPost.append("title", newTitle);
       infoPost.append("users_idUser", this.$store.state.idUser);
       infoPost.append("image", image[0]);
-      let request = new Request(requestPath, {
-        method: "PUT",
-        body: infoPost,
-      });
-      fetch(request).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-      });
+
+      axios
+        .put(requestPath, infoPost, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+        });
       this.editMode = false;
     },
     post() {
@@ -233,22 +213,43 @@ export default {
       infoPost.append("title", this.newMessage.title);
       infoPost.append("users_idUser", this.$store.state.idUser);
       infoPost.append("image", image);
-      let request = new Request(requestPath, {
-        method: "POST",
-        body: infoPost,
-      });
+      // let request = new Request(requestPath, {
+      //   headers:{
+      //     authorization: "Bearer " + this.$store.state.token
+      //   },
+      //   method: "POST",
+      //   body: infoPost,
+      // });
 
-      fetch(request)
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
+      // fetch(request)
+      //   .then(function (res) {
+      //     if (res.ok) {
+      //       return res.json();
+      //     }
+      //   })
+      //   .then(() => {
+      //     this.getListPost(this.pageActuelle);
+      //     this.newPost();
+      //     this.$emit("updateListPost");
+      //   });
+
+      axios
+        .post(requestPath, infoPost, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.statusText === "OK") {
+            return res.status.json();
           }
         })
-        .then(() => {
+        .then(()=>{
+          console.log("rafraichis")
           this.getListPost(this.pageActuelle);
           this.newPost();
           this.$emit("updateListPost");
-        });
+        })
+        .catch((error) => console.log(error));
     },
   },
 

@@ -56,6 +56,7 @@
 
 <script>
 import commentList from "./listeCommentaire.vue";
+import axios from "axios";
 export default {
   name: "UniquePost",
   components: {
@@ -78,10 +79,10 @@ export default {
 
   data() {
     return {
-      idUser:this.userId,
+      idUser: this.userId,
       modeEdit: this.editMode,
       statusLock: this.lockStatus,
-      like:this.initLike,
+      like: this.initLike,
       newBody: this.body,
       newTitle: this.title,
       showAll: false,
@@ -126,8 +127,7 @@ export default {
       this.$emit("lockPost", index, id);
     },
     sendLike(valeurLike, id) {
-
-      if (this.like == undefined || this.like == null || this.like===-1) {
+      if (this.like == undefined || this.like == null || this.like === -1) {
         this.like = valeurLike;
       } //si l'utilisateur à déjà (dis)liké le post
       else {
@@ -152,19 +152,15 @@ export default {
       };
       let requestPath = `http://localhost:3000/api/posts/post/like/id=${id}`;
 
-      let request = new Request(requestPath, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoLike),
-      });
-      fetch(request).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-      });
+      axios
+        .post(requestPath, infoLike, {
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+        });
     },
   },
 };
