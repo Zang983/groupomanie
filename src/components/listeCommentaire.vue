@@ -41,6 +41,7 @@ export default {
 
   methods: {
     getCommentaire() {
+      let promiseThis=this
       let requestPath = `http://localhost:3000/api/comment/postId=${this.postId}`;
       fetch(requestPath)
         .then(function (res) {
@@ -50,12 +51,21 @@ export default {
         })
         .then((reponse) => {
           this.listeCommentaire=[]
+          let valeurLike=-1;
           for (let commentaire of reponse) {
             console.log(commentaire)
+            for(let like of commentaire.likes)
+            {
+              if(like.idUser===promiseThis.$store.state.idUser)
+              {
+               valeurLike = like.valeur
+              }
+            }
             let nouveauCommentaire = {
-              auteur:commentaire.user.firstname + " " + commentaire.user.lastname
-                 /* A MODIFIER QUAND LES JOINTURES SERONT FAITES */,
+              auteur:commentaire.user.firstname + " " + commentaire.user.lastname,
+                 /* A MODIFIER QUAND LES JOINTURES SERONT FAITES */
               userId:commentaire.idUser,
+              valeurLike : valeurLike,
               idCommentaire: commentaire.idCommentaire,
               contenu: commentaire.contenu,
               dateCreation: commentaire.dateCreation,

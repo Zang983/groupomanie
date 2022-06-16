@@ -46,7 +46,7 @@
         v-bind:postDate="message.postDate"
         v-bind:editDate="message.editDate"
         v-bind:showAllMessage="message.showAllMessage"
-        v-bind:like="message.like"
+        v-bind:initLike="message.like"
         v-bind:userId="message.userId"
         v-bind:urlImage="message.urlImage"
         v-bind:editMode="editMode"
@@ -136,6 +136,7 @@ export default {
               urlImage: "",
               lockStatus: "",
             };
+
             newMessage.body = message.contenu;
             newMessage.author = message.user.firstname + " " + message.user.lastname;
             newMessage.title = message.titre;
@@ -145,7 +146,14 @@ export default {
             newMessage.urlImage = message.url_image;
             newMessage.userId = message.idUser;
             newMessage.lockStatus = message.lockStatus;
-            newMessage.like = message.likeStatus;
+            newMessage.like = -1;
+            for(let like of message.aimers)
+            {
+              if(like.idUser===promiseThis.$store.state.idUser)
+              {
+                newMessage.like = like.valeur
+              }
+            }
             promiseThis.posts.push(newMessage);
             promiseThis.nombrePage = value.nombrePage / 5;
             promiseThis.nombrePage = Math.ceil(value.nombrePage / 5);

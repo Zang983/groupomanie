@@ -112,7 +112,6 @@ export default {
            this.toggleModale(value);
            this.$emit('showModaleOff')
            this.$store.commit('saveIdUser',value.user.idUser)
-           this.$store.commit('levelPermission',value.isAdmin)
            this.$store.commit('saveToken',value.token)
            this.$store.commit('saveFirstname',value.user.firstName)
            this.$store.commit('saveLastname',value.user.lastName)

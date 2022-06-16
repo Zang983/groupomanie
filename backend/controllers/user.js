@@ -82,7 +82,6 @@ exports.userList = (req, res, next) => {
     .catch(error => res.status(500).json(error))
 
 }
-
 exports.profil = (req, res, next) => {
   /*Faire une requête renvoyant les informations du profil demandé.
   */
@@ -152,12 +151,11 @@ exports.delete = (req, res, next) => {
       }
     })
   db.user.destroy({ where: { idUser: userId } })
-    .then(() => res.status(200).json({ message: "Compte effacé" }))
-    .catch(error => res.status(500).json({ error }))
-  res.status(200).json({ message: "Compte effacé" })
+    .then(() => { return res.status(200).json({ message: "Compte effacé" })})
+    .catch(error => { return res.status(500).json({ error })})
+  // res.status(200).json({ message: "Compte effacé" })
 
 }
-
 exports.deleteAvatar = (req, res, next) => {
   let userId = req.params.id.split("=")[1]
 

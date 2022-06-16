@@ -1,27 +1,29 @@
-.user_new_post
-{
-  margin-bottom:35px;
-  input,textarea {
+.user_new_post {
+  margin-bottom: 35px;
+
+  input,
+  textarea {
     width: calc(100% - 22px);
-    border:1px solid rgba(0, 0, 255, 0.299);
-    margin:0px;
-    padding:0px;
-    font-size:120%;
-    padding-left:20px;
+    border: 1px solid rgba(0, 0, 255, 0.299);
+    margin: 0px;
+    padding: 0px;
+    font-size: 120%;
+    padding-left: 20px;
   }
-  input
-  {
-    height:50px;
+
+  input {
+    height: 50px;
   }
-  p
-  {
-    height:250px; 
-    background-color:blakc;
-    border:none;
-    margin:0px;
-    padding:0px; 
+
+  p {
+    height: 250px;
+    background-color: blakc;
+    border: none;
+    margin: 0px;
+    padding: 0px;
   }
 }
+
 .posts_bloc {
   width: 60%;
   min-width: 60%;
@@ -44,13 +46,13 @@
 
   .user_post {
     width: 100%;
-    min-width:100%;
-    max-width:100%;
+    min-width: 100%;
+    max-width: 100%;
     margin-bottom: 40px;
     border-radius: 20px;
-    &_locked
-    {
-      border-radius:0px 0px 20px 20px;
+
+    &_locked {
+      border-radius: 0px 0px 20px 20px;
       background-color: rgba(255, 0, 0, 0.569);
     }
   }
@@ -105,19 +107,20 @@
   }
 }
 
-textarea
-{
-  width:100%;
-  border:none;
-  padding:0px;
-  height:250px;
-  font-size:120%;
-  margin:0px;
+textarea {
+  width: 100%;
+  border: none;
+  padding: 0px;
+  height: 250px;
+  font-size: 120%;
+  margin: 0px;
 }
-input{
-  font-size:120%;
-  width:70%;
+
+input {
+  font-size: 120%;
+  width: 70%;
 }
+
 .message_post {
   max-width: 100%;
   margin: 0px;
@@ -126,6 +129,7 @@ input{
   border-top: 1px solid blue;
   border-bottom: 1px solid blue;
   line-height: 150%;
+
   &Short {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -153,9 +157,8 @@ input{
 }
 
 .user_post_locked {
-  .header_post
-  {
-    border-radius:0px 0px 0px 0px;
+  .header_post {
+    border-radius: 0px 0px 0px 0px;
 
   }
 
@@ -189,7 +192,7 @@ input{
 .likeAndCommentary {
   display: flex;
   align-items: center;
-  padding-right:10px;
+  padding-right: 10px;
 
   i {
     border: none;
@@ -200,6 +203,16 @@ input{
 
   i:hover {
     font-size: 120%;
+  }
+
+  .blueLike {
+    font-size: 120%;
+    color: blue;
+  }
+
+  .redLike {
+    font-size: 120%;
+    color: red;
   }
 
   .likeDown {
@@ -214,47 +227,49 @@ input{
     color: blue;
   }
 }
-.send_block
-{
-    display:flex;
-    align-items:center;
-    height:35px;
-    width:100%;
-    .send_button,.send_picture{
-    color:white;
-    font-size:120%;
-    }
-    .send_picture
-    {
-      height:35px;
-      width:20%;
-      color:black;
-    }
-    button:hover, i:hover
-    {
-      cursor:pointer;
-      filter:brightness(0.8);
-    }
-    i
-    {
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content: center;
-      height:calc(100% - 4px)
 
-    }
+.send_block {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  width: 100%;
 
-}
-.image_post
-{
-  text-align:center;
-  width:100%; 
+  .send_button,
+  .send_picture {
+    color: white;
+    font-size: 120%;
+  }
+
+  .send_picture {
+    height: 35px;
+    width: 20%;
+    color: black;
+  }
+
+  button:hover,
+  i:hover {
+    cursor: pointer;
+    filter: brightness(0.8);
+  }
+
+  i {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 4px)
+  }
 
 }
-.image_post img
-{
+
+.image_post {
+  text-align: center;
+  width: 100%;
+
+}
+
+.image_post img {
   object-fit: contain;
-  max-width:50%;
-  max-height:400px;
+  max-width: 50%;
+  max-height: 400px;
 }

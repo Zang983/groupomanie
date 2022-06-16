@@ -24,9 +24,11 @@
     <div class="interractionLike">
       <i
         class="fa-solid fa-thumbs-up likeUp"
+        v-bind:class="{blueLike : like===1}"
         @click="likeCommentaire(1, message.idCommentaire)"></i>
       <i
         class="fa-solid fa-thumbs-up likeDown"
+        v-bind:class="{redLike : like===0}"
         @click="likeCommentaire(0, message.idCommentaire)"></i>
     </div>
   </div>
@@ -39,6 +41,7 @@ export default {
 
   data() {
     return {
+      like:this.message.valeurLike,
       idUser:this.message.userId,
       nouveauCommentaire:this.message.contenu,
       locked: false,
@@ -61,7 +64,8 @@ export default {
       this.$emit("deleteCommentaire", this.message.idCommentaire, this.index);
     },
     likeCommentaire(valeurLike, id) {
-      if (this.like == undefined || this.like == null) {
+      console.log(this.like)
+      if (this.like === undefined || this.like === null || this.like===-1) {
         this.like = valeurLike;
       } //si l'utilisateur à déjà (dis)liké le post
       else {

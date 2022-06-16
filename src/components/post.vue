@@ -45,8 +45,8 @@
          Écrit le : <strong>{{ postDateFr }}</strong>
       </p>
       <div class="likeAndCommentary">
-        <i class="fa-solid fa-thumbs-up likeUp" @click="sendLike(1, id)"></i>
-        <i class="fa-solid fa-thumbs-up likeDown" @click="sendLike(0, id)"></i>
+        <i class="fa-solid fa-thumbs-up likeUp" v-bind:class="{blueLike : like===1}" @click="sendLike(1, id)"></i>
+        <i class="fa-solid fa-thumbs-up likeDown" v-bind:class="{redLike : like===0}" @click="sendLike(0, id)"></i>
         <i class="fa-solid fa-message" @click="showComments(index)" ></i>
         <commentList v-if="commentVisibility" v-bind:postId="id" v-on:showComments="showComments()"></commentList>
       </div>
@@ -63,6 +63,7 @@ export default {
   },
   props: [
     "index",
+    "initLike",
     "lockStatus",
     "body",
     "title",
@@ -80,6 +81,7 @@ export default {
       idUser:this.userId,
       modeEdit: this.editMode,
       statusLock: this.lockStatus,
+      like:this.initLike,
       newBody: this.body,
       newTitle: this.title,
       showAll: false,
@@ -124,14 +126,15 @@ export default {
       this.$emit("lockPost", index, id);
     },
     sendLike(valeurLike, id) {
-      if (this.like == undefined || this.like == null) {
+
+      if (this.like == undefined || this.like == null || this.like===-1) {
         this.like = valeurLike;
       } //si l'utilisateur à déjà (dis)liké le post
       else {
         if (this.like === valeurLike) {
           //l'utilisateur souhaite être neutre
           valeurLike = -1; //on défini valeurLike à -1, ce qui implique la suppression du statut du like côté API
-          this.like = null;
+          this.like = -1;
         }
         if (this.like === 1 && valeurLike === 0) {
           // l'utilisateur aimé le like et le dislike

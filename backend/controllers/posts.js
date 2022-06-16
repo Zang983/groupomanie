@@ -28,15 +28,13 @@ exports.deletePost = (req, res, next) => {
     let userId = req.body.userId
     db.post.findOne({ where: { idPost: req.body.id } })
         .then(result => {
-            if (!result.lockStatus) {
                 let urlImage = "./images" + result.url_image.split("/images")[1]
                 if (result.url_image != "" && fs.existsSync(urlImage)) {
                     fs.unlink(urlImage, (err) => {
                     })
                 }
-                db.commentaire.destroy({
-                    where: { idPost: req.body.id }
-                }).then(() => db.post.destroy({
+
+                db.post.destroy({
                     where: {
                         [Op.and]: [
                             { idPost: req.body.id },
@@ -44,17 +42,8 @@ exports.deletePost = (req, res, next) => {
                         ]
                     }
                 })
-                    .then(res.status(200).json("Message supprimé"))
-                    .catch(error => res.status(500).json({ error })))
 
-
-
-            }
-            else {
-                return res.status(401).json("Vous n'êtes pas autorisé à faire cette action")
-            }
-        }).catch(error => res.status(501).json("Le serveur n'a pas compris votre demande"))
-}
+})}
 /* Refactoriser, pas besoin du if/else modifier la valeur du lockStatus selon le droit admin */
 exports.getPosts = (req, res, next) => {
     let nombrePage = 0;
@@ -65,12 +54,13 @@ exports.getPosts = (req, res, next) => {
     db.post.count()
         .then((value) => {
             nombrePage = value;
-            db.user
             let admin = 1
-           
                 db.post.findAll({
                     order: [['dateCreation', 'DESC']],
-                    include: [{ model: db.user, attributes: ["firstname", "lastname"] }],
+                    include: [
+                        { model: db.user, attributes: ["firstname", "lastname"] },
+                        {model : db.aimer, attributes:["idUser","valeur"]}
+                ],
                     offset: page * 5, limit: 5,
 
                 })

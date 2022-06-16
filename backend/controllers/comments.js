@@ -29,7 +29,10 @@ exports.getComments = (req, res, next) => {
     postId = req.params.postId.split("=")[1]
 
     db.commentaire.findAll({
-        include:[{model:db.user, attributes:["firstname","lastname"]}],
+        include:[
+            {model:db.user, attributes:["firstname","lastname"]},
+            {model:db.like,attributes:["idUser","valeur"]}
+        ],
         where: {
             idPost: postId
         },
