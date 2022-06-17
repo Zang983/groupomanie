@@ -17,14 +17,13 @@
       </button>
     </div>
     <commentaire
-      v-for="(message,index) of listeCommentaire"
+      v-for="(message, index) of listeCommentaire"
       v-bind:key="index"
       v-bind:message="message"
       v-bind:index="index"
       @deleteCommentaire="deleteCommentaire"
-      @lockCommentaire="lockCommentaire"
       @editCommentaire="editCommentaire"
-      >
+    >
     </commentaire>
   </div>
 </template>
@@ -32,7 +31,7 @@
 
 <script>
 import commentaire from "./commentaire.vue";
-import axios from "axios"
+import axios from "axios";
 export default {
   name: "CommentList",
   props: ["postId"],
@@ -42,34 +41,33 @@ export default {
 
   methods: {
     getCommentaire() {
-      let promiseThis=this
+      let promiseThis = this;
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/comment/postId=${this.postId}`;
-      
+
       axios
         .get(requestPath, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
-        .then( reponse=>{
-          this.listeCommentaire=[]
-          let valeurLike=-1;
+        .then((reponse) => {
+          this.listeCommentaire = [];
+          let valeurLike = -1;
           for (let commentaire of reponse.data) {
-            for(let like of commentaire.likes)
-            {
-              if(like.idUser===promiseThis.$store.state.idUser)
-              {
-               valeurLike = like.valeur
+            for (let like of commentaire.likes) {
+              if (like.idUser === promiseThis.$store.state.idUser) {
+                valeurLike = like.valeur;
               }
             }
             let nouveauCommentaire = {
-              auteur:commentaire.user.firstname + " " + commentaire.user.lastname,
-              userId:commentaire.idUser,
-              valeurLike : valeurLike,
+              auteur:
+                commentaire.user.firstname + " " + commentaire.user.lastname,
+              userId: commentaire.idUser,
+              valeurLike: valeurLike,
               idCommentaire: commentaire.idCommentaire,
               contenu: commentaire.contenu,
               dateCreation: commentaire.dateCreation,
               dateDernierEdit: commentaire.dateDernierEdit,
-              lockStatus: false,
-              StatutEditMode:false,
+              StatutEditMode: false,
             };
             this.listeCommentaire.push(nouveauCommentaire);
           }
@@ -80,6 +78,7 @@ export default {
       this.$emit("showComments");
     },
     envoieCommentaire() {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/comment/";
       let infoCommentaire = {
         idUser: this.$store.state.idUser,
@@ -88,73 +87,52 @@ export default {
         idPost: this.postId,
       };
       let promiseThis = this;
-      axios.post(requestPath,infoCommentaire,{headers: { authorization: `Bearer ${this.$store.state.token}` }})
-        .then(function (res) {
-          if (res.ok) {
+      axios
+        .post(requestPath, infoCommentaire, {
+          headers: { authorization: `Bearer ${token}` },
+        })
+        .then(()=> {
+
             promiseThis.getCommentaire();
-            promiseThis.nouveauCommentaire="";
-          } 
+            promiseThis.nouveauCommentaire = "";
+       
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deleteCommentaire(id,index){
+    deleteCommentaire(id, index) {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/comment/:id=${id}`;
       let corps = {
         id: id,
         userId: this.$store.state.idUser,
       };
 
-        axios.delete(requestPath, {
+      axios
+        .delete(requestPath, {
           data: { corps },
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
-          this.listeCommentaire.splice(index,1)
-
+          this.listeCommentaire.splice(index, 1);
         })
         .catch((error) => console.log(error));
-
-
-    },
-    lockCommentaire(index,id){
-        let requestPath = `http://localhost:3000/api/comment/lock/id=${this.postId}`;
-        let promiseThis=this
-      let infoPost = {
-        idCommentaire: id,
-        lockStatus: !this.listeCommentaire[index].lockStatus,
-      };
-      let request = new Request(requestPath, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoPost),
-      });
-      fetch(request).then(function (res) {
-        if (res.ok) {
-          promiseThis.listeCommentaire[index].lockStatus = !promiseThis.listeCommentaire[index].lockStatus
-          return res.json();
-        }
-      });
-
     },
     editCommentaire(id, nouveauContenu) {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/comment/id=${id}`;
       let infoPost = {
         nouveauCommentaire: nouveauContenu,
         idUser: this.$store.state.idUser,
       };
-      axios.put(requestPath,infoPost,{headers:{ authorization: `Bearer ${this.$store.state.token}` }})
-      .then(function (res) {
-        if (res.ok) {
+      axios
+        .put(requestPath, infoPost, {
+          headers: { authorization: `Bearer ${token}` },
+        })
+        .then(() => {
           this.editMode = false;
-          return res.json();
-        }
-      });
-      
+        });
     },
   },
 
@@ -163,7 +141,6 @@ export default {
       auteur: "",
       idCommentaire: "",
       dateCreation: "",
-      lockStatus: "",
       listeCommentaire: [],
       nouveauCommentaire: "",
     };

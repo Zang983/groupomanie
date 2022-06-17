@@ -24,10 +24,11 @@
       ><input type="file" id="imageUser" accept=".jpeg,.jpg,png" />
 
       <button
-       alt="Image de l'utilisateur"
-        v-if="this.$store.state.avatar != null && this.$store.state.avatar !=''"
+        v-if="this.avatar!=''"
         v-on:click="supprimeAvatar"
-      >Supprimer mon image</button>
+      >
+        Supprimer mon image
+      </button>
       <label for="telephone">Téléphone :</label>
       <input
         type="tel"
@@ -63,30 +64,34 @@ export default {
   name: "modaleParametre",
   data() {
     return {
-      prenom:"",
-      nom:"",
-      description:"",
+      prenom: "",
+      nom: "",
+      description: "",
       mdp1: "",
       mdp2: "",
       email: this.$store.state.email,
       telephone: this.$store.state.telephone,
-      image2:""
+      image2: "",
+      avatar:"",
     };
   },
   methods: {
-    getMyProfil(){
-      let requestPath =`http://localhost:3000/api/auth/profil/id=${this.$store.state.idUser}`
-        axios.get(requestPath,{headers:{authorization:`Bearer ${this.$store.state.token}`}})
+    getMyProfil() {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
+      let requestPath = `http://localhost:3000/api/auth/profil/id=${this.$store.state.idUser}`;
+      axios
+        .get(requestPath, { headers: { authorization: `Bearer ${token}` } })
         .then((value) => {
-          this.prenom=value.data.firstName;
-          this.nom=value.data.lastName;
-          this.description=value.data.userDescription
+          this.prenom = value.data.firstName;
+          this.nom = value.data.lastName;
+          this.description = value.data.userDescription;
+          this.avatar=value.data.url_avatar;
         })
         .catch((error) => console.log(error));
-
     },
     majProfil() {
-        let image = document.querySelector("#imageUser").files[0];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
+      let image = document.querySelector("#imageUser").files[0];
       let requestPath = `http://localhost:3000/api/auth/parametre/id=${this.$store.state.idUser}`;
       let infoRequete = new FormData();
       infoRequete.append("firstname", this.prenom);
@@ -96,9 +101,9 @@ export default {
       infoRequete.append("pwd2", this.mdp2);
       infoRequete.append("image", image);
       infoRequete.append("telephone", this.telephone);
-
-      axios.put(requestPath, infoRequete,
-          {headers: { authorization: `Bearer ${this.$store.state.token}` },
+      axios
+        .put(requestPath, infoRequete, {
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
           alert("Vos modifications sont enregistrées");
@@ -107,13 +112,15 @@ export default {
         .catch((error) => console.log(error));
     },
     supprimerCompte() {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;
       let corps = {
         userId: this.$store.state.idUser,
       };
-      axios.delete(requestPath, {
+      axios
+        .delete(requestPath, {
           data: { corps },
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
           this.showModale();
@@ -121,26 +128,32 @@ export default {
         .catch((error) => console.log(error));
     },
     supprimeAvatar() {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/auth/deleteAvatar/id=${this.$store.state.idUser}`;
       let corps = {
         userId: this.$store.state.idUser,
       };
-      axios.delete(requestPath, {
+      axios
+        .delete(requestPath, {
           data: { corps },
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
-        .then(() => {console.log("avatar supprimé")})
+        .then(() => {
+          this.getMyProfil()
+          console.log("avatar supprimé");
+        })
         .catch((error) => console.log(error));
     },
     fermeture() {
       this.$emit("fermeture");
     },
-    showModale() { //envoi vers le composant bannière un signal pour remettre la modale
+    showModale() {
+      //envoi vers le composant bannière un signal pour remettre la modale
       this.$emit("showModale");
     },
   },
-  beforeMount(){
-    this.getMyProfil()
+  beforeMount() {
+    this.getMyProfil();
   },
 };
 </script>

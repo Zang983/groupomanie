@@ -58,6 +58,7 @@ export default {
 
   methods: {
     newAnnounce() {
+       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/ceMessage/";
       let infoAnnonce = {
         idUser: this.$store.state.idUser,
@@ -66,7 +67,7 @@ export default {
       let promiseThis = this;
       axios
         .post(requestPath, infoAnnonce, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
           promiseThis.toggleNouvelleAnnonce =
@@ -88,13 +89,13 @@ export default {
       this.$forceUpdate();
     },
     getAnnonceList() {
+       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/ceMessage/all";
       let promiseThis = this;
       this.annonceList = [];
-
       axios
         .get(requestPath, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then((value) => {
           promiseThis.annonceList = value.data.resultat;
@@ -108,6 +109,7 @@ export default {
     },
 
     deleteMessageCE(index) {
+       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/ceMessage/id=${this.annonceList[index].idCE}`;
       let corps = {
         id: this.annonceList[index].idCE,
@@ -119,13 +121,14 @@ export default {
       axios
         .delete(requestPath, {
           data: { corps },
-          headers: { Authorization: `Bearer ${this.$store.state.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
           promiseThis.annonceList.splice(index, 1);
         });
     },
     editMessageCE(index) {
+       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/ceMessage/${this.annonceList[index].idCE}`;
       let promiseThis = this;
       let infoAnnonce = {
@@ -137,7 +140,7 @@ export default {
 
       axios
         .put(requestPath, infoAnnonce, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
           promiseThis.toggleEditMode(index);

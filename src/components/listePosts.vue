@@ -31,14 +31,9 @@
         <!-- <i class="fa-solid fa-image"></i> -->
       </div>
     </article>
-    <div
-      class="user_post"
-      v-for="(message, index) in posts"
-      :key="message.statusLock"
-    >
+    <div class="user_post" v-for="(message, index) in posts" :key="index">
       <post
         v-bind:index="index"
-        v-bind:lockStatus="message.lockStatus"
         v-bind:body="message.body"
         v-bind:title="message.title"
         v-bind:author="message.author"
@@ -53,7 +48,6 @@
         v-bind:avatar="message.avatar"
         @editPost="editPost"
         @deletePostFromList="deletePostFromList"
-        @lockPost="lockPost"
         @deleteImage="deleteImage"
       ></post>
     </div>
@@ -83,26 +77,6 @@ export default {
     post,
   },
   methods: {
-    lockPost(index, id) {
-      let requestPath = "http://localhost:3000/api/posts/post/lock";
-      let infoPost = {
-        idPosts: id,
-        lockStatus: !this.posts[index].lockStatus,
-      };
-      let request = new Request(requestPath, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(infoPost),
-      });
-      fetch(request).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-      });
-    },
     newPost() {
       this.newMessage.showIt = !this.newMessage.showIt;
       this.newMessage.body = "";
@@ -113,31 +87,32 @@ export default {
       let requestPath = `http://localhost:3000/api/posts/post/requete=${numeroRequete}/page=${page}`;
       let promiseThis = this;
       this.posts = [];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
 
       axios
         .get(requestPath, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(function (value) {
           for (let message of value.data.Post) {
             let newMessage = {};
-            console.log(message.user)
             newMessage.body = message.contenu;
-            newMessage.author = message.user.firstname + " " + message.user.lastname;
+            newMessage.author =
+              message.user.firstname + " " + message.user.lastname;
             newMessage.title = message.titre;
             newMessage.postDate = message.dateCreation;
             newMessage.editDate = message.dateDernierEdit;
             newMessage.id = message.idPost;
             newMessage.urlImage = message.url_image;
             newMessage.userId = message.idUser;
-            newMessage.lockStatus = message.lockStatus;
-            if(message.user.url_avatar!="" && message.user.url_avatar !=null)
-            {
-            newMessage.avatar = message.user.url_avatar;
-            }
-            else
-            {
-            newMessage.avatar = "http://localhost:3000/images/defaultProfil.jpg"
+            if (
+              message.user.url_avatar != "" &&
+              message.user.url_avatar != null
+            ) {
+              newMessage.avatar = message.user.url_avatar;
+            } else {
+              newMessage.avatar =
+                "http://localhost:3000/images/defaultProfil.jpg";
             }
             newMessage.like = -1;
             for (let like of message.aimers) {
@@ -145,11 +120,9 @@ export default {
                 newMessage.like = like.valeur;
               }
             }
-            console.log(value)
             promiseThis.posts.push(newMessage);
             promiseThis.nombrePage = value.data.nombrePage / 5;
             promiseThis.nombrePage = Math.ceil(value.data.nombrePage / 5);
-
           }
         })
         .catch(function (err) {
@@ -158,6 +131,7 @@ export default {
     },
     deletePostFromList(index, id) {
       let requestPath = `http://localhost:3000/api/posts/post/delete/id=${id}`;
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let corps = {
         id: id,
         userId: this.$store.state.idUser,
@@ -165,7 +139,7 @@ export default {
       axios
         .delete(requestPath, {
           data: { corps },
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
           this.getListPost(this.pageActuelle);
@@ -174,18 +148,24 @@ export default {
     },
     deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let infoPost = new FormData();
       infoPost.append("idPost", id);
       infoPost.append("supprimeImage", 1);
       infoPost.append("users_idUser", this.$store.state.idUser);
 
-      axios.put(requestPath, infoPost, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+      axios
+        .put(requestPath, infoPost, {
+          headers: { authorization: `Bearer ${token}` },
         })
-        .then(()=>{console.log("ici");this.getListPost(this.pageActuelle)})
-        .catch(error=>console.log(error))
+        .then(() => {
+          console.log("ici");
+          this.getListPost(this.pageActuelle);
+        })
+        .catch((error) => console.log(error));
     },
     editPost(id, newTitle, newBody, image) {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let infoPost = {};
       this.author = this.$store.state.userName;
@@ -199,9 +179,10 @@ export default {
 
       axios
         .put(requestPath, infoPost, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
-        .then(() => {this.getListPost(this.pageActuelle)
+        .then(() => {
+          this.getListPost(this.pageActuelle);
         });
       this.editMode = false;
     },
@@ -210,6 +191,7 @@ export default {
       let infoPost = {};
       this.author = this.$store.state.userName;
       let image = document.querySelector("#send_picture").files[0];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
 
       infoPost = new FormData();
       infoPost.append("author", this.$store.state.userName);
@@ -219,9 +201,9 @@ export default {
       infoPost.append("image", image);
       axios
         .post(requestPath, infoPost, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
-        .then(()=>{
+        .then(() => {
           this.getListPost(this.pageActuelle);
           this.newPost();
         })

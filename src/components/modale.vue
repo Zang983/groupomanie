@@ -107,21 +107,25 @@ export default {
             return res.json();
           })
         .then((value) => {
+          let token ="";
+          let tokenCookie="";
           if(value.token!=undefined ||value.token==="")
           {/* A adapter selon le retour de la fonction login coté back*/
+
+           this.$store.commit('saveIdUser',value.user.idUser)
+           token=value.token.slice(0,value.token.length/2)
+           tokenCookie=value.token.slice(value.token.length/2,value.token.length)
+           let date = new Date(Date.now()+ 7200000)
+           date = date.toUTCString();
+           document.cookie=`token=${tokenCookie};expires=${date};samesite="strict"`
+           localStorage.setItem("token",token)
+           localStorage.setItem("access",value.user.access)
+           localStorage.setItem("idUser",value.user.idUser)
+           this.$store.commit('saveToken',token)
+           this.$store.commit('levelPermission',value.user.access)
+
            this.toggleModale(value);
            this.$emit('showModaleOff')
-           this.$store.commit('saveIdUser',value.user.idUser)
-           this.$store.commit('saveToken',value.token)
-           this.$store.commit('saveFirstname',value.user.firstName)
-           this.$store.commit('saveLastname',value.user.lastName)
-           this.$store.commit('saveEmail',value.user.email)
-           this.$store.commit('saveTelephone',value.user.telephone)
-           this.$store.commit('saveAvatar',value.user.url_avatar)
-           this.$store.commit('saveDescription',value.user.description)
-           this.$store.commit('levelPermission',value.user.access)
-           let userName=value.user.firstName + " " + value.user.lastName;
-           this.$store.commit('saveUserName',userName)
           }
           });
           

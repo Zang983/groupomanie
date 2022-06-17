@@ -14,20 +14,35 @@ exports.signup = (req, res, next) => {
   let email = req.body.email, pwd = req.body.pwd, firstName = req.body.firstName, lastName = req.body.lastName
   if (email == "" || pwd == "" || firstName == "" || lastName == "") {
 
-    res.status(400).json({ message: "Informations d'inscriptions manquantes." })
+    return res.status(400).json({ message: "Informations d'inscriptions manquantes." })
   }
-  if (!new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomania)[.]{1}(fr)$/).test(req.body.email) ||
-    !new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd)) {
-    res.status(400).json({ message: "Erreur d'adresse mail ou de mot de passe." })
-  }
-  bcrypt.hash(pwd, 10)
-    .then(hash => {
-      db.user.create({ firstName: firstName, lastName: lastName, password: hash, email: email })
-        .then(() => { res.status(201).json({ message: "Utilisateur créé" }) })
-    })
-    .catch(() => {
-      res.status(500).json({ message: "Problème avec le mot de passe" })
-    })
+  db.user.findOne({where: {email:req.body.email}})
+  .then(value=>
+  {
+    if(value === null)
+    {
+          console.log("kutfkutf");
+          if (!new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomania)[.]{1}(fr)$/).test(req.body.email) ||
+          !new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd)) {
+          res.status(400).json({ message: "Erreur d'adresse mail ou de mot de passe." })
+        }
+        bcrypt.hash(pwd, 10)
+          .then(hash => {
+            db.user.create({ firstName: firstName, lastName: lastName, password: hash, email: email })
+              .then(() => { res.status(201).json({ message: "Utilisateur créé" }) })
+          })
+          .catch(() => {
+            res.status(500).json({ message: "Problème avec le mot de passe" })
+          })
+
+    }
+    else
+    {
+      return res.status(401).json({message : "Vous êtes déjà inscrit"})
+    }
+
+  })
+
 };
 
 
@@ -57,8 +72,6 @@ exports.login = (req, res, next) => {
               return res.status(401).json({ error: 'E-mail ou mot de passe incorrect' });
             }
             /* On coupe le token en 2 afin de stocker une partie en local storage et l'autre en cookie*/
-            res.cookie("test", "BONJOUR")
-
             res.status(200).json({
               user: {
                 idUser: user.idUser, firstName: user.firstName, lastName: user.lastName,
@@ -69,7 +82,7 @@ exports.login = (req, res, next) => {
               token: jwt.sign(
                 { userId: user.idUser, isAdmin: isAdmin },
                 'AuheoO11nNej47Gr,eiUHog@ru::ohga5',
-                { expiresIn: '24h' },
+                { expiresIn: '2h' },
               )
             });
           })

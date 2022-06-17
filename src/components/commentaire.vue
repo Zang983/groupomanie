@@ -1,16 +1,15 @@
 <template>
-  <div class="commentaire" v-bind:class="{user_post_locked:locked}">
+  <div class="commentaire">
     <div class="enTeteCommentaire">
       {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}
       <div class="interractionCommentaire">
-        <!-- <i class="fa-solid fa-lock" v-on:click="lockCommentaire()"> </i> -->
         <i
           class="fa-solid fa-trash-can" 
-           v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
+           v-if="this.idUser == this.$store.state.idUser || this.$store.state.access==='00001'" 
           v-on:click="deleteCommentaire()"></i>
         <i
           class="fa-solid fa-pen-to-square"
-          v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
+          v-if="this.idUser == this.$store.state.idUser || this.$store.state.access==='00001'" 
           v-on:click="toggleEditCommentaire"></i>
       </div>
     </div>
@@ -45,7 +44,6 @@ export default {
       like:this.message.valeurLike,
       idUser:this.message.userId,
       nouveauCommentaire:this.message.contenu,
-      locked: false,
       editMode: this.message.statutEditMode,
       commentaireDateFr:
         new Date(this.message.dateCreation).toLocaleDateString("fr") +
@@ -65,7 +63,6 @@ export default {
       this.$emit("deleteCommentaire", this.message.idCommentaire, this.index);
     },
     likeCommentaire(valeurLike, id) {
-      console.log(this.like)
       if (this.like === undefined || this.like === null || this.like===-1) {
         this.like = valeurLike;
       } //si l'utilisateur à déjà (dis)liké le post
@@ -89,18 +86,15 @@ export default {
         idCommentaire: id,
         idUser: this.$store.state.idUser,
       };
+       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/comment/like/id=${id}`;
       axios.post(requestPath, infoLike, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         }).then(function (res) {
         if (res.ok) {
           return res.json();
         }
       });
-    },
-    lockCommentaire() {
-      this.locked = !this.locked;
-      this.$emit("lockCommentaire", this.index, this.message.idCommentaire);
     },
     editCommentaire() {
       this.$emit("editCommentaire", this.message.idCommentaire,this.nouveauCommentaire);

@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 import modale from "./components/modale.vue";
 import banniere from "./components/banniere.vue";
 import posts from "./components/listePosts.vue";
@@ -30,11 +31,20 @@ export default {
     membersList,
   },
   methods: {
+    checkCookie(){
+      setTimeout(this.checkCookie,10000);
+      if(document.cookie.length===0)
+      {
+        this.show=false;
+      }
+    },
     updateListPost() {
       this.listPostVersion = +1;
     },
-    showModale(){
-      this.show=false; 
+    showModale() {
+      localStorage.clear();
+      document.cookie = `token="";max-age=-5;samesite="strict"`;
+      this.show = false;
     },
     showModaleOff() {
       this.show = true;
@@ -45,6 +55,15 @@ export default {
       listPostVersion: 1,
       show: false,
     };
+  },
+  beforeMount() {
+    if (localStorage.getItem("token") && localStorage.getItem("access") && localStorage.getItem("idUser")) {
+      this.$store.commit("saveToken", localStorage.getItem("token"));
+      this.$store.commit("levelPermission", localStorage.getItem("access"));
+      this.$store.commit("saveIdUser", localStorage.getItem("idUser"));
+      this.show = true;
+    }
+ this.checkCookie()
   },
 };
 </script>
@@ -72,5 +91,4 @@ body {
     width: 100%;
   }
 }
-
 </style>

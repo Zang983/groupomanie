@@ -1,5 +1,5 @@
 <template>
-  <article v-bind:class="{user_post_locked:statusLock}" >
+  <article>
     <div class="header_post">
       <div class="user_img--post">
         <img v-bind:src="this.avatar" alt="Image utilisateur" v-if="avatar!='' && avatar!=null">
@@ -12,15 +12,14 @@
         <i
           class="fa-solid fa-pen-to-square"
           v-on:click="toggleEditPost()"
-          v-if="this.idUser === this.$store.state.idUser || this.$store.state.access==='00001'" 
+          v-if="this.idUser == this.$store.state.idUser || this.$store.state.access==='00001'" 
         ></i>
         <i
           class="fa-solid fa-trash-can"
           v-on:click="deletePostFromList(index,id)"
-          v-if="this.userId === this.$store.state.idUser || this.$store.state.access==='00001'" 
+          v-if="this.userId == this.$store.state.idUser || this.$store.state.access==='00001'" 
         ></i>
 
-        <!-- <i class="fa-solid fa-lock" v-on:click="lockPost(index, id)"> </i> -->
       </div>
     </div>
     <div class="message_post">
@@ -66,7 +65,6 @@ export default {
   props: [
     "index",
     "initLike",
-    "lockStatus",
     "body",
     "title",
     "author",
@@ -83,7 +81,6 @@ export default {
     return {
       idUser: this.userId,
       modeEdit: this.editMode,
-      statusLock: this.lockStatus,
       like: this.initLike,
       newBody: this.body,
       newTitle: this.title,
@@ -123,10 +120,6 @@ export default {
     },
     deletePostFromList(index, id) {
       this.$emit("deletePostFromList", index, id);
-    },
-    lockPost(index, id) {
-      this.statusLock = !this.statusLock;
-      this.$emit("lockPost", index, id);
     },
     sendLike(valeurLike, id) {
       if (this.like == undefined || this.like == null || this.like === -1) {
