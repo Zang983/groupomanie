@@ -60,10 +60,12 @@ exports.login = (req, res, next) => {
             res.cookie("test", "BONJOUR")
 
             res.status(200).json({
-              user: { idUser: user.idUser, firstName: user.firstName, lastName: user.lastName,
-                 email: user.email, telephone: user.telephone, url_avatar: user.url_avatar,
-                  description: user.userDescription,
-                  access:user.droits },
+              user: {
+                idUser: user.idUser, firstName: user.firstName, lastName: user.lastName,
+                email: user.email, telephone: user.telephone, url_avatar: user.url_avatar,
+                description: user.userDescription,
+                access: user.droits
+              },
               token: jwt.sign(
                 { userId: user.idUser, isAdmin: isAdmin },
                 'AuheoO11nNej47Gr,eiUHog@ru::ohga5',
@@ -87,7 +89,7 @@ exports.profil = (req, res, next) => {
   */
   let userId = req.params.id.split("=")[1]
   db.user.findOne({
-    attributes: ["email", "firstName", "lastName", "telephone", "url_avatar"],
+    attributes: ["email", "firstName", "lastName", "telephone", "url_avatar", "userDescription"],
     where: {
       idUser: userId
     }
@@ -96,84 +98,110 @@ exports.profil = (req, res, next) => {
 }
 
 exports.parametre = (req, res, next) => {
-  let userId = req.params.id.split("=")[1]
-  /* On vérifie s'il faut mettre à jour le MDP*/
-  if (req.body.pwd1 != "" && req.body.pwd1 === req.body.pwd2) {
-    if (new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd1)) {
-      bcrypt.hash(req.body.pwd1, 10)
-        .then(hash => {
-          db.user.update({ password: hash, }, { where: { idUser: userId } })
-            .catch(error => res.status(500).json({ error }))
-        })
+
+
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
+  const userId = decodedToken.userId;
+
+
+  if (userId == req.params.id.split("=")[1]) {
+    if (req.body.pwd1 != "" && req.body.pwd1 === req.body.pwd2) {
+      if (new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd1)) {
+        bcrypt.hash(req.body.pwd1, 10)
+          .then(hash => {
+            db.user.update({ password: hash, }, { where: { idUser: userId } })
+              .catch(error => res.status(500).json({ error }))
+          })
+      }
+    }
+
+    if (req.file === undefined) {
+      db.user.update({
+        firstName: req.body.firstname,
+        lastName: req.body.lastname,
+        userDescription: req.body.userDescription,
+        telephone: req.body.telephone,
+      }, { where: { idUser: userId } }).then(() => res.status(201).json({ message: "Utilisateur modifié" }))
+        .catch(error => res.status(500).json({ error }))
+
+    }
+    else {
+      let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      db.user.update({
+        userName: req.body.firstname,
+        lastName: req.body.lastname,
+        userDescription: req.body.userDescription,
+        url_avatar: imageUrl,
+        telephone: req.body.telephone,
+      }, { where: { idUser: userId } }).then(() => res.status(201).json({ message: "Utilisateur modifié" }))
+        .catch(error => res.status(500).json({ error }))
     }
   }
-
-  if (req.file === undefined) {
-    db.user.update({
-      firstName: req.body.firstname,
-      lastName: req.body.lastname,
-      userDescription: req.body.userDescription,
-      telephone: req.body.telephone,
-    }, { where: { idUser: userId } }).then(() => res.status(201).json({ message: "Utilisateur modifié" }))
-      .catch(error => res.status(500).json({ error }))
-
-  }
   else {
-    let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    db.user.update({
-      userName: req.body.firstname,
-      lastName: req.body.lastname,
-      userDescription: req.body.userDescription,
-      url_avatar: imageUrl,
-      telephone: req.body.telephone,
-    }, { where: { idUser: userId } }).then(() => res.status(201).json({ message: "Utilisateur modifié" }))
-      .catch(error => res.status(500).json({ error }))
-
+    return res.status(401).json({ message: "Vous n'êtes pas propriétaire du compte" })
   }
-
 
 }
 
 exports.delete = (req, res, next) => {
-  let userId = req.params.id.split("=")[1]
-  db.user.findOne({
-    attributes: ["url_avatar"],
-    where: { idUser: userId }
-  })
-    .then(resultat => {
-      if (!resultat.url_avatar == "") {
-        let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
-        if (fs.existsSync(url_avatar)) {
-          fs.unlink(url_avatar, (err) => {
-            if (err) throw err;
-          })
-        }
-      }
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
+  const userId = decodedToken.userId;
+
+
+  if (userId == req.params.id.split("=")[1]) {
+    db.user.findOne({
+      attributes: ["url_avatar"],
+      where: { idUser: userId }
     })
-  db.user.destroy({ where: { idUser: userId } })
-    .then(() => { return res.status(200).json({ message: "Compte effacé" })})
-    .catch(error => { return res.status(500).json({ error })})
-  // res.status(200).json({ message: "Compte effacé" })
+      .then(resultat => {
+        if (!resultat.url_avatar == "") {
+          let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
+          if (fs.existsSync(url_avatar)) {
+            fs.unlink(url_avatar, (err) => {
+              if (err) throw err;
+            })
+          }
+        }
+      })
+    db.user.destroy({ where: { idUser: userId } })
+      .then(() => { return res.status(200).json({ message: "Compte effacé" }) })
+      .catch(error => { return res.status(500).json({ error }) })
+  }
+  else {
+    return res.status(401).json({ message: "Vous n'êtes pas propriétaire du compte" })
+  }
+
 
 }
 exports.deleteAvatar = (req, res, next) => {
-  let userId = req.params.id.split("=")[1]
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
+  const userId = decodedToken.userId;
 
-  db.user.findOne({
-    attributes: ["url_avatar"],
-    where: { idUser: userId }
-  })
-    .then(resultat => {
-      if (!resultat.url_avatar == "") {
-        let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
-        if (fs.existsSync(url_avatar)) {
-          fs.unlink(url_avatar, (err) => {
-            if (err) throw err;
-          })
-        }
-      }
+
+  if (userId == req.params.id.split("=")[1]) {
+
+    db.user.findOne({
+      attributes: ["url_avatar"],
+      where: { idUser: userId }
     })
-  db.user.update({
-    url_avatar: ""
-  }, { where: { idUser: userId } }).then(() => res.status(200).json({ message: "Avatar supprimé" })).catch(error => res.status().json({ error }))
+      .then(resultat => {
+        if (!resultat.url_avatar == "") {
+          let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
+          if (fs.existsSync(url_avatar)) {
+            fs.unlink(url_avatar, (err) => {
+              if (err) throw err;
+            })
+          }
+        }
+      })
+    db.user.update({
+      url_avatar: ""
+    }, { where: { idUser: userId } }).then(() => res.status(200).json({ message: "Avatar supprimé" })).catch(error => res.status().json({ error }))
+  }
+  else {
+    return res.status(401).json({ message: "Vous n'êtes pas propriétaire du compte" })
+  }
 }

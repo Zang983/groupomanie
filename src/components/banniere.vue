@@ -28,7 +28,6 @@ export default {
   methods: {
     toggleParametre()
     {
-      console.log(this.$store.state.avatar)
       this.parametreVisible = !this.parametreVisible
     },
     showModale()

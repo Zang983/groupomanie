@@ -22,9 +22,19 @@
 
       <label for="imageUser">Votre photo : </label
       ><input type="file" id="imageUser" accept=".jpeg,.jpg,png" />
-      <img v-bind:src="avatar" alt="Image de l'utilisateur" v-if="avatar!=''" v-on:click="supprimeAvatar">
+
+      <button
+       alt="Image de l'utilisateur"
+        v-if="this.$store.state.avatar != null && this.$store.state.avatar !=''"
+        v-on:click="supprimeAvatar"
+      >Supprimer mon image</button>
       <label for="telephone">Téléphone :</label>
-      <input type="tel" id="telephone" v-model="telephone" autcomplete="new-username"/>
+      <input
+        type="tel"
+        id="telephone"
+        v-model="telephone"
+        autcomplete="new-username"
+      />
       <label for="description">Description :</label>
       <textarea id="description" v-model="description"></textarea>
       <label for="password1">Nouveau mot de passe :</label>
@@ -48,24 +58,35 @@
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
   name: "modaleParametre",
   data() {
     return {
-      prenom: this.$store.state.firstname,
-      nom: this.$store.state.lastname,
-      description: this.$store.state.description,
+      prenom:"",
+      nom:"",
+      description:"",
       mdp1: "",
       mdp2: "",
       email: this.$store.state.email,
       telephone: this.$store.state.telephone,
-      avatar:this.$store.state.avatar,
+      image2:""
     };
   },
   methods: {
+    getMyProfil(){
+      let requestPath =`http://localhost:3000/api/auth/profil/id=${this.$store.state.idUser}`
+        axios.get(requestPath,{headers:{authorization:`Bearer ${this.$store.state.token}`}})
+        .then((value) => {
+          this.prenom=value.data.firstName;
+          this.nom=value.data.lastName;
+          this.description=value.data.userDescription
+        })
+        .catch((error) => console.log(error));
+
+    },
     majProfil() {
-      let image = document.querySelector("#imageUser").files[0];
+        let image = document.querySelector("#imageUser").files[0];
       let requestPath = `http://localhost:3000/api/auth/parametre/id=${this.$store.state.idUser}`;
       let infoRequete = new FormData();
       infoRequete.append("firstname", this.prenom);
@@ -74,59 +95,52 @@ export default {
       infoRequete.append("pwd1", this.mdp1);
       infoRequete.append("pwd2", this.mdp2);
       infoRequete.append("image", image);
-      infoRequete.append("telephone",this.telephone);
+      infoRequete.append("telephone", this.telephone);
 
-      let request = new Request(requestPath, {
-        method: "PUT",
-        body: infoRequete,
-      });
-      fetch(request)
-      .then(() => {alert("Vos modifications sont enregistrées");this.fermeture()})
-      .catch(error=>console.log(error))
+      axios.put(requestPath, infoRequete,
+          {headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {
+          alert("Vos modifications sont enregistrées");
+          this.fermeture();
+        })
+        .catch((error) => console.log(error));
     },
     supprimerCompte() {
       let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;
       let corps = {
         userId: this.$store.state.idUser,
       };
-      let request = new Request(requestPath, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(corps),
-      });
-      fetch(request)
-         .then(() => { /*this.showModale()*/})
+      axios.delete(requestPath, {
+          data: { corps },
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {
+          this.showModale();
+        })
         .catch((error) => console.log(error));
     },
-    supprimeAvatar(){
-
+    supprimeAvatar() {
       let requestPath = `http://localhost:3000/api/auth/deleteAvatar/id=${this.$store.state.idUser}`;
       let corps = {
         userId: this.$store.state.idUser,
       };
-      let request = new Request(requestPath, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(corps),
-      });
-      fetch(request)
-         .then(() => { /*this.showModale()*/})
+      axios.delete(requestPath, {
+          data: { corps },
+          headers: { authorization: `Bearer ${this.$store.state.token}` },
+        })
+        .then(() => {console.log("avatar supprimé")})
         .catch((error) => console.log(error));
-
     },
     fermeture() {
       this.$emit("fermeture");
     },
-    showModale()//envoi vers le composant bannière un signal pour remettre la modale
-    {
-      this.$emit("showModale")
-    }
+    showModale() { //envoi vers le composant bannière un signal pour remettre la modale
+      this.$emit("showModale");
+    },
+  },
+  beforeMount(){
+    this.getMyProfil()
   },
 };
 </script>

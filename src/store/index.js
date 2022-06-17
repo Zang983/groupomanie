@@ -13,7 +13,7 @@ export default new Vuex.Store({
     token: "",
     email:"",
     telephone:"",
-    avatar:"",
+    avatar:null,
     description:"",
   },
   getters: {

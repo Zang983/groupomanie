@@ -50,6 +50,7 @@
         v-bind:userId="message.userId"
         v-bind:urlImage="message.urlImage"
         v-bind:editMode="editMode"
+        v-bind:avatar="message.avatar"
         @editPost="editPost"
         @deletePostFromList="deletePostFromList"
         @lockPost="lockPost"
@@ -120,10 +121,9 @@ export default {
         .then(function (value) {
           for (let message of value.data.Post) {
             let newMessage = {};
-
+            console.log(message.user)
             newMessage.body = message.contenu;
-            newMessage.author =
-              message.user.firstname + " " + message.user.lastname;
+            newMessage.author = message.user.firstname + " " + message.user.lastname;
             newMessage.title = message.titre;
             newMessage.postDate = message.dateCreation;
             newMessage.editDate = message.dateDernierEdit;
@@ -131,15 +131,25 @@ export default {
             newMessage.urlImage = message.url_image;
             newMessage.userId = message.idUser;
             newMessage.lockStatus = message.lockStatus;
+            if(message.user.url_avatar!="" && message.user.url_avatar !=null)
+            {
+            newMessage.avatar = message.user.url_avatar;
+            }
+            else
+            {
+            newMessage.avatar = "http://localhost:3000/images/defaultProfil.jpg"
+            }
             newMessage.like = -1;
             for (let like of message.aimers) {
               if (like.idUser === promiseThis.$store.state.idUser) {
                 newMessage.like = like.valeur;
               }
             }
+            console.log(value)
             promiseThis.posts.push(newMessage);
-            promiseThis.nombrePage = value.nombrePage / 5;
-            promiseThis.nombrePage = Math.ceil(value.nombrePage / 5);
+            promiseThis.nombrePage = value.data.nombrePage / 5;
+            promiseThis.nombrePage = Math.ceil(value.data.nombrePage / 5);
+
           }
         })
         .catch(function (err) {
@@ -167,16 +177,13 @@ export default {
       let infoPost = new FormData();
       infoPost.append("idPost", id);
       infoPost.append("supprimeImage", 1);
+      infoPost.append("users_idUser", this.$store.state.idUser);
 
-      axios
-        .put(requestPath, infoPost, {
+      axios.put(requestPath, infoPost, {
           headers: { authorization: `Bearer ${this.$store.state.token}` },
         })
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-        });
+        .then(()=>{console.log("ici");this.getListPost(this.pageActuelle)})
+        .catch(error=>console.log(error))
     },
     editPost(id, newTitle, newBody, image) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
@@ -194,10 +201,7 @@ export default {
         .put(requestPath, infoPost, {
           headers: { authorization: `Bearer ${this.$store.state.token}` },
         })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
+        .then(() => {this.getListPost(this.pageActuelle)
         });
       this.editMode = false;
     },
@@ -213,41 +217,13 @@ export default {
       infoPost.append("title", this.newMessage.title);
       infoPost.append("users_idUser", this.$store.state.idUser);
       infoPost.append("image", image);
-      // let request = new Request(requestPath, {
-      //   headers:{
-      //     authorization: "Bearer " + this.$store.state.token
-      //   },
-      //   method: "POST",
-      //   body: infoPost,
-      // });
-
-      // fetch(request)
-      //   .then(function (res) {
-      //     if (res.ok) {
-      //       return res.json();
-      //     }
-      //   })
-      //   .then(() => {
-      //     this.getListPost(this.pageActuelle);
-      //     this.newPost();
-      //     this.$emit("updateListPost");
-      //   });
-
       axios
         .post(requestPath, infoPost, {
           headers: { authorization: `Bearer ${this.$store.state.token}` },
         })
-        .then((res) => {
-          console.log(res);
-          if (res.statusText === "OK") {
-            return res.status.json();
-          }
-        })
         .then(()=>{
-          console.log("rafraichis")
           this.getListPost(this.pageActuelle);
           this.newPost();
-          this.$emit("updateListPost");
         })
         .catch((error) => console.log(error));
     },

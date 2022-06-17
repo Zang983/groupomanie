@@ -25,17 +25,17 @@ db.annonce=require("./ce")(sequelize,DataTypes);
 /* Définition des relations */
 
 db.user.hasMany(db.post,{foreignKey:"idUser", onDelete:"cascade"})
-db.post.belongsTo(db.user,{foreignKey:"idUser"});
+db.post.belongsTo(db.user,{foreignKey:"idUser", onDelete:"cascade"});
 
 
 db.user.hasMany(db.commentaire,{foreignKey:"idUser", onDelete:"cascade"})
-db.commentaire.belongsTo(db.user,{foreignKey:"idUser"});
+db.commentaire.belongsTo(db.user,{foreignKey:"idUser",onDelete:"cascade"});
 
 db.post.hasMany(db.commentaire,{foreignKey:"idPost" ,onDelete:"cascade"})
 db.commentaire.belongsTo(db.post,{foreignKey:"idPost",onDelete:"cascade"})
 
 db.post.hasMany(db.aimer,{foreignKey:"idPost",onDelete:"cascade"})
-db.aimer.belongsTo(db.post,{foreignKey:"idPost"})
+db.aimer.belongsTo(db.post,{foreignKey:"idPost",onDelete:"cascade"})
 
 db.user.hasMany(db.aimer,{foreignKey:"idUser",onDelete:"cascade"})
 db.aimer.belongsTo(db.user,{foreignKey:"idUser",onDelete:"cascade"})

@@ -18,30 +18,23 @@
 
 
 <script>
+import axios from "axios"
 export default {
   name: "members-list",
 
   methods: {
     getListMembers() {
       let requestPath = "http://localhost:3000/api/auth/userList";
-      fetch(requestPath)
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-        })
-        .then((value) => (this.listMembers = value))
+      axios.get(requestPath,{headers:{authorization:`Bearer ${this.$store.state.token}`}})
+        .then((value) => (this.listMembers = value.data))
         .catch((error) => console.log(error));
     },
     getMemberInformation(id) {
       let requestPath = `http://localhost:3000/api/auth/profil/id=${id}`;
-      fetch(requestPath)
-      .then(res=>{
-      if(res.ok)
-      {return res.json()}})
+
+      axios.get(requestPath,{headers:{authorization:`Bearer ${this.$store.state.token}`}})
       .then(value=>{
-        console.log(value)
-      this.infoMembre={firstname:value.firstName, lastname:value.lastName, email:value.email,telephone:value.telephone};
+      this.infoMembre={firstname:value.data.firstName, lastname:value.data.lastName, email:value.data.email,telephone:value.data.telephone};
       this.carteVisible=true})
       .catch(error=>console.log(error))
     },

@@ -5,7 +5,7 @@ module.exports=(sequelize,DataTypes)=>
         firstName:DataTypes.STRING,
         lastName:DataTypes.STRING,
         password:DataTypes.STRING,
-        url_avatar:DataTypes.STRING,
+        url_avatar:{type : DataTypes.STRING},
         fonction:DataTypes.STRING,
         telephone:{type : DataTypes.STRING,defaultValue:"0100000000"},
         email:DataTypes.STRING,

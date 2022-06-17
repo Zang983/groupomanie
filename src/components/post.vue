@@ -2,7 +2,8 @@
   <article v-bind:class="{user_post_locked:statusLock}" >
     <div class="header_post">
       <div class="user_img--post">
-        <img src="../assets/logo.png" alt="Avatar de l'utilisateur" />
+        <img v-bind:src="this.avatar" alt="Image utilisateur" v-if="avatar!='' && avatar!=null">
+        <img src="../assets/logo.png" alt="Avatar de l'utilisateur" v-if="avatar==='' || avatar===null"/>
         {{this.author}}
       </div>
       <h3 v-show="!modeEdit">{{ this.newTitle }}</h3>
@@ -27,8 +28,8 @@
      <i class="fa-solid fa-trash-can supprimerImage"
           v-on:click="deleteImage"
         ></i></p>
-    <p v-bind:class="{message_postShort: !showAll,}" v-show="!modeEdit">
-      <pre>{{ this.newBody }}</pre>
+    <p class="corpsMessage" v-show="!modeEdit">
+      {{ this.newBody }}
     </p></div>
     <!-- MODE EDIT -->
     <div v-show="modeEdit">
@@ -75,6 +76,7 @@ export default {
     "userId",
     "urlImage",
     "editMode",
+    "avatar",
   ],
 
   data() {
