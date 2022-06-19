@@ -69,21 +69,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 // .hbody {
 //   display: flex;
 //   margin-top: 5%;
 //   justify-content: space-around;
 // }
+i, button
+{
+  cursor:pointer;
+}
 html
 {
-  min-height:100vh;
+  height:fit-content;
 }
 
 body {
+  font-family:Lato,arial;
   margin: 0px;
-  min-width: 100%;
-  min-height:100%;
-
 }
 // .send_button {
 //   height: 35px;

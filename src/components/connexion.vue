@@ -20,7 +20,7 @@
     <h2 v-if="status">Connexion</h2>
     <h2 v-if="!status">Inscription</h2>
     <h3 v-if="status"> Vous n'êtes pas inscrit ? <span v-on:click="toggleStatus">Inscrivez-vous !</span></h3>
-    <h3 v-if="!status">Vous êtes déjà inscrit ?<span v-on:click="toggleStatus">Connectez-vous !</span></h3>
+    <h3 v-if="!status">Vous êtes déjà inscrit ?<span v-on:click="toggleStatus"> Connectez-vous !</span></h3>
     </div>
     <form>
       <label>
@@ -31,13 +31,13 @@
           v-model="email.value"
           v-on:change="checkInput"
           autocomplete="username"
-          placeholder="Veuillez saisir votre e-mail."
+          placeholder="Votre e-mail"
           autofocus
         />
-        <p v-if="email.isValid == 0">
+      </label>
+              <p v-if="email.isValid == 0" class="erreur_formulaire">
           Veuillez saisir votre adresse e-mail professionnelle.
         </p>
-      </label>
       <label>
         Mot de passe :
         <input
@@ -48,8 +48,9 @@
           v-on:change="checkInput"
           placeholder="Votre mot de passe."
         />
-        <p v-if="pwd.isValid == 0">Êtes-vous sûr de votre mot de passe?</p>
+
       </label>
+              <p v-if="pwd.isValid == 0" class="erreur_formulaire">Êtes-vous sûr de votre mot de passe?</p>
       <label v-if="!status">
         Nom :
         <input
@@ -59,8 +60,9 @@
           v-model="lastName.value"
           v-on:change="checkInput"
         />
-        <p v-if="lastName.isValid == 0">Veuillez saisir votre nom</p>
+      
       </label>
+        <p v-if="lastName.isValid == 0" class="erreur_formulaire">Veuillez saisir votre nom</p>
       <label v-if="!status">
         Prénom :
         <input
@@ -70,14 +72,16 @@
           v-on:change="checkInput"
           id="firstName"
         />
-        <p v-if="firstName.isValid == 0">Veuillez saisir votre prénom.</p>
-      </label>
+       
+      </label> <p v-if="firstName.isValid == 0" class="erreur_formulaire">Veuillez saisir votre prénom.</p>
           <button v-on:click.prevent="submitForm">Envoyer</button>
     </form>
-    <p>
+    <p class="contact_admin">
       Cet espace est réservé aux employés de Groupomania, profitez de cet espace pour échanger et vous détendre ! 
-    </p>
-
+      <br>
+      <br>
+      Vous avez des difficultés à vous connecter ? Contactez un <a href="mailto:admin@groupomania.fr"> administrateur</a> 
+</p>
     </div>
   </div>
   </div>
