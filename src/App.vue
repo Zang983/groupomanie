@@ -15,7 +15,7 @@
 
 <script>
 
-import modale from "./components/modale.vue";
+import modale from "./components/connexion.vue";
 import banniere from "./components/banniere.vue";
 import posts from "./components/listePosts.vue";
 import cePosts from "./components/annonce_ce.vue";
@@ -69,26 +69,29 @@ export default {
 </script>
 
 <style lang="scss">
-.hbody {
-  display: flex;
-  margin-top: 5%;
-  justify-content: space-around;
+// .hbody {
+//   display: flex;
+//   margin-top: 5%;
+//   justify-content: space-around;
+// }
+html
+{
+  min-height:100vh;
 }
 
 body {
   margin: 0px;
   min-width: 100%;
-  font-size: 1.35em;
-  background-color: rgba(40, 42, 52, 0.151);
-}
+  min-height:100%;
 
-.send_button {
-  height: 35px;
-  background-color: blue;
-  width: 80%;
-  color: white;
-  &__full_size {
-    width: 100%;
-  }
 }
+// .send_button {
+//   height: 35px;
+//   background-color: blue;
+//   width: 80%;
+//   color: white;
+//   &__full_size {
+//     width: 100%;
+//   }
+// }
 </style>

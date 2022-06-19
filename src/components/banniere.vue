@@ -28,7 +28,7 @@ export default {
   methods: {
     toggleParametre()
     {
-      this.parametreVisible = !this.parametreVisible
+       this.parametreVisible = !this.parametreVisible
     },
     showModale()
     {

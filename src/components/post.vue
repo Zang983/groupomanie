@@ -12,12 +12,12 @@
         <i
           class="fa-solid fa-pen-to-square"
           v-on:click="toggleEditPost()"
-          v-if="this.idUser == this.$store.state.idUser || this.$store.state.access==='00001'" 
+          v-if="this.idUser == this.$store.state.idUser || this.$store.state.access=='00001'" 
         ></i>
         <i
           class="fa-solid fa-trash-can"
           v-on:click="deletePostFromList(index,id)"
-          v-if="this.userId == this.$store.state.idUser || this.$store.state.access==='00001'" 
+          v-if="this.userId == this.$store.state.idUser || this.$store.state.access=='00001'" 
         ></i>
 
       </div>
@@ -140,6 +140,7 @@ export default {
           this.like = 1;
         }
       }
+            let token = this.$store.state.token + document.cookie.split("=")[1];
       const infoLike = {
         valeur: valeurLike,
         idPost: id,
@@ -149,7 +150,7 @@ export default {
 
       axios
         .post(requestPath, infoLike, {
-          headers: { authorization: `Bearer ${this.$store.state.token}` },
+          headers: { authorization: `Bearer ${token}` },
         })
         .then(function (res) {
           if (res.ok) {

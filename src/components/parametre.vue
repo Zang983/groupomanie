@@ -25,7 +25,7 @@
 
       <button
         v-if="this.avatar!=''"
-        v-on:click="supprimeAvatar"
+        v-on:click.prevent="supprimeAvatar"
       >
         Supprimer mon image
       </button>
@@ -77,19 +77,22 @@ export default {
   },
   methods: {
     getMyProfil() {
+       
       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/auth/profil/id=${this.$store.state.idUser}`;
       axios
         .get(requestPath, { headers: { authorization: `Bearer ${token}` } })
-        .then((value) => {
+        .then((value) => { 
           this.prenom = value.data.firstName;
           this.nom = value.data.lastName;
           this.description = value.data.userDescription;
           this.avatar=value.data.url_avatar;
+
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log("error\n"  + error));
     },
     majProfil() {
+   
       let token = this.$store.state.token + document.cookie.split("=")[1];
       let image = document.querySelector("#imageUser").files[0];
       let requestPath = `http://localhost:3000/api/auth/parametre/id=${this.$store.state.idUser}`;
@@ -107,7 +110,7 @@ export default {
         })
         .then(() => {
           alert("Vos modifications sont enregistrées");
-          this.fermeture();
+          this.getMyProfil()
         })
         .catch((error) => console.log(error));
     },
@@ -140,7 +143,6 @@ export default {
         })
         .then(() => {
           this.getMyProfil()
-          console.log("avatar supprimé");
         })
         .catch((error) => console.log(error));
     },

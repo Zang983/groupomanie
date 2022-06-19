@@ -7,6 +7,7 @@
       </button>
       <i
         class="fa-solid fa-envelope"
+        v-if="this.$store.state.access==='00001'"
         v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
       ></i>
     </h2>

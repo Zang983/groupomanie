@@ -1,12 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
-
-const sequelize = new Sequelize("mydb", 'root', 'zangetsu91', {
+const env = require("dotenv").config();
+const sequelize = new Sequelize(process.env.dbName, "root", process.env.password, {
   host: 'localhost',
   dialect: 'mysql',
 });
-
-
-
 sequelize.authenticate().then(console.log("Connexion à la BDD réussie!!!")).catch(error => console.log(error))
 
 let db={};

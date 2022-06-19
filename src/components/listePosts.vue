@@ -144,7 +144,7 @@ export default {
         .then(() => {
           this.getListPost(this.pageActuelle);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {console.log(error);this.getListPost(this.pageActuelle)});
     },
     deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
@@ -162,7 +162,7 @@ export default {
           console.log("ici");
           this.getListPost(this.pageActuelle);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {console.log(error);this.getListPost(this.pageActuelle)});
     },
     editPost(id, newTitle, newBody, image) {
       let token = this.$store.state.token + document.cookie.split("=")[1];

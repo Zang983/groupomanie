@@ -16,13 +16,11 @@ exports.signup = (req, res, next) => {
 
     return res.status(400).json({ message: "Informations d'inscriptions manquantes." })
   }
-  db.user.findOne({where: {email:req.body.email}})
-  .then(value=>
-  {
-    if(value === null)
-    {
-          console.log("kutfkutf");
-          if (!new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomania)[.]{1}(fr)$/).test(req.body.email) ||
+  db.user.findOne({ where: { email: req.body.email } })
+    .then(value => {
+      if (value === null) {
+        console.log("kutfkutf");
+        if (!new RegExp(/^[a-zA-Z0-9.-_]+[@]{1}(groupomania)[.]{1}(fr)$/).test(req.body.email) ||
           !new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd)) {
           res.status(400).json({ message: "Erreur d'adresse mail ou de mot de passe." })
         }
@@ -35,13 +33,12 @@ exports.signup = (req, res, next) => {
             res.status(500).json({ message: "Problème avec le mot de passe" })
           })
 
-    }
-    else
-    {
-      return res.status(401).json({message : "Vous êtes déjà inscrit"})
-    }
+      }
+      else {
+        return res.status(401).json({ message: "Vous êtes déjà inscrit" })
+      }
 
-  })
+    })
 
 };
 
@@ -63,7 +60,7 @@ exports.login = (req, res, next) => {
         res.status(404).json({ message: "E-mail ou mot de passe incorrect" })
       }
       else {
-        if (db.user.droits === "00001") {
+        if (user.droits == "00001") {
           isAdmin = 1
         }
         bcrypt.compare(req.body.pwd, user.password)
@@ -117,7 +114,6 @@ exports.parametre = (req, res, next) => {
   const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
   const userId = decodedToken.userId;
 
-
   if (userId == req.params.id.split("=")[1]) {
     if (req.body.pwd1 != "" && req.body.pwd1 === req.body.pwd2) {
       if (new RegExp(/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,32})$/).test(req.body.pwd1)) {
@@ -140,15 +136,28 @@ exports.parametre = (req, res, next) => {
 
     }
     else {
-      let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-      db.user.update({
-        userName: req.body.firstname,
-        lastName: req.body.lastname,
-        userDescription: req.body.userDescription,
-        url_avatar: imageUrl,
-        telephone: req.body.telephone,
-      }, { where: { idUser: userId } }).then(() => res.status(201).json({ message: "Utilisateur modifié" }))
-        .catch(error => res.status(500).json({ error }))
+      db.user.findOne({
+        where: { idUser: userId }
+      }).then(resultat => {
+        let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
+
+        if (fs.existsSync(url_avatar)) {
+          fs.unlink(url_avatar, (err) => {
+            if (err) throw err;
+          })
+        }
+        let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        db.user.update({
+          userName: req.body.firstname,
+          lastName: req.body.lastname,
+          userDescription: req.body.userDescription,
+          url_avatar: imageUrl,
+          telephone: req.body.telephone,
+        }, { where: { idUser: userId } })
+          .then(() => res.status(201).json({ message: "Utilisateur modifié" }))
+          .catch(error => res.status(500).json({ error }))
+
+      })
     }
   }
   else {

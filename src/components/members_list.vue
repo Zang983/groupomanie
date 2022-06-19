@@ -47,6 +47,7 @@ export default {
             lastname: value.data.lastName,
             email: value.data.email,
             telephone: value.data.telephone,
+            description:value.data.userDescription
           };
           this.carteVisible = true;
         })

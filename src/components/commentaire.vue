@@ -81,6 +81,7 @@ export default {
           this.like = 1;
         }
       }
+      
       const infoLike = {
         valeur: valeurLike,
         idCommentaire: id,

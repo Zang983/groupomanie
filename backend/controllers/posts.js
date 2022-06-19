@@ -13,8 +13,8 @@ exports.sendPost = (req, res, next) => {
         if (req.file != undefined) {
             imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         }
-        if (req.body.author === undefined || req.body.body == "" || req.body.title == "") {
-            return res.status(400).json({ message: "Informations manquantes" })
+        if (req.body.title == "") {
+            return res.status(400).json({ message: "Titre manquants" })
         }
         db.post.create({
             idPost: '',
@@ -33,10 +33,17 @@ exports.sendPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
-    const userId = decodedToken.userId;
-    if (userId == req.body.corps.userId) {
+    let userId = decodedToken.userId;
+
+    if (userId == req.body.corps.userId || decodedToken.isAdmin === 1) {
         db.post.findOne({ where: { idPost: req.body.corps.id } })
             .then(result => {
+                if(result===null){
+                    return res.status(500).json({message:"La nature n'aime pas le vide"})
+                }
+                if (decodedToken.isAdmin) {
+                    userId = result.idUser
+                }
                 let urlImage = "./images" + result.url_image.split("/images")[1]
                 if (result.url_image != "" && fs.existsSync(urlImage)) {
                     fs.unlink(urlImage, (err) => {
@@ -85,14 +92,12 @@ exports.updateAPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
     const userId = decodedToken.userId;
-    if (userId == req.body.users_idUser) {
-        if (req.body.supprimeImage) {
+    if (userId == req.body.users_idUser || decodedToken.isAdmin === 1) {
+        if (req.body.supprimeImage == 1) {
             db.post.findOne({
-                attributes: ["url_image"],
-            },
-                {
-                    where: { idPost: req.body.idPost }
-                })
+                attributes: ["url_image", "idUser"],
+                where: { idPost: req.body.idPost }
+            })
                 .then(resultat => {
                     if (!resultat.url_image == "") {
                         let urlImage = "./images" + resultat.url_image.split("/images")[1]
@@ -101,41 +106,47 @@ exports.updateAPost = (req, res, next) => {
                                 if (err) throw err;
                             })
                         }
+                        db.post.update({
+                            url_image: "",
+                        }, {
+                            where: { idpost: req.body.idPost }
+                        }).then(() => { return res.status(203).json({ message: "Image supprimée" }) })
                     }
-                    res.status(203).json({ message: "Image supprimée" })
                 })
-            db.post.update({
-                url_image: "",
-            }, {
-                where: { idpost: req.body.idPost }
-            })
         }
         else {
-            /* Si on édite le post : on vérifie si une nouvelle image est envoyée si oui on récupère le nom en imageUrl sinon on récupère l'ancien path dans la BDD*/
+           /*
+           Récupération du chemin de l'image, si cette dernière existe on la supprimer s'il y'a un nouveau fichier. Sinon on garde la même
+           */
             let imageUrl = "";
-            if (req.file != undefined) {
-                imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-            }
-            else {
-                db.post.findOne({
-                    attributes: ["url_image"],
-                },
-                    {
-                        where: { idPost: req.body.idPost }
-                    })
-                    .then(resultat => imageUrl = resultat.url_image)
-            }
-            db.post.update({
-                titre: req.body.title,
-                contenu: req.body.body,
-                url_image: imageUrl,
-                dateDernierEdit: Sequelize.fn('NOW')
-            }, {
-                where: {
-                    idPost: req.body.idPost,
-                }
-            }).then(result => res.status(201).json({ result }))
-                .catch(error => res.status(500).json({ error }))
+            db.post.findOne({
+                attributes: ["url_image"],
+                where: { idPost: req.body.idPost }
+            })
+                .then(resultat => {
+                    if (resultat.url_image != "") {
+                        imageUrl = resultat.url_image;
+                    }
+                    if (req.file != undefined) {
+                        let fichierASupprimer = "./images" + resultat.url_image.split("/images")[1]
+                        if (resultat.url_image != "" && fs.existsSync(fichierASupprimer)) {
+                            fs.unlink(fichierASupprimer, (err) => {
+                            })
+                        }
+                        imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    }
+                    db.post.update({
+                        titre: req.body.title,
+                        contenu: req.body.body,
+                        url_image: imageUrl,
+                        dateDernierEdit: Sequelize.fn('NOW')
+                    }, {
+                        where: {
+                            idPost: req.body.idPost,
+                        }
+                    }).then(result => res.status(201).json({ result }))
+                        .catch(error => res.status(500).json({ error }))
+                })
         }
     }
     else {
@@ -146,7 +157,9 @@ exports.likeAPost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
     const userId = decodedToken.userId;
+
     if (userId == req.body.idUser) {
+
         if (req.body.valeur === -1) {
             db.aimer.destroy({
                 where: {
