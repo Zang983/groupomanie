@@ -6,6 +6,7 @@
 header {
     background-color: rgba(211, 211, 211, 0.73);
     display: flex;
+    text-align:center;
     align-items: center;
     justify-content: center;
     border-bottom: 3px solid #FFD7D7;
@@ -24,6 +25,7 @@ header {
     display: flex;
     height: calc(90% - 3px);
     background-color: #4E5166;
+
 }
 
 .illustration_societe {
@@ -32,6 +34,9 @@ header {
     border-right: 3px solid rgba(211, 211, 211, 0.73);
     @media screen and (max-width: 1440px) {
         width:50%;
+    }
+    @media screen and (max-width: 768px) {
+        display:none;
     }
 }
 
@@ -57,6 +62,9 @@ header {
     opacity: 0.8;
     @media screen and (max-width: 1440px) {
         width:40%;
+    }
+    @media screen and (max-width: 768px) {
+        width:80%;
     }
 }
 
@@ -86,11 +94,17 @@ form
     flex-direction: column;
     button
     {
+        color:#4E5166;
+        font-weight:bold;
+        text-transform: uppercase;
         margin : 20px auto;
         height:50px;
         width:100%;
         border-radius:20px;
         border:3px solid lightgray;
+        &:hover{
+            background-color:#fd2b0190;
+        }
     }
 }
 label
@@ -109,6 +123,11 @@ label
         border:1px solid  rgba(211, 211, 211, 0.73);
         background-color:lightgray;
         padding-left:1%;
+    }
+    input:focus
+    {
+        background-color:#4e51667a;
+        color:white;
     }
 }
 .erreur_formulaire
