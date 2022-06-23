@@ -1,13 +1,15 @@
 <template>
-  <div class="bloc-blague" v-if="this.joke.body != ''">
+  <div class="bloc_blague" v-if="this.joke.body != ''">
     <!-- On affiche l'encadré avec la blague que si fetch arrive à en récupérer une-->
     <div v-on:click="toggleAnswer" class="contenu_blague">
-      <p class="corps_blague"  >{{ joke.body }}</p>
+    <button v-on:click.stop="getJoke"><i class="fa-solid fa-arrows-rotate actualisation_blague" ></i></button>
+      <p class="corps_blague" v-if="!this.joke.showAnswer" ><span class="intitule_corps_blague">Blague :</span> {{ joke.body }}</p>  
       <p class="reponse_blague" v-if="this.joke.showAnswer">
-        {{ joke.answer }}
-      </p>
+        <span class="intitule_corps_blague">Chute :</span> {{ joke.answer }}
+      </p> 
+
+
     </div>
-    <button v-on:click="getJoke"><i class="fa-solid fa-arrows-rotate actualisation_blague" ></i></button>
   </div>
 </template>
 <script>
@@ -21,6 +23,7 @@ export default {
 
   methods: {
     getJoke() {
+      
       jokes
         .random()
         .then((blague) => {
@@ -47,5 +50,5 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss" src="./blague.scss">
 </style>

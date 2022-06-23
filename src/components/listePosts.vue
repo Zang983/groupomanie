@@ -1,21 +1,20 @@
 <template>
-  <div class="posts_bloc">
+  <div class="bloc_post">
     <h2>
-      Fil d'actu
+      Exprimez vous !
       <i class="fa-solid fa-envelope" v-on:click="newPost"></i>
     </h2>
-    <article class="user_new_post" v-if="this.newMessage.showIt == 1">
-      <div class="header_new_post">
+    <div class="bloc_nouveau_post" v-if="this.newMessage.showIt == 1">
+      <div class="entete_nouveau_post">
         <label
           >Titre de votre message :
           <input
             v-model="newMessage.title"
-            class="new_title"
+            class="titre_nouveau_post"
             placeholder="Votre titre"
         /></label>
-        <div class="action_post"></div>
       </div>
-      <p class="message_post">
+      <div class="contenu_nouvea_message">
         <label>
           <textarea
             v-model="newMessage.body"
@@ -24,34 +23,45 @@
           >
           </textarea>
         </label>
-      </p>
-      <div class="send_block">
-        <button v-on:click="post()" class="send_button">Envoyer</button>
-        <input type="file" id="send_picture" accept=".jpeg,.jpg,png" />
+      </div>
+      <div class="bloc_bouton_nouveau_post">
+        <button v-on:click="post()" class="bouton_envoi">Envoyer</button>
+        <label for="send_picture"
+          ><button class="bouton_envoi bouton_envoi_image">
+            Image<input
+              type="file"
+              name="send_picture"
+              id="send_picture"
+              accept=".jpeg,.jpg,png"
+            /></button
+        ></label>
+
         <!-- <i class="fa-solid fa-image"></i> -->
       </div>
-    </article>
-    <div class="user_post" v-for="(message, index) in posts" :key="index">
-      <post
-        v-bind:index="index"
-        v-bind:body="message.body"
-        v-bind:title="message.title"
-        v-bind:author="message.author"
-        v-bind:id="message.id"
-        v-bind:postDate="message.postDate"
-        v-bind:editDate="message.editDate"
-        v-bind:showAllMessage="message.showAllMessage"
-        v-bind:initLike="message.like"
-        v-bind:userId="message.userId"
-        v-bind:urlImage="message.urlImage"
-        v-bind:editMode="editMode"
-        v-bind:avatar="message.avatar"
-        @editPost="editPost"
-        @deletePostFromList="deletePostFromList"
-        @deleteImage="deleteImage"
-      ></post>
     </div>
-    <div class="blocPagination" v-if="nombrePage > 1">
+
+    <post
+      v-for="(message, index) in posts"
+      :key="index"
+      v-bind:index="index"
+      v-bind:body="message.body"
+      v-bind:title="message.title"
+      v-bind:author="message.author"
+      v-bind:id="message.id"
+      v-bind:postDate="message.postDate"
+      v-bind:editDate="message.editDate"
+      v-bind:showAllMessage="message.showAllMessage"
+      v-bind:initLike="message.like"
+      v-bind:userId="message.userId"
+      v-bind:urlImage="message.urlImage"
+      v-bind:editMode="editMode"
+      v-bind:avatar="message.avatar"
+      @editPost="editPost"
+      @deletePostFromList="deletePostFromList"
+      @deleteImage="deleteImage"
+    ></post>
+
+    <div class="bloc_pagination" v-if="nombrePage > 1">
       <span
         v-for="page in nombrePage"
         v-bind:key="page"
@@ -83,6 +93,7 @@ export default {
       this.newMessage.title = "";
     },
     getListPost(page) {
+      this.pageActuelle = page;
       let numeroRequete = this.$store.state.numeroRequete;
       let requestPath = `http://localhost:3000/api/posts/post/requete=${numeroRequete}/page=${page}`;
       let promiseThis = this;
@@ -144,7 +155,10 @@ export default {
         .then(() => {
           this.getListPost(this.pageActuelle);
         })
-        .catch((error) => {console.log(error);this.getListPost(this.pageActuelle)});
+        .catch((error) => {
+          console.log(error);
+          this.getListPost(this.pageActuelle);
+        });
     },
     deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
@@ -162,7 +176,10 @@ export default {
           console.log("ici");
           this.getListPost(this.pageActuelle);
         })
-        .catch((error) => {console.log(error);this.getListPost(this.pageActuelle)});
+        .catch((error) => {
+          console.log(error);
+          this.getListPost(this.pageActuelle);
+        });
     },
     editPost(id, newTitle, newBody, image) {
       let token = this.$store.state.token + document.cookie.split("=")[1];

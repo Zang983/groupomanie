@@ -1,18 +1,34 @@
-// .pagination{
-//     display:inline-block;
-//     width:20px;
-//     margin-right:4px;
-//     text-align:center;
-//     border:1px solid black;
-//     background-color:white;
-// }
-// .pagination:hover
-// {
-//     cursor:pointer;
-// }
-// .pageActuelle
-// {
-//     color:rgba(0, 0, 255, 0.628); 
-//     text-decoration:underline;
-//     background-color:rgba(241, 241, 241, 0.797)
-// }
+$couleur-primaire: #FD2D01;
+$couleur-secondaire: #FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite: #fd2b0173;
+
+.bloc_post {
+    width: 50%;
+    margin-top: 30px;
+    background-color: $couleur-tertiaire;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid white;
+    color: $couleur-secondaire;
+    font-size: 110%;
+}
+
+.pagination {
+    display: inline-block;
+    width: 20px;
+    margin-right: 4px;
+    text-align: center;
+}
+
+.pagination:hover {
+    cursor: pointer;
+}
+
+.pageActuelle {
+    color: rgba(0, 0, 255, 0.628);
+    text-decoration: underline;
+    background-color: rgba(241, 241, 241, 0.797)
+}

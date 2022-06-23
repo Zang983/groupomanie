@@ -1,56 +1,62 @@
+$couleur-primaire: #FD2D01;
+$couleur-secondaire: #FFd7d7;
+$couleur-tertiaire : #4E5166;
+
 #accueil {
     height: 100vh;
-  
 }
-
+//contient le nom avec les deux logos qui tournent en SVG.
 header {
-    background-color: rgba(211, 211, 211, 0.73);
+    background-color: rgba(211, 211, 211, 0.829);
     display: flex;
-    text-align:center;
+    text-align: center;
     align-items: center;
     justify-content: center;
-    border-bottom: 3px solid #FFD7D7;
+    border-bottom: 3px solid $couleur-secondaire;
     height: 10%;
+
     svg {
         margin: 0 10px;
         width: 60px;
         height: 60px;
-        fill: #FD2D01;
+        fill: $couleur-primaire;
         animation: 5s ease-in rotation infinite;
     }
 }
-
+//contenant global de la page (image + bloc de connexion)
 .conteneur_connexion {
     align-items: center;
     display: flex;
     height: calc(90% - 3px);
-    background-color: #4E5166;
+    background-color: $couleur-tertiaire;
 
 }
-
+//bloc contenant l'image d'accueil
 .illustration_societe {
     width: 60%;
     height: 100%;
     border-right: 3px solid rgba(211, 211, 211, 0.73);
+
     @media screen and (max-width: 1440px) {
-        width:50%;
+        width: 50%;
     }
+
     @media screen and (max-width: 768px) {
-        display:none;
+        display: none;
     }
 }
-
-.illustration_societe img{
+//traitement de l'image
+.illustration_societe img {
     object-fit: cover;
     max-width: 100%;
     height: calc(100%);
     filter: grayscale(1);
     opacity: 90%;
 }
-
+//reste de la page.
 .menu_connexion {
-    background-color: #FFD7D7;
-    border: 3px solid #FD2D01;
+    background-color: $couleur-secondaire;
+    border: 3px solid $couleur-primaire;
     margin: auto;
     padding: 15px;
     width: 25%;
@@ -60,104 +66,91 @@ header {
     justify-content: space-between;
     border-radius: 50px;
     opacity: 0.8;
+
     @media screen and (max-width: 1440px) {
-        width:40%;
+        width: 40%;
     }
+
     @media screen and (max-width: 768px) {
-        width:80%;
+        width: 80%;
     }
 }
-
-.connexion_inscription
-{
-    display:flex;
+//bloc de connexion/identification
+.connexion_inscription {
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height:10%;
-    span{
-        color:#4E5166;
+    height: 10%;
+
+    span {
+        color: $couleur-tertiaire;
         text-decoration: underline;
-        &:hover
-        {
-            cursor:pointer;
+
+        &:hover {
+            cursor: pointer;
         }
     }
-
 }
-h2,h3 {
-    margin:0 auto;
+//titre et phrase d'accueil
+h2,
+h3 {
+    margin: 0 auto;
 }
-form
-{
-    display:flex;
-    width:98%;
+//formulaire
+form {
+    display: flex;
+    width: 98%;
     flex-direction: column;
-    button
-    {
-        color:#4E5166;
-        font-weight:bold;
+
+    button {
+        color: $couleur-tertiaire;
+        font-weight: bold;
         text-transform: uppercase;
-        margin : 20px auto;
-        height:50px;
-        width:100%;
-        border-radius:20px;
-        border:3px solid lightgray;
-        &:hover{
-            background-color:#fd2b0190;
+        margin: 20px auto;
+        height: 50px;
+        width: 100%;
+        border-radius: 20px;
+        border: 3px solid lightgray;
+
+        &:hover {
+            background-color: #fd2b0190;
         }
     }
 }
-label
-{
-    display:flex;
-    width:100%;
+label {
+    display: flex;
+    width: 100%;
     justify-content: space-between;
-    margin:5px 0;
-    color:#4E5166;
-    font-weight:bold;
-    input
-    {
-        width:60%;
-        height:25px;
-        border-radius:20px;
-        border:1px solid  rgba(211, 211, 211, 0.73);
-        background-color:lightgray;
-        padding-left:1%;
+    margin: 5px 0;
+    color: $couleur-tertiaire;
+    font-weight: bold;
+
+    input {
+        width: 60%;
+        height: 25px;
+        border-radius: 20px;
+        border: 1px solid rgba(211, 211, 211, 0.73);
+        background-color: lightgray;
+        padding-left: 1%;
     }
-    input:focus
-    {
-        background-color:#4e51667a;
-        color:white;
+
+    input:focus {
+        background-color: $couleur-tertiaire;
+        color: white;
     }
-}
-.erreur_formulaire
-{
-    color:red;
-    margin:10px 0;
-}
-.contact_admin
-{
-    margin:0;
-    border:1px solid #4E5166;
-    text-align:center;
-    font-style: italic;
-    font-size:110%;
-    padding:1%;
-    border-radius:10px;
 }
 
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-        opacity: 1;
-    }
-    50% {
-        transform: rotateX(20deg);
-        transform: rotatey(180deg);
-        opacity: 0.5
-    }
-    100% {
-        opacity: 1;
-        transform: rotate(0deg);
-    }
+.erreur_formulaire {
+    color: red;
+    margin: 10px 0;
+}
+//bloc de contact 
+.contact_admin {
+    margin: 0;
+    border: 1px solid $couleur-tertiaire;
+    text-align: center;
+    font-style: italic;
+    font-size: 110%;
+    padding: 1%;
+    border-radius: 10px;
 }

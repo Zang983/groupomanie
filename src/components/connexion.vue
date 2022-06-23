@@ -153,7 +153,6 @@ export default {
     },
     toggleStatus() {
       this.status = !this.status;
-      this.$forceUpdate;
     },
     checkInput(event) {
       let element = null;
@@ -190,7 +189,7 @@ export default {
       if (element.value == "" || validator) {
         element.isValid = true;
       }
-      this.$forceUpdate();
+      this.$forceUpdate();//sinon ne détecte pas les premiers changement sur les champs nom et prénom.
     },
   },
   data() {

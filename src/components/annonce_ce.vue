@@ -1,24 +1,22 @@
 <template>
   <div class="ce_posts_container">
     <h2>
-      Annonce C.E.
-      <button v-on:click="getAnnonceList()" class="refresh_button">
-        <i class="fa-solid fa-arrows-rotate"></i>
+            <button class="bouton_gestion_ce">
+        <i
+          class="fa-solid fa-envelope nouveau_ce"
+          v-if="this.$store.state.access === '00001'"
+          v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
+        ></i>
       </button>
-      <i
-        class="fa-solid fa-envelope"
-        v-if="this.$store.state.access==='00001'"
-        v-on:click="toggleNouvelleAnnonce = !toggleNouvelleAnnonce"
-      ></i>
+      Annonce C.E.
+      <button v-on:click="getAnnonceList()" class="bouton_gestion_ce">
+        <i class="fa-solid fa-arrows-rotate rafraichissement_ce"></i>
+      </button>
+
     </h2>
     <div class="envoiAnnonce" v-show="toggleNouvelleAnnonce">
       <textarea v-model="nouvelleAnnonce"></textarea>
-      <button
-        class="send_button send_button__full_size"
-        v-on:click="newAnnounce"
-      >
-        Envoyer
-      </button>
+      <button v-on:click="newAnnounce" class="bouton_envoi">Envoyer</button>
     </div>
     <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
       <p class="message_post_ce" v-show="!annonce.editMode">
@@ -30,22 +28,23 @@
         v-model="annonce.message"
       ></textarea>
       <button
-        class="send_button send_button__full_size"
+        class="bouton_envoi"
         v-on:click="editMessageCE(index)"
         v-show="annonce.editMode"
       >
         Éditer
       </button>
       <div class="administration_ce">
+        <button>
         <i
-          class="fa-solid fa-pen-to-square edit_button_ce"
+          class="fa-solid fa-pen-to-square edition_ce"
           v-on:click="toggleEditMode(index)"
-        ></i>
+        ></i></button>       <button>
         <i
-          class="fa-solid fa-trash-can delete_button_ce"
+          class="fa-solid fa-trash-can suppression_ce"
           v-if="annonce.idCE"
           v-on:click="deleteMessageCE(index)"
-        ></i>
+        ></i></button>
       </div>
     </div>
   </div>
@@ -59,7 +58,7 @@ export default {
 
   methods: {
     newAnnounce() {
-       let token = this.$store.state.token + document.cookie.split("=")[1];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/ceMessage/";
       let infoAnnonce = {
         idUser: this.$store.state.idUser,
@@ -87,10 +86,10 @@ export default {
 
     toggleEditMode(index) {
       this.annonceList[index].editMode = !this.annonceList[index].editMode;
-      this.$forceUpdate();
+      this.$forceUpdate();//vue ne detecte pas le changement dans le tableau
     },
     getAnnonceList() {
-       let token = this.$store.state.token + document.cookie.split("=")[1];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/ceMessage/all";
       let promiseThis = this;
       this.annonceList = [];
@@ -110,7 +109,7 @@ export default {
     },
 
     deleteMessageCE(index) {
-       let token = this.$store.state.token + document.cookie.split("=")[1];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/ceMessage/id=${this.annonceList[index].idCE}`;
       let corps = {
         id: this.annonceList[index].idCE,
@@ -129,14 +128,14 @@ export default {
         });
     },
     editMessageCE(index) {
-       let token = this.$store.state.token + document.cookie.split("=")[1];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/ceMessage/${this.annonceList[index].idCE}`;
       let promiseThis = this;
       let infoAnnonce = {
         idCE: this.annonceList[index].idCE,
         access: this.$store.state.access,
         message: this.annonceList[index].message,
-        userId:this.$store.state.idUser
+        userId: parseInt(this.$store.state.idUser),
       };
 
       axios

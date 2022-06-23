@@ -1,0 +1,43 @@
+$couleur-primaire:#FD2D01;
+$couleur-secondaire:#FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite:#fd2b01bb;
+$couleur-tertiaire-opacite:#4e5166;
+
+.bloc_blague
+{
+    width:100%;
+    text-align:center;
+    display:flex;
+    background-color:$couleur-secondaire;
+    border-bottom:3px solid lightgray;
+    cursor:pointer;
+}
+.contenu_blague
+{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    position:relative;
+    font-size: 110%;
+    button
+    {
+        position:absolute;
+        left:10px;
+        border:none;
+        background-color: inherit;
+        i{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            font-size:20px;
+            color:$couleur-tertiaire;
+        }
+    }
+}
+.intitule_corps_blague
+{
+    font-weight: bold;
+    text-decoration: underline;
+}

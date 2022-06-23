@@ -1,77 +1,89 @@
-// .ce_posts_container
-// {
-//     width:20%;
-//     border:1px solid lightgray;
-//     border-radius : 10px;
-//     height:500px;
-//     background-color:white;
-//     display:flex;
-//     overflow-y:auto;
-//     flex-direction: column;
-//     align-items: center;
+$couleur-primaire:#FD2D01;
+$couleur-secondaire:#FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite:#fd2b0173;
+//Conteneur global des messages CE
+.ce_posts_container
+{
+    width:20%;
+    margin-top:30px;
+    border:3px solid $couleur-tertiaire;
+    box-shadow:-1px 1px 1px 1px rgba(255, 255, 255, 0.209);
+    border-radius : 10px;
+    height:600px;
+    background-color:#FFd7d7;
+    display:flex;
+    overflow-y:auto;
+    flex-direction: column;
+    align-items: center;
+}
+h2
+{
+    display:flex;
+    align-items:center;
+}
+//Bouton permettant l'envoi d'un nouveau message ou le rafraichissement
+.bouton_gestion_ce 
+{
+    color:$couleur-tertiaire;
+    background-color:inherit;
+    border:none;
+    display:inline;
+}
+// Bloc pour l'envoi d'un nouveau message
+.envoiAnnonce
+{
+  width:98%;
+  margin:auto;  
+}
+//Textarea pour les nouveaux message ou l'édition 
+textarea
+{
+    display:block;
+    margin:auto;
+    margin-top:5px;
+    border-radius:10px;
+    padding-left:5px;
+    width:95%;
+    height:80px;
+    border:1px solid black;
+}
+/*Conteneur message et paragraphe*/
+.post_CE
+{
+    border:3px dotted  $couleur-primaire;
+    background-color:$couleur-tertiaire;
+    color:$couleur-secondaire;
+    margin-bottom : 20px;  
+    width:90%;
+    position:relative;
+    p
+    {
+        max-width:100%;
+        text-align:center;
+        white-space:break-spaces;
+    }
+}
 
-// }
-// .post_CE
-// {
-//     border:1px solid lightblue;
-//     background-color:rgba(211, 211, 211, 0.168);
-//     margin-bottom : 20px;  
+//Bloc contenant les boutons d'édition et suppression
+.administration_ce
+{
+    bottom:0px;
+    width:100%;
+    margin:0px; 
+    display:flex;
+    justify-content: flex-end;
+    margin-top:10px;
+    button
+    {
+        border:none;
+        background-color: inherit;
+        color:$couleur-secondaire;
+        font-size:100%;
+        &:hover
+        {
+            color:$couleur-primaire;
+        }
 
-//     width:98%;
-//     p
-//     {
-//         max-width:100%;
-//         text-align:center;
-//         white-space:break-spaces;
-//     }
-// }
-// h2
-// {
-//     text-align:center;
-// }
-// .date_ce
-// {
-//     width:95%;
-//     margin:auto;
-//     font-size:80%;
-//     font-weight:bold;
-// }
-// .administration_ce
-// {
-//     bottom:0px;
-//     width:100%;
-//     margin:0px; 
-//     display:flex;
-//     justify-content: flex-end;
-//     margin-top:10px;
-// }
-// i
-// {
-//     font-size:15px;
-//     margin-right:10px;
-// }
-// i:hover
-// {
-//     cursor:pointer;
-// }
-// textarea
-// {
-//     background-color:rgba(211, 211, 211, 0.355);
-//     width:calc(100% - 2px);
-//     border:1px solid black;
-// }
-// .envoiAnnonce
-// {
-//   width:98%;
-//   margin:auto;  
-// }
-// .refresh_button
-// {
-//     color:lightgray;
-//     background-color:inherit;
-//     border:none;
-// }
-// button:hover
-// {
-//     cursor:pointer;
-// }
+    }
+}

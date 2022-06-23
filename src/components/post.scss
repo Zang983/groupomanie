@@ -1,280 +1,232 @@
-// .user_new_post {
-//   margin-bottom: 35px;
+$couleur-primaire: #FD2D01;
+$couleur-secondaire: #FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite: #fd2b0173;
 
-//   input,
-//   textarea {
-//     width: calc(100% - 22px);
-//     border: 1px solid rgba(0, 0, 255, 0.299);
-//     margin: 0px;
-//     padding: 0px;
-//     font-size: 120%;
-//     padding-left: 20px;
-//   }
+//Conteneur principal
+.conteneur_post {
+    font-size: 110%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.218);
+    width: 95%;
+    margin-bottom: 30px;
+    color: #4E5166;
+    border: 1px solid white;
+}
 
-//   input {
-//     height: 50px;
-//   }
+//Date du post
+.info_date_post {
+    align-self: flex-start;
+    margin: 5px;
+    margin-left: 20px;
+    color: $couleur-secondaire;
+}
 
-//   p {
-//     height: 250px;
-//     background-color: blakc;
-//     border: none;
-//     margin: 0px;
-//     padding: 0px;
-//   }
-// }
+//Auteur + boutons d'actions
+.en_tete_post {
+    width: 100%;
+    background-color: $couleur-secondaire;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+}
 
-// .posts_bloc {
-//   width: 60%;
-//   min-width: 60%;
-//   max-width: 60%;
-//   border: 1px gray solid;
-//   padding: 0px 20px;
-//   border-radius: 50px;
-//   padding-bottom: 2%;
-//   display: flex;
-//   flex-direction: column;
+.info_auteur_post {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+}
 
-//   h2 {
-//     display: flex;
-//     justify-content: space-between;
-//   }
+.avatar_auteur_post {
+    border-radius: 100%;
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+}
 
-//   i:hover {
-//     cursor: pointer;
-//   }
+.action_post {
+    margin-right: 20px;
 
-//   .user_post {
-//     width: 100%;
-//     min-width: 100%;
-//     max-width: 100%;
-//     margin-bottom: 40px;
-//     border-radius: 20px;
 
-//     &_locked {
-//       border-radius: 0px 0px 20px 20px;
-//       background-color: rgba(255, 0, 0, 0.569);
-//     }
-//   }
-// }
+    button {
+        border-radius: 100%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $couleur-tertiaire;
+        background-color: inherit;    
+        color:$couleur-tertiaire;
 
-// .header_post {
-//   background-color: rgba(128, 128, 128, 0.389);
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   position: relative;
-//   padding: 7px 10px;
+        &:hover {
+            background-color: white;
+        }
+    }
 
-//   .user_img--post {
-//     display: flex;
-//     align-items: center;
-//     font-size: 120%;
-//     font-weight: bold;
-//     margin-right: 10px;
+}
 
-//     img {
-//       width: 50px;
-//       height: 50px;
-//       object-fit: cover;
-//       border-radius: 100%;
-//       background-color: white;
-//       margin-right: 20px;
-//     }
-//   }
+//titre du message
+.titre_post_utilisateur {
+    background-color: $couleur-primaire-opacite;
+    width: calc(100% - 2px);
+    height: 30px;
+    margin: 0;
+    color: #363846;
+    border: 1px solid white;
+    border-left: none;
+    border-right: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-//   h3 {
-//     font-size: 140%;
-//     position: absolute;
-//     left: 50%;
-//     transform: translateX(-50%)
-//   }
+//input de modification du titre
+.modification_titre_post {
+    width: 80%;
+    border: none;
+    background-color: lightgray;
+    height: 25px;
+    text-align: center;
+}
 
-//   .action_post {
-//     display: flex;
-//     justify-content: space-around;
-//     width: 20%;
+//partie de modification du corps du message..
+.edition_message {
+    width: 95%;
+    margin-bottom: 20px;
+    position: relative;
 
-//     i {
-//       height: 35px;
-//       width: 35px;
-//       display: flex;
-//       align-items: center;
-//       border-radius: 50px;
-//       background-color: white;
-//       justify-content: center;
-//     }
-//   }
-// }
+    textarea {
+        border: none;
+        background-color: lightgray;
+        width: 100%;
+        height: 200px;
+        font-size: 110%;
+    }
 
-// textarea {
-//   width: 100%;
-//   border: none;
-//   padding: 0px;
-//   height: 250px;
-//   font-size: 120%;
-//   margin: 0px;
-// }
+    .envoi_image_cache {
+        display: none;
+    }
 
-// input {
-//   font-size: 120%;
-//   width: 70%;
-// }
+    .bouton_envoi {
+        width: fit-content;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+    }
 
-// .message_post {
-//   max-width: 100%;
-//   margin: 0px;
-//   padding: 10px;
-//   background-color: white;
-//   border-top: 1px solid blue;
-//   border-bottom: 1px solid blue;
-//   line-height: 150%;
+    .bouton_envoi_image {
+        display: flex;
+        border: none;
+        border-radius: 100%;
+        width: 30px;
+        height: 30px;
 
-//   &Short {
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-//     white-space: nowrap;
-//     max-width: 100%;
-//   }
-// }
+        label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100%;
+            width: 100%;
+            height: 100%;
+        }
 
-// .footer_post {
-//   height: 50px;
-//   background-color: rgba(128, 128, 128, 0.389);
-//   position: relative;
-//   font-size: small;
-//   display: flex;
-//   width: 100%;
-//   justify-content: space-between;
-//   align-items: center;
-//   border-radius: 0 0 20px 20px;
+        &:hover {
+            background-color: #fe765f;
+        }
+    }
+}
 
-//   .info_date_post {
-//     margin-left: 10px;
-//     font-size: small;
-//   }
+.send_block {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
 
-// }
+//Partie contenant l'image
+.conteneur_principal_image {
 
-// .user_post_locked {
-//   .header_post {
-//     border-radius: 0px 0px 0px 0px;
+    position: relative;
+    width: 95%;
+    margin: 25px auto;
+}
 
-//   }
+//Placement du bouton de suppression en haut à droite de l'image
+.supprimer_image {
+    position: absolute;
+    top: 4%;
+    right: 5%;
+    display: none;
+    width: 30px;
+    height: 30px;
 
-// }
+}
 
-// .post_triangle {
-//   position: absolute;
-//   top: calc(50% - 4px);
-//   left: calc(50% - 10px);
-//   border-top: 17px solid rgb(57, 49, 49);
-//   border-right: 10px solid transparent;
-//   border-left: 10px solid transparent;
+.conteneur_principal_image:hover .supprimer_image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    background-color: white;
+    border-radius: 100%;
+    border: 1px solid black;
 
-//   &:hover {
-//     cursor: pointer;
-//   }
+}
 
-//   &__rotated {
-//     transform: rotate(60deg)
-//   }
+.image_post {
+    max-width: 100%;
+    object-fit: cover;
+}
 
-//   &--smaller {
-//     height: 0px;
-//     width: 0px;
-//     border-top: 10px solid rgb(57, 49, 49);
-//     border-right: 6px solid transparent;
-//     border-left: 6px solid transparent;
-//   }
-// }
+//Corps principal du message
+.corpsMessage {
+    color: white;
+}
 
-// .likeAndCommentary {
-//   display: flex;
-//   align-items: center;
-//   padding-right: 10px;
+//le footer contient les boutons like et le bouton permettant d'afficher des commentaires
+.footer_post {
+    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 
-//   i {
-//     border: none;
-//     color: black;
-//     transition-delay: 0.1s;
-//     margin-right: 10px;
-//   }
+    button {
+        width: 35px;
+        height: 35px;
+        margin-left: 10px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        border: none;
+        font-size: 80%
+    }
 
-//   i:hover {
-//     font-size: 120%;
-//   }
+}
 
-//   .blueLike {
-//     font-size: 120%;
-//     color: blue;
-//   }
+.like,
+.dislike {
+    width: 30px;
+    height: 30px;
+    display: flex;
 
-//   .redLike {
-//     font-size: 120%;
-//     color: red;
-//   }
+}
 
-//   .likeDown {
-//     transform: rotate(180deg)
-//   }
+.blueLike,
+.like:hover {
+    color: blue;
+}
 
-//   .likeDown:hover {
-//     color: red;
-//   }
+.redLike,
+.dislike:hover {
+    color: red;
+}
 
-//   .likeUp:hover {
-//     color: blue;
-//   }
-// }
-
-// .send_block {
-//   display: flex;
-//   align-items: center;
-//   height: 35px;
-//   width: 100%;
-
-//   .send_button,
-//   .send_picture {
-//     color: white;
-//     font-size: 120%;
-//   }
-
-//   .send_picture {
-//     height: 35px;
-//     width: 20%;
-//     color: black;
-//   }
-
-//   button:hover,
-//   i:hover {
-//     cursor: pointer;
-//     filter: brightness(0.8);
-//   }
-
-//   i {
-//     width: 100%;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     height: calc(100% - 4px)
-//   }
-
-// }
-
-// .image_post {
-//   text-align: center;
-//   width: 100%;
-
-// }
-
-// .image_post img {
-//   object-fit: contain;
-//   max-width: 50%;
-//   max-height: 400px;
-// }
-// .corpsMessage
-// {
-//   white-space:pre-wrap;
-//   text-align: justify;
-// }
+.dislike {
+    transform: rotate(180deg);
+}

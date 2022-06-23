@@ -64,12 +64,11 @@ exports.getCE = (req, res, next) => {
 }
 
 exports.updateCE = (req, res, next) => {
-    console.log(req.body)
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'AuheoO11nNej47Gr,eiUHog@ru::ohga5');
     const userId = decodedToken.userId;
-    console.log(decodedToken)
-    if (userId == req.body.users_idUser) {
+
+    if (userId == req.body.userId) {
         if (decodedToken.isAdmin === 1 && req.body.message != "")//a modifier avec la valeur contenue dans le token
         {
             db.annonce.update({
@@ -81,7 +80,6 @@ exports.updateCE = (req, res, next) => {
             }).then(() => res.status(201).json({ message: "Post mis à jour" }))
                 .catch(error => res.status(500).json(error))
         }
-
     }
     else {
         return res.status(401).json({ message: "Droits insuffisant!" })

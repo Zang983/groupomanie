@@ -1,25 +1,40 @@
+$couleur-primaire: #FD2D01;
+$couleur-secondaire: #FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite: #fd2b0173;
 
-// .commentaire
-// {
-//     width:95%;
-//     margin-top:15px;
-//     font-size:130%;
-//     border-radius: 20px;
-//     padding:8px;
-// }
+button {
 
-// .commentaire:nth-child(even)
-// {
-//     border:1px solid lightblue;
-//     background-color:lightgray
-// }
-// .commentaire:nth-child(odd)
-// {
-//     border:1px solid lightgray;
-//     background-color:lightblue
-// }
+}
 
-// .contenuCommentaire
-// {
-//     white-space:pre-wrap
-// }
+.interraction_like {
+    align-items: center;
+    width:100%;
+}
+.like,.dislike
+{
+    display:inline;
+    width: 35px;
+    height: 35px;
+    margin-left: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: none;
+    font-size: 80%
+}
+
+
+.blueLike,
+.like:hover {
+    color: blue;
+}
+
+.redLike,
+.dislike:hover {
+    color: red;
+}
+
+.dislike {
+    transform: rotate(180deg);
+}

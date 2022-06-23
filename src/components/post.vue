@@ -1,56 +1,125 @@
 <template>
-  <article>
-    <div class="header_post">
-      <div class="user_img--post">
-        <img v-bind:src="this.avatar" alt="Image utilisateur" v-if="avatar!='' && avatar!=null">
-        <img src="../assets/logo.png" alt="Avatar de l'utilisateur" v-if="avatar==='' || avatar===null"/>
-        {{this.author}}
-      </div>
-      <h3 v-show="!modeEdit">{{ this.newTitle }}</h3>
-      <input type="text" v-show="modeEdit" v-model="newTitle" />
-      <div class="action_post">
-        <i
-          class="fa-solid fa-pen-to-square"
-          v-on:click="toggleEditPost()"
-          v-if="this.idUser == this.$store.state.idUser || this.$store.state.access=='00001'" 
-        ></i>
-        <i
-          class="fa-solid fa-trash-can"
-          v-on:click="deletePostFromList(index,id)"
-          v-if="this.userId == this.$store.state.idUser || this.$store.state.access=='00001'" 
-        ></i>
+  <article class="conteneur_post">
+    <!-- HEURE ET BLOC "NOUVEAU" -->
+    <p class="info_date_post">
+      Écrit le : <strong>{{ postDateFr }}</strong>
+    </p>
+    <!-- Titre de larticle -->
+    <h3 class="titre_post_utilisateur">
+      <span v-show="!modeEdit">{{ this.newTitle }}</span>
+      <input
+        type="text"
+        class="modification_titre_post"
+        v-show="modeEdit"
+        v-model="newTitle"
+      />
+    </h3>
 
+    <!-- Avatar, nom de l'auteur et boutons d'actions -->
+    <div class="en_tete_post">
+      <div class="info_auteur_post">
+        <img
+          v-bind:src="this.avatar"
+          class="avatar_auteur_post"
+          alt="Image utilisateur"
+          v-if="avatar != '' && avatar != null"
+        />
+        <img
+          src="../assets/logo.png"
+          class="avatar_auteur_post"
+          alt="Avatar par défaut"
+          v-if="avatar === '' || avatar === null"
+        />
+        {{ this.author }}
+      </div>
+      <div class="action_post">
+        <button
+          v-on:click="toggleEditPost()"
+          v-if="
+            this.idUser == this.$store.state.idUser ||
+            this.$store.state.access == '00001'
+          "
+        >
+          <i class="fa-solid fa-pen-to-square modification_post"></i>
+        </button>
+        <button
+          v-on:click="deletePostFromList(index, id)"
+          v-if="
+            this.userId == this.$store.state.idUser ||
+            this.$store.state.access == '00001'
+          "
+        >
+          <i class="fa-solid fa-trash-can suppression_post"></i>
+        </button>
       </div>
     </div>
+    <!-- Contenu du message -->
     <div class="message_post">
-    <p class="image_post" v-if="this.urlImage!=undefined && this.urlImage!=''"><img class="image_post" v-bind:src="this.urlImage" alt="image de l'article">        
-     <i class="fa-solid fa-trash-can supprimerImage"
-          v-on:click="deleteImage"
-        ></i></p>
-    <p class="corpsMessage" v-show="!modeEdit">
-      {{ this.newBody }}
-    </p></div>
+      <div>
+        <figure class="conteneur_principal_image">
+          <img
+            class="image_post"
+            v-if="this.urlImage != undefined && this.urlImage != ''"
+            v-bind:src="this.urlImage"
+            alt="image de l'article"
+          />
+          <button
+            class="supprimer_image"
+            v-if="
+              this.userId == this.$store.state.idUser ||
+              this.$store.state.access == '00001'
+            "
+          >
+            <i class="fa-solid fa-trash-can" v-on:click="deleteImage"></i>
+          </button>
+          <figcaption class="corpsMessage" v-show="!modeEdit">
+            {{ this.newBody }}
+          </figcaption>
+        </figure>
+      </div>
+    </div>
     <!-- MODE EDIT -->
-    <div v-show="modeEdit">
-      <textarea class="textarea__edit" v-model="newBody"></textarea>
+    <div v-show="modeEdit" class="edition_message">
+      <textarea v-model="newBody"></textarea>
       <div class="send_block">
-        <button v-on:click="editPost(id)" class="send_button">Éditer mon message {{index}}</button>
-        <input type="file" class="send_picture" accept=".jpeg,.jpg,png">
-      <!-- <button class="send_picture"><i class="fa-solid fa-image"></i></button> -->
+        <button v-on:click="editPost(id)" class="bouton_envoi">
+          Éditer mon message
+        </button>
+        <button class="bouton_envoi_image">
+          <label class="label_envoi_image">
+            <input
+              class="envoi_image_cache"
+              type="file"
+              accept=".jpeg,.jpg,png"
+            />
+            <i class="fa-solid fa-image"></i>
+          </label>
+        </button>
       </div>
     </div>
     <!-- FIN DU MODE EDIT -->
     <div class="footer_post">
-      <p class="info_date_post">
-         Écrit le : <strong>{{ postDateFr }}</strong>
-      </p>
-      <div class="likeAndCommentary">
-        <i class="fa-solid fa-thumbs-up likeUp" v-bind:class="{blueLike : like===1}" @click="sendLike(1, id)"></i>
-        <i class="fa-solid fa-thumbs-up likeDown" v-bind:class="{redLike : like===0}" @click="sendLike(0, id)"></i>
-        <i class="fa-solid fa-message" @click="showComments(index)" ></i>
-        <commentList v-if="commentVisibility" v-bind:postId="id" v-on:showComments="showComments()"></commentList>
-      </div>
+      <button class="like" @click="sendLike(1, id)">
+        <i
+          class="fa-solid fa-thumbs-up"
+          v-bind:class="{ blueLike: like === 1 }"
+        ></i>
+      </button>
+      <button class="dislike" @click="sendLike(0, id)">
+        <i
+          class="fa-solid fa-thumbs-up"
+          v-bind:class="{ redLike: like === 0 }"
+        ></i>
+      </button>
+      <button @click="showComments(index)">
+        <i class="fa-solid fa-message"></i>
+      </button>
     </div>
+    <commentList
+      v-if="commentVisibility"
+      v-bind:postId="id"
+      v-on:showComments="showComments()"
+    ></commentList>
   </article>
 </template>
 
@@ -84,7 +153,6 @@ export default {
       like: this.initLike,
       newBody: this.body,
       newTitle: this.title,
-      showAll: false,
       postDateFr:
         new Date(this.postDate).toLocaleDateString("fr") +
         " à " +
@@ -93,16 +161,12 @@ export default {
         new Date(this.editDate).toLocaleDateString("fr") +
         " à " +
         new Date(this.postDate).toTimeString().slice(0, 8),
-      commentVisibility: false,
+      commentVisibility: true,
     };
   },
   methods: {
     showComments() {
       this.commentVisibility = !this.commentVisibility;
-    },
-    showAllMessage() {
-      this.showAll = !this.showAll;
-      this.$forceUpdate();
     },
     toggleEditPost() {
       //let file=document.querySelector(".send_button").files[0];
@@ -110,16 +174,20 @@ export default {
     },
     editPost() {
       let image = "";
-      let bouton = document.querySelectorAll(".send_picture")[this.index];
+      let bouton = document.querySelectorAll(".envoi_image_cache")[this.index];
       image = bouton.files;
       this.$emit("editPost", this.id, this.newTitle, this.newBody, image);
       this.toggleEditPost();
     },
     deleteImage() {
-      this.$emit("deleteImage", this.id);
+      if (confirm("Voulez vous vraiment supprimer votre image ?")) {
+        this.$emit("deleteImage", this.id);
+      }
     },
     deletePostFromList(index, id) {
-      this.$emit("deletePostFromList", index, id);
+      if (confirm("Voulez vous vraiment supprimer votre message ?")) {
+        this.$emit("deletePostFromList", index, id);
+      }
     },
     sendLike(valeurLike, id) {
       if (this.like == undefined || this.like == null || this.like === -1) {
@@ -140,7 +208,7 @@ export default {
           this.like = 1;
         }
       }
-            let token = this.$store.state.token + document.cookie.split("=")[1];
+      let token = this.$store.state.token + document.cookie.split("=")[1];
       const infoLike = {
         valeur: valeurLike,
         idPost: id,

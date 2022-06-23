@@ -5,14 +5,14 @@
   <div class="contenantCommentaire">
     <div class="enTeteCommentaire">
       <h2>Commentaires</h2>
-      <i class="fa-solid fa-xmark" v-on:click="fermeture()"></i>
+      <button class="fermeture_commentaire" v-on:click="fermeture()"><i class="fa-solid fa-xmark" ></i></button>
     </div>
     <div class="bloc_nouveau_commentaire">
       <textarea
         class="nouveau_commentaire"
         v-model="nouveauCommentaire"
       ></textarea>
-      <button v-on:click="envoieCommentaire()">
+      <button v-on:click="envoieCommentaire()" class="bouton_envoi_commentaire">
         <i class="fa-solid fa-envelope"></i>
       </button>
     </div>

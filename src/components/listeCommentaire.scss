@@ -1,58 +1,57 @@
-// .contenantCommentaire
-// {
-//     position:fixed;
-//     z-index:5;
-//     top:29%; 
-//     left:16%;
-//     bottom:30%;
-//     right:21%;
-//     display:flex;
-//     flex-direction: column;
-//     align-items:center;
-//     background-color:white;
-//     border:1px solid blue;
-//     border-radius:20px;
-//     padding:1%;
-//     overflow: auto;
-//     button{
-//         border:none;
-//         background-color:inherit;
-//     }
-// }
+$couleur-primaire: #FD2D01;
+$couleur-secondaire: #FFd7d7;
+$couleur-tertiaire : #4E5166;
+$couleur-primaire-opacite: #fd2b0173;
 
-// .enTeteCommentaire
-// {
-//     display:flex;
-//     align-items: center;;
-//     width:100%;
-// }
-// h2
-// {
-// width:100%;
-// text-align:center;
-// }
-// .bloc_nouveau_commentaire
-// {
-//     width:100%;
-//     display:flex;
-//     justify-content:space-between;
-//     align-items:center;
-//     i
-//     {
-//         font-size:140%;
-//         width:3%;
-//         text-align:center;
-//     }
-// }
 
-// .nouveau_commentaire
-// {
-//     width:97%;
-//     border:1px solid black; 
-//     border-radius:20px;
-//     height:35px;
-//     font-size:160%;
-//     font-weight:bold;
-//     padding:10px;
-//     box-shadow :1px 1px 3px 2px lightgray
-// }
+.contenantCommentaire {
+    background-color: $couleur-secondaire;
+    width: 95%;
+    margin-bottom: 20px;
+}
+
+.enTeteCommentaire {
+    width: 100%;
+    display: flex;
+    color: $couleur-tertiaire;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+.fermeture_commentaire {
+    position: absolute;
+    right: 10%;
+    background-color: inherit;
+    border: none;
+    font-size: 20px;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.bloc_nouveau_commentaire {
+    width: 95%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    textarea {
+        width: 90%;
+        height: 50px
+    }
+
+    .bouton_envoi_commentaire {
+        border-radius: 100%;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: inherit;
+        color: $couleur-tertiaire;
+        border: 1px solid $couleur-tertiaire;
+    }
+}
