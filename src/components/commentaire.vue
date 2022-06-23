@@ -1,9 +1,25 @@
 <template>
   <div class="commentaire">
     <div class="enTeteCommentaire">
-      {{ message.auteur }} à écrit le : {{ this.commentaireDateFr }}
+      <div class="auteur_heure">
+        <img
+          v-bind:src="message.avatar"
+          class="avatar_auteur_commentaire"
+          alt="Image auteur"
+          v-if="message.avatar != '' && message.avatar != null"
+        />
+        <img
+          src="../assets/logo.png"
+          class="avatar_auteur_commentaire"
+          alt="Avatar par défaut"
+          v-if="message.avatar === '' || message.avatar === null"
+        />
+        <span class="nom_auteur">{{ message.auteur }}</span> à écrit le :
+        {{ this.commentaireDateFr }}
+      </div>
       <div class="interractionCommentaire">
         <button
+          aria-label="Suppression commentaire"
           v-if="
             this.idUser == this.$store.state.idUser ||
             this.$store.state.access === '00001'
@@ -13,6 +29,7 @@
           <i class="fa-solid fa-trash-can"></i>
         </button>
         <button
+          aria-label="Édition commentaire"
           v-if="
             this.idUser == this.$store.state.idUser ||
             this.$store.state.access === '00001'
@@ -28,20 +45,34 @@
     </div>
     <div class="modificationCommentaire" v-if="editMode">
       <textarea
-        class="nouveau_commentaire"
+        class="edition_commentaire"
         v-model="nouveauCommentaire"
       ></textarea>
-      <button class="send_button" v-on:click="editCommentaire">Éditer</button>
+      <button
+        aria-label="Envoi du commentaire édité"
+        class="bouton_envoi"
+        v-on:click="editCommentaire"
+      >
+        Éditer
+      </button>
     </div>
 
     <div class="interraction_like">
-      <button @click="likeCommentaire(1, message.idCommentaire)" class="like">
+      <button
+        aria-label="Like"
+        @click="likeCommentaire(1, message.idCommentaire)"
+        class="like"
+      >
         <i
           class="fa-solid fa-thumbs-up"
           v-bind:class="{ blueLike: like === 1 }"
         ></i>
       </button>
-      <button @click="likeCommentaire(0, message.idCommentaire)" class="dislike">
+      <button
+        aria-label="Dislike"
+        @click="likeCommentaire(0, message.idCommentaire)"
+        class="dislike"
+      >
         <i
           class="fa-solid fa-thumbs-up"
           v-bind:class="{ redLike: like === 0 }"
@@ -78,7 +109,9 @@ export default {
       this.editMode = !this.editMode;
     },
     deleteCommentaire() {
-      this.$emit("deleteCommentaire", this.message.idCommentaire, this.index);
+      if (confirm("Voulez vous vraiment supprimer votre commentaire ?")) {
+        this.$emit("deleteCommentaire", this.message.idCommentaire, this.index);
+      }
     },
     likeCommentaire(valeurLike, id) {
       if (this.like === undefined || this.like === null || this.like === -1) {
@@ -129,5 +162,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./commentaire.scss">
+<style lang="scss" scoped src="./commentaire.scss">
 </style>

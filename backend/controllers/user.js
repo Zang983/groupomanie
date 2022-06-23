@@ -139,7 +139,11 @@ exports.parametre = (req, res, next) => {
       db.user.findOne({
         where: { idUser: userId }
       }).then(resultat => {
-        let url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
+        let url_avatar=""
+        if(resultat.url_avatar != null && resultat.url_avatar!="")
+        {
+        url_avatar = "./images" + resultat.url_avatar.split("/images")[1]
+        }
 
         if (fs.existsSync(url_avatar)) {
           fs.unlink(url_avatar, (err) => {

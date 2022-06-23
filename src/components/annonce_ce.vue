@@ -1,7 +1,7 @@
 <template>
   <div class="ce_posts_container">
     <h2>
-            <button class="bouton_gestion_ce">
+      <button class="bouton_gestion_ce" aria-label="Nouvelle annonce CE">
         <i
           class="fa-solid fa-envelope nouveau_ce"
           v-if="this.$store.state.access === '00001'"
@@ -9,14 +9,23 @@
         ></i>
       </button>
       Annonce C.E.
-      <button v-on:click="getAnnonceList()" class="bouton_gestion_ce">
+      <button
+        aria-label="Actualisation liste"
+        v-on:click="getAnnonceList()"
+        class="bouton_gestion_ce"
+      >
         <i class="fa-solid fa-arrows-rotate rafraichissement_ce"></i>
       </button>
-
     </h2>
     <div class="envoiAnnonce" v-show="toggleNouvelleAnnonce">
       <textarea v-model="nouvelleAnnonce"></textarea>
-      <button v-on:click="newAnnounce" class="bouton_envoi">Envoyer</button>
+      <button
+        aria-label="Envoi annonce"
+        v-on:click="newAnnounce"
+        class="bouton_envoi"
+      >
+        Envoyer
+      </button>
     </div>
     <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
       <p class="message_post_ce" v-show="!annonce.editMode">
@@ -28,6 +37,7 @@
         v-model="annonce.message"
       ></textarea>
       <button
+        aria-label="Edition message CE"
         class="bouton_envoi"
         v-on:click="editMessageCE(index)"
         v-show="annonce.editMode"
@@ -35,16 +45,19 @@
         Éditer
       </button>
       <div class="administration_ce">
-        <button>
-        <i
-          class="fa-solid fa-pen-to-square edition_ce"
+        <button
+          aria-label="Edition message CE"
           v-on:click="toggleEditMode(index)"
-        ></i></button>       <button>
-        <i
-          class="fa-solid fa-trash-can suppression_ce"
+        >
+          <i class="fa-solid fa-pen-to-square edition_ce"></i>
+        </button>
+        <button
+          aria-label="Suppression message"
           v-if="annonce.idCE"
           v-on:click="deleteMessageCE(index)"
-        ></i></button>
+        >
+          <i class="fa-solid fa-trash-can suppression_ce"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -86,7 +99,7 @@ export default {
 
     toggleEditMode(index) {
       this.annonceList[index].editMode = !this.annonceList[index].editMode;
-      this.$forceUpdate();//vue ne detecte pas le changement dans le tableau
+      this.$forceUpdate(); //vue ne detecte pas le changement dans le tableau
     },
     getAnnonceList() {
       let token = this.$store.state.token + document.cookie.split("=")[1];

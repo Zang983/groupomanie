@@ -15,7 +15,6 @@
     "nodemon": "^2.0.16",
     "sass": "^1.51.0",
     "vue": "^2.6.14",
-    "vue-router": "^3.5.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

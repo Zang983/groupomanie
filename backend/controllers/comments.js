@@ -49,7 +49,7 @@ exports.getComments = (req, res, next) => {
 
     db.commentaire.findAll({
         include: [
-            { model: db.user, attributes: ["firstname", "lastname"] },
+            { model: db.user, attributes: ["firstname", "lastname","url_avatar"] },
             { model: db.like, attributes: ["idUser", "valeur"] }
         ],
         where: {

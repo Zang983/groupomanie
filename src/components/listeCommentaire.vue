@@ -2,19 +2,19 @@
 
 
 <template>
-  <div class="contenantCommentaire">
-    <div class="enTeteCommentaire">
+  <div class="contenant_commentaire">
+    <div class="en_tete_bloc_commentaire">
       <h2>Commentaires</h2>
-      <button class="fermeture_commentaire" v-on:click="fermeture()"><i class="fa-solid fa-xmark" ></i></button>
+      <button class="fermeture_commentaire" v-on:click="fermeture()" aria-label="Fermer les commentaires"><i class="fa-solid fa-xmark" ></i></button>
     </div>
     <div class="bloc_nouveau_commentaire">
+      <label>Votre commentaire :
       <textarea
         class="nouveau_commentaire"
         v-model="nouveauCommentaire"
-      ></textarea>
-      <button v-on:click="envoieCommentaire()" class="bouton_envoi_commentaire">
-        <i class="fa-solid fa-envelope"></i>
-      </button>
+      ></textarea></label>
+              <button v-on:click="envoieCommentaire()" class="bouton_envoi" aria-label="Envoi commentaire">Envoyer</button>
+
     </div>
     <commentaire
       v-for="(message, index) of listeCommentaire"
@@ -59,8 +59,8 @@ export default {
               }
             }
             let nouveauCommentaire = {
-              auteur:
-                commentaire.user.firstname + " " + commentaire.user.lastname,
+              auteur: commentaire.user.firstname + " " + commentaire.user.lastname,
+              avatar:commentaire.user.url_avatar,
               userId: commentaire.idUser,
               valeurLike: valeurLike,
               idCommentaire: commentaire.idCommentaire,
@@ -101,7 +101,7 @@ export default {
           console.log(error);
         });
     },
-    deleteCommentaire(id, index) {
+    deleteCommentaire(id) {
       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/comment/:id=${id}`;
       let corps = {
@@ -115,7 +115,7 @@ export default {
           headers: { authorization: `Bearer ${token}` },
         })
         .then(() => {
-          this.listeCommentaire.splice(index, 1);
+          this.getCommentaire();
         })
         .catch((error) => console.log(error));
     },

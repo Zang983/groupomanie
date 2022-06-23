@@ -25,9 +25,9 @@
         </label>
       </div>
       <div class="bloc_bouton_nouveau_post">
-        <button v-on:click="post()" class="bouton_envoi">Envoyer</button>
+        <button v-on:click="post()" class="bouton_envoi" aria-label="Envoi article">Envoyer</button>
         <label for="send_picture"
-          ><button class="bouton_envoi bouton_envoi_image">
+          ><button aria-label="Insertion image" class="bouton_envoi bouton_envoi_image">
             Image<input
               type="file"
               name="send_picture"

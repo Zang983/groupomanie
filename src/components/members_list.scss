@@ -3,7 +3,7 @@ $couleur-secondaire:#FFd7d7;
 $couleur-tertiaire : #4E5166;
 $couleur-primaire-opacite:#fd2b0173;
 
-.liste_membre
+.conteneur_principal
 {
     width:15%;
     background-color:$couleur-secondaire;
@@ -29,22 +29,33 @@ $couleur-primaire-opacite:#fd2b0173;
     text-decoration:underline;
     cursor:pointer;
 }
-.carte_visite
-{
-    border:1px solid lightblue;
-    position:relative;
-    left:98%;
-    width:200px;
-    height:300px;
-    top:-150px;
-
-    background-color:white;
-    box-shadow:2px 2px 3px 3px gray;
-    padding:10px;
-    margin:10px;
-    z-index:1;
+.profil{
+    margin-top:20px;
 }
-.fermeture_modale:hover
+.fermeture_profil
+{
+    border:none;
+    background-color:inherit; 
+    position:absolute;
+    right:10%;
+    top:20px;
+    font-size:20px;
+}
+.fermeture_profil:hover
 {
 cursor:pointer
+}
+
+.avatar_profil
+{
+    width:100px; 
+    height:100px;
+    object-fit:cover;
+    border-radius:100%;
+}
+.nom_profil
+{
+    color:$couleur-tertiaire;
+    text-decoration: underline;
+    font-size:125%;
 }

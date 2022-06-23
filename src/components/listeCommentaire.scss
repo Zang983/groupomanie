@@ -4,13 +4,13 @@ $couleur-tertiaire : #4E5166;
 $couleur-primaire-opacite: #fd2b0173;
 
 
-.contenantCommentaire {
+.contenant_commentaire {
     background-color: $couleur-secondaire;
     width: 95%;
     margin-bottom: 20px;
 }
 
-.enTeteCommentaire {
+.en_tete_bloc_commentaire {
     width: 100%;
     display: flex;
     color: $couleur-tertiaire;
@@ -34,24 +34,12 @@ $couleur-primaire-opacite: #fd2b0173;
 .bloc_nouveau_commentaire {
     width: 95%;
     margin: auto;
-    display: flex;
     justify-content: space-around;
     align-items: center;
-
     textarea {
-        width: 90%;
-        height: 50px
-    }
-
-    .bouton_envoi_commentaire {
-        border-radius: 100%;
-        width: 35px;
-        height: 35px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: inherit;
-        color: $couleur-tertiaire;
-        border: 1px solid $couleur-tertiaire;
+        width: 95%;
+        height: 60px;
+        margin-top: 1%;
+        border-radius: 10px;
     }
 }

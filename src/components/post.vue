@@ -34,6 +34,7 @@
       </div>
       <div class="action_post">
         <button
+        aria-label="Édition de l'article"
           v-on:click="toggleEditPost()"
           v-if="
             this.idUser == this.$store.state.idUser ||
@@ -43,6 +44,7 @@
           <i class="fa-solid fa-pen-to-square modification_post"></i>
         </button>
         <button
+        aria-label="Suppression de l'article"
           v-on:click="deletePostFromList(index, id)"
           v-if="
             this.userId == this.$store.state.idUser ||
@@ -56,7 +58,8 @@
     <!-- Contenu du message -->
     <div class="message_post">
       <div>
-        <figure class="conteneur_principal_image">
+        <figure>
+          <div class="conteneur_principal_image" v-if="this.urlImage != undefined && this.urlImage != ''" >
           <img
             class="image_post"
             v-if="this.urlImage != undefined && this.urlImage != ''"
@@ -64,14 +67,17 @@
             alt="image de l'article"
           />
           <button
+            aria-label="Suppression image"
             class="supprimer_image"
+            v-on:click="deleteImage"
             v-if="
               this.userId == this.$store.state.idUser ||
-              this.$store.state.access == '00001'
-            "
+              this.$store.state.access == '00001'"
+       
           >
-            <i class="fa-solid fa-trash-can" v-on:click="deleteImage"></i>
+            <i class="fa-solid fa-trash-can" ></i>
           </button>
+          </div>
           <figcaption class="corpsMessage" v-show="!modeEdit">
             {{ this.newBody }}
           </figcaption>
@@ -82,10 +88,10 @@
     <div v-show="modeEdit" class="edition_message">
       <textarea v-model="newBody"></textarea>
       <div class="send_block">
-        <button v-on:click="editPost(id)" class="bouton_envoi">
+        <button aria-label="Envoi message édité" v-on:click="editPost(id)" class="bouton_envoi">
           Éditer mon message
         </button>
-        <button class="bouton_envoi_image">
+        <button aria-label="Bouton d'envoi d'image" class="bouton_envoi_image">
           <label class="label_envoi_image">
             <input
               class="envoi_image_cache"
@@ -99,19 +105,19 @@
     </div>
     <!-- FIN DU MODE EDIT -->
     <div class="footer_post">
-      <button class="like" @click="sendLike(1, id)">
+      <button aria-label="Like" class="like" @click="sendLike(1, id)">
         <i
           class="fa-solid fa-thumbs-up"
           v-bind:class="{ blueLike: like === 1 }"
         ></i>
       </button>
-      <button class="dislike" @click="sendLike(0, id)">
+      <button aria-label="Dislike" class="dislike" @click="sendLike(0, id)">
         <i
           class="fa-solid fa-thumbs-up"
           v-bind:class="{ redLike: like === 0 }"
         ></i>
       </button>
-      <button @click="showComments(index)">
+      <button aria-label="Voir commentaires de l'article" @click="showComments(index)">
         <i class="fa-solid fa-message"></i>
       </button>
     </div>
@@ -161,7 +167,7 @@ export default {
         new Date(this.editDate).toLocaleDateString("fr") +
         " à " +
         new Date(this.postDate).toTimeString().slice(0, 8),
-      commentVisibility: true,
+      commentVisibility: false,
     };
   },
   methods: {
@@ -230,5 +236,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./post.scss">
+<style lang="scss" scoped src="./post.scss">
 </style>
