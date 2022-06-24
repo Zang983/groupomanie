@@ -2,18 +2,13 @@
   <div class="parametre">
     <div class="header_parametre">
       <div class="avatar_utilisateur_parametre">
-        <button
-          class="edition_image"
-          aria-label="Edition image"
-          v-if="
-            this.userId == this.$store.state.idUser ||
-            this.$store.state.access == '00001'">
+        <button class="edition_image" aria-label="Edition image">
           <label>
             <input
               type="file"
               id="imageUser"
               class="invisible"
-              accept=".jpeg,.jpg,png" />
+              accept=".jpeg,.jpg,.png" />
             <i class="fa-solid fa-pen-to-square"></i
           ></label>
         </button>
@@ -32,36 +27,20 @@
           class="supprimer_image"
           aria-label="Suppression image"
           v-on:click="supprimeAvatar"
-          v-if="
-            this.userId == this.$store.state.idUser ||
-            this.$store.state.access == '00001'
-          "
         >
           <i class="fa-solid fa-trash-can"></i>
         </button>
       </div>
       <h2>
-        Vos paramètres
+        {{ this.prenom }} {{ this.nom }}
         <i class="fa-solid fa-xmark" v-on:click="fermeture()"></i>
       </h2>
     </div>
 
     <form>
-      <label for="firstname">Prénom :</label
-      ><input
-        type="text"
-        id="firstname"
-        v-model="prenom"
-        autocomplete="new-username"
-      />
-      <label for="lastname">Nom : </label
-      ><input
-        type="text"
-        id="lastname"
-        v-model="nom"
-        autocomplete="new-username"
-      />
-      <label for="telephone">Téléphone :</label>
+      <label for="telephone" title="Dix numéros consécutifs."
+        >Téléphone* :</label
+      >
       <input
         type="tel"
         id="telephone"
@@ -70,7 +49,11 @@
       />
       <label for="description">Description :</label>
       <textarea id="description" v-model="description"></textarea>
-      <label for="password1">Nouveau mot de passe :</label>
+      <label
+        for="password1"
+        title="Une majuscule, un chiffre et 8 caractères minimum"
+        >Nouveau mot de passe* :</label
+      >
       <input
         type="password"
         autocomplete="new-password"
@@ -114,7 +97,7 @@ export default {
       mdp1: "",
       mdp2: "",
       email: this.$store.state.email,
-      telephone: this.$store.state.telephone,
+      telephone: "",
       image2: "",
       avatar: "",
     };
@@ -130,48 +113,49 @@ export default {
           this.nom = value.data.lastName;
           this.description = value.data.userDescription;
           this.avatar = value.data.url_avatar;
+          this.telephone = value.data.telephone;
         })
         .catch((error) => console.log("error\n" + error));
     },
     majProfil() {
-      let token = this.$store.state.token + document.cookie.split("=")[1];
-      let image = document.querySelector("#imageUser").files[0];
-      let requestPath = `http://localhost:3000/api/auth/parametre/id=${this.$store.state.idUser}`;
-      let infoRequete = new FormData();
-      infoRequete.append("firstname", this.prenom);
-      infoRequete.append("lastname", this.nom);
-      infoRequete.append("userDescription", this.description);
-      infoRequete.append("pwd1", this.mdp1);
-      infoRequete.append("pwd2", this.mdp2);
-      infoRequete.append("image", image);
-      infoRequete.append("telephone", this.telephone);
-      axios
-        .put(requestPath, infoRequete, {
-          headers: { authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          alert("Vos modifications sont enregistrées");
-          this.getMyProfil();
-        })
-        .catch((error) => console.log(error));
-    },
-    supprimerCompte() {
-      if (confirm("Voulez-vous vraiment supprimez votre compte?")) {
+      if (this.mdp1 != this.mdp2) {
+        alert("Mots de passe incorrect");
+      } else {
         let token = this.$store.state.token + document.cookie.split("=")[1];
-        let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;
-        let corps = {
-          userId: this.$store.state.idUser,
-        };
+        let image = document.querySelector("#imageUser").files[0];
+        let requestPath = `http://localhost:3000/api/auth/parametre/id=${this.$store.state.idUser}`;
+        let infoRequete = new FormData();
+        infoRequete.append("userDescription", this.description);
+        infoRequete.append("pwd1", this.mdp1);
+        infoRequete.append("pwd2", this.mdp2);
+        infoRequete.append("image", image);
+        infoRequete.append("telephone", this.telephone);
         axios
-          .delete(requestPath, {
-            data: { corps },
+          .put(requestPath, infoRequete, {
             headers: { authorization: `Bearer ${token}` },
           })
           .then(() => {
-            this.showModale();
+            alert("Vos modifications sont enregistrées");
+            this.$emit("fermeture");
           })
           .catch((error) => console.log(error));
       }
+    },
+    supprimerCompte() {
+      let token = this.$store.state.token + document.cookie.split("=")[1];
+      let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;
+      let corps = {
+        userId: this.$store.state.idUser,
+      };
+      axios
+        .delete(requestPath, {
+          data: { corps },
+          headers: { authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          this.showModale();
+        })
+        .catch((error) => console.log(error));
     },
     supprimeAvatar() {
       let token = this.$store.state.token + document.cookie.split("=")[1];
@@ -187,7 +171,10 @@ export default {
         .then(() => {
           this.getMyProfil();
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          alert("Problème lors de la suppresion de votre compte");
+          console.log(error);
+        });
     },
     fermeture() {
       this.$emit("fermeture");

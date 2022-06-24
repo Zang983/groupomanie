@@ -139,7 +139,16 @@ label {
         color: white;
     }
 }
-
+.confirmation_inscription,.probleme_connexion
+{
+    color:red;
+    span{
+        text-decoration: underline;
+        :hover{
+            cursor:pointer;
+        }
+    }
+}
 .erreur_formulaire {
     color: red;
     margin: 10px 0;

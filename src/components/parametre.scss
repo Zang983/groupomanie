@@ -30,7 +30,7 @@ $couleur-primaire-opacite: #fd2b0173;
     position:relative;
     img {
         width: 180px;
-        max-height:180px;
+        height:180px;
         object-fit: cover;
         border-radius: 100%;
         margin-right:20px;
@@ -90,7 +90,6 @@ $couleur-primaire-opacite: #fd2b0173;
     background-color: white;
     border-radius: 100%;
     border: 1px solid black;
-
 }
 
 .header_parametre

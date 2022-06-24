@@ -10,7 +10,7 @@
         <cePosts></cePosts>
       </main>
     </div>
-    <parametre v-if="showParametre" @fermeture="toggleParametre"></parametre>
+    <parametre v-if="showParametre" @fermeture="toggleParametre" @showModale="showModale"></parametre>
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
   methods: {
     checkCookie(){
       setTimeout(this.checkCookie,10000);
+     
       if(document.cookie.length===0)
       {
         this.show=false;

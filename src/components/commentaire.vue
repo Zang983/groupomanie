@@ -9,7 +9,7 @@
           v-if="message.avatar != '' && message.avatar != null"
         />
         <img
-          src="../assets/logo.png"
+          src="../assets/images/defaultProfil.jpg"
           class="avatar_auteur_commentaire"
           alt="Avatar par défaut"
           v-if="message.avatar === '' || message.avatar === null"

@@ -38,8 +38,8 @@ exports.deletePost = (req, res, next) => {
     if (userId == req.body.corps.userId || decodedToken.isAdmin === 1) {
         db.post.findOne({ where: { idPost: req.body.corps.id } })
             .then(result => {
-                if(result===null){
-                    return res.status(500).json({message:"La nature n'aime pas le vide"})
+                if (result === null) {
+                    return res.status(500).json({ message: "La nature n'aime pas le vide" })
                 }
                 if (decodedToken.isAdmin) {
                     userId = result.idUser
@@ -99,54 +99,62 @@ exports.updateAPost = (req, res, next) => {
                 where: { idPost: req.body.idPost }
             })
                 .then(resultat => {
-                    if (!resultat.url_image == "") {
-                        let urlImage = "./images" + resultat.url_image.split("/images")[1]
-                        if (fs.existsSync(urlImage)) {
-                            fs.unlink(urlImage, (err) => {
-                                if (err) throw err;
-                            })
+                    if (resultat != null) {
+                        if (!resultat.url_image == "") {
+                            let urlImage = "./images" + resultat.url_image.split("/images")[1]
+                            if (fs.existsSync(urlImage)) {
+                                fs.unlink(urlImage, (err) => {
+                                    if (err) throw err;
+                                })
+                            }
+                            db.post.update({
+                                url_image: "",
+                            }, {
+                                where: { idpost: req.body.idPost }
+                            }).then(() => { return res.status(203).json({ message: "Image supprimée" }) })
                         }
-                        db.post.update({
-                            url_image: "",
-                        }, {
-                            where: { idpost: req.body.idPost }
-                        }).then(() => { return res.status(203).json({ message: "Image supprimée" }) })
                     }
                 })
         }
         else {
-           /*
-           Récupération du chemin de l'image, si cette dernière existe on la supprimer s'il y'a un nouveau fichier. Sinon on garde la même
-           */
+            /*
+            Récupération du chemin de l'image, si cette dernière existe on la supprimer s'il y'a un nouveau fichier. Sinon on garde la même
+            */
             let imageUrl = "";
             db.post.findOne({
                 attributes: ["url_image"],
                 where: { idPost: req.body.idPost }
             })
                 .then(resultat => {
-                    if (resultat.url_image != "") {
-                        imageUrl = resultat.url_image;
-                    }
-                    if (req.file != undefined) {
-                        let fichierASupprimer = "./images" + resultat.url_image.split("/images")[1]
-                        if (resultat.url_image != "" && fs.existsSync(fichierASupprimer)) {
-                            fs.unlink(fichierASupprimer, (err) => {
-                            })
+                    if (resultat != null) {
+                        console.log(resultat)
+                        if (resultat.url_image != "") {
+                            imageUrl = resultat.url_image;
                         }
-                        imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-                    }
-                    db.post.update({
-                        titre: req.body.title,
-                        contenu: req.body.body,
-                        url_image: imageUrl,
-                        dateDernierEdit: Sequelize.fn('NOW')
-                    }, {
-                        where: {
-                            idPost: req.body.idPost,
+                        if (req.file != undefined) {
+                            let fichierASupprimer = "./images" + resultat.url_image.split("/images")[1]
+                            if (resultat.url_image != "" && fs.existsSync(fichierASupprimer)) {
+                                fs.unlink(fichierASupprimer, (err) => {
+                                })
+                            }
+                            imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                         }
-                    }).then(result => res.status(201).json({ result }))
-                        .catch(error => res.status(500).json({ error }))
-                })
+                        db.post.update({
+                            titre: req.body.title,
+                            contenu: req.body.body,
+                            url_image: imageUrl,
+                            dateDernierEdit: Sequelize.fn('NOW')
+                        }, {
+                            where: {
+                                idPost: req.body.idPost,
+                            }
+                        }).then(result => res.status(201).json({ result }))
+                            .catch(error => res.status(500).json({ error }))
+                    } else {
+                        return res.status(404).json("Le post que vous tentez de modifier est inexistant.")
+                    }
+                }
+                )
         }
     }
     else {

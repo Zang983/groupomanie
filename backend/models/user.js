@@ -2,8 +2,8 @@ module.exports=(sequelize,DataTypes)=>
 {
     const User = sequelize.define("user",{
         idUser:{ type: DataTypes.INTEGER, primaryKey: true },
-        firstName:DataTypes.STRING,
-        lastName:DataTypes.STRING,
+        firstname:DataTypes.STRING,
+        lastname:DataTypes.STRING,
         password:DataTypes.STRING,
         url_avatar:{type : DataTypes.STRING},
         fonction:DataTypes.STRING,

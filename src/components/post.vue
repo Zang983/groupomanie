@@ -96,7 +96,7 @@
             <input
               class="envoi_image_cache"
               type="file"
-              accept=".jpeg,.jpg,png"
+              accept=".jpeg,.jpg,.png"
             />
             <i class="fa-solid fa-image"></i>
           </label>

@@ -13,8 +13,11 @@
             class="titre_nouveau_post"
             placeholder="Votre titre"
         /></label>
+        <p class="erreur_titre" v-if="erreur_titre">
+          Champ obligatoire, 60 caractères maximum
+        </p>
       </div>
-      <div class="contenu_nouvea_message">
+      <div class="contenu_nouveau_message">
         <label>
           <textarea
             v-model="newMessage.body"
@@ -25,16 +28,24 @@
         </label>
       </div>
       <div class="bloc_bouton_nouveau_post">
-        <button v-on:click="post()" class="bouton_envoi" aria-label="Envoi article">Envoyer</button>
-        <label for="send_picture"
-          ><button aria-label="Insertion image" class="bouton_envoi bouton_envoi_image">
-            Image<input
-              type="file"
-              name="send_picture"
+        <button
+          v-on:click="post()"
+          class="bouton_envoi"
+          aria-label="Envoi article"
+        >
+          Envoyer
+        </button>
+        <button aria-label="Bouton d'envoi d'image" class="bouton_envoi_image">
+          <label class="label_envoi_image">
+            <input
+              class="envoi_image_cache"
               id="send_picture"
-              accept=".jpeg,.jpg,png"
-            /></button
-        ></label>
+              type="file"
+              accept=".jpeg,.jpg,.png"
+            />
+            <i class="fa-solid fa-image"></i>
+          </label>
+        </button>
 
         <!-- <i class="fa-solid fa-image"></i> -->
       </div>
@@ -87,15 +98,16 @@ export default {
     post,
   },
   methods: {
+    //On reset les champs à chaque nouveau post.
     newPost() {
       this.newMessage.showIt = !this.newMessage.showIt;
       this.newMessage.body = "";
       this.newMessage.title = "";
     },
+    //On récupére la liste des posts pour la page voulue.
     getListPost(page) {
       this.pageActuelle = page;
-      let numeroRequete = this.$store.state.numeroRequete;
-      let requestPath = `http://localhost:3000/api/posts/post/requete=${numeroRequete}/page=${page}`;
+      let requestPath = `http://localhost:3000/api/posts/post/page=${page}`;
       let promiseThis = this;
       this.posts = [];
       let token = this.$store.state.token + document.cookie.split("=")[1];
@@ -140,6 +152,7 @@ export default {
           console.log(err);
         });
     },
+    //On supprime un post
     deletePostFromList(index, id) {
       let requestPath = `http://localhost:3000/api/posts/post/delete/id=${id}`;
       let token = this.$store.state.token + document.cookie.split("=")[1];
@@ -160,6 +173,7 @@ export default {
           this.getListPost(this.pageActuelle);
         });
     },
+    //Suppression exclusive de l'image
     deleteImage(id) {
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
       let token = this.$store.state.token + document.cookie.split("=")[1];
@@ -181,6 +195,7 @@ export default {
           this.getListPost(this.pageActuelle);
         });
     },
+    //Edition du post
     editPost(id, newTitle, newBody, image) {
       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/posts/post/update/${id}`;
@@ -200,36 +215,43 @@ export default {
         })
         .then(() => {
           this.getListPost(this.pageActuelle);
-        });
+        })
+        .catch(this.getListPost(this.pageActuelle));
       this.editMode = false;
     },
+    //Ajout d'un nouveau post.
     post() {
       let requestPath = "http://localhost:3000/api/posts/post";
       let infoPost = {};
       this.author = this.$store.state.userName;
       let image = document.querySelector("#send_picture").files[0];
       let token = this.$store.state.token + document.cookie.split("=")[1];
-
-      infoPost = new FormData();
-      infoPost.append("author", this.$store.state.userName);
-      infoPost.append("body", this.newMessage.body);
-      infoPost.append("title", this.newMessage.title);
-      infoPost.append("users_idUser", this.$store.state.idUser);
-      infoPost.append("image", image);
-      axios
-        .post(requestPath, infoPost, {
-          headers: { authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          this.getListPost(this.pageActuelle);
-          this.newPost();
-        })
-        .catch((error) => console.log(error));
+      if (this.newMessage.title.length <= 60 && this.newMessage.title != "") {
+        this.erreur_titre=false;
+        infoPost = new FormData();
+        infoPost.append("author", this.$store.state.userName);
+        infoPost.append("body", this.newMessage.body);
+        infoPost.append("title", this.newMessage.title);
+        infoPost.append("users_idUser", this.$store.state.idUser);
+        infoPost.append("image", image);
+        axios
+          .post(requestPath, infoPost, {
+            headers: { authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            this.getListPost(this.pageActuelle);
+            this.newPost();
+          })
+          .catch((error) => console.log(error));
+      } else {
+        this.erreur_titre = true;
+      }
     },
   },
 
   data() {
     return {
+      erreur_titre: false,
       pageActuelle: 1,
       nombrePage: 0,
       editMode: "",

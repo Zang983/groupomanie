@@ -25,14 +25,16 @@
           v-if="this.infoMembre.avatar != '' && this.infoMembre.avatar != null"
         />
         <img
-          src="../assets/logo.png"
+          src="../assets/images/defaultProfil.jpg"
           class="avatar_profil"
           alt="Avatar par défaut"
           v-if="this.infoMembre.avatar === '' || this.infoMembre.avatar === null"
         />
       <h3 class="nom_profil">{{ infoMembre.firstname }} {{ infoMembre.lastname }}</h3>
-      {{ infoMembre.email }} {{ infoMembre.description
-      }}{{ infoMembre.telephone }}
+      <p class="email_profil"><i class="fa-solid fa-at"></i>{{ infoMembre.email }}</p>
+       <p class="telephone_profil"><i class="fa-solid fa-phone"></i>{{ infoMembre.telephone }}</p>
+      <p class="description_profil">{{ infoMembre.description}}</p>
+     
     </div>
   </div>
 </template>

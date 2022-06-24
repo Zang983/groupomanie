@@ -153,7 +153,8 @@ $couleur-primaire-opacite: #fd2b0173;
 .conteneur_principal_image {
 
     position: relative;
-    width: 100%;
+    width: fit-content;
+    max-width:100%;
     margin: 25px auto;
 }
 
@@ -186,6 +187,7 @@ $couleur-primaire-opacite: #fd2b0173;
 
 //Corps principal du message
 .corpsMessage {
+    white-space:pre-wrap;
     color: white;
 }
 

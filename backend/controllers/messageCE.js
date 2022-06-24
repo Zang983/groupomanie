@@ -16,7 +16,7 @@ exports.sendCE = (req, res, next) => {
                         message: req.body.body,
                         idUser: req.body.idUser,
                         visible: true
-                    }).then(() => { res.status(200).json(message = "Annonce créée") })
+                    }).then(() => { res.status(200).json({message : "Annonce créée"}) })
                         .catch(error => res.status(500).json(error))
                 }
                 else {
