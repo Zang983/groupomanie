@@ -5,6 +5,7 @@ $couleur-primaire-opacite:#fd2b0173;
 //Conteneur global des messages CE
 .ce_posts_container
 {
+
     width:20%;
     margin-top:30px;
     border:3px solid $couleur-tertiaire;
@@ -16,11 +17,25 @@ $couleur-primaire-opacite:#fd2b0173;
     overflow-y:auto;
     flex-direction: column;
     align-items: center;
+    @media screen and (max-width: 1023px) {
+        flex-direction:row;
+        flex-wrap:wrap;
+        width:95%;
+        margin:auto;
+        margin-top:50px;
+        height:fit-content;
+    }
 }
 h2
 {
     display:flex;
     align-items:center;
+    @media screen and (max-width: 1023px) {
+        margin:auto;
+    }   
+
+    
+
 }
 //Bouton permettant l'envoi d'un nouveau message ou le rafraichissement
 .bouton_gestion_ce 
@@ -49,13 +64,32 @@ textarea
     border:1px solid black;
 }
 /*Conteneur message et paragraphe*/
+.liste_message_ce
+{
+    width:90%;
+    margin:0;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    @media screen and (max-width: 1023px) {
+        flex-direction: row;
+        flex-wrap:wrap;
+        justify-content: space-between;
+        margin: auto;
+        margin-top:20px;
+    }
+    @media screen and (max-width: 590px) {
+        justify-content: center;
+    }
+}
 .post_CE
 {
+    overflow: hidden;
     border:3px dotted  $couleur-primaire;
     background-color:$couleur-tertiaire;
     color:$couleur-secondaire;
-    margin-bottom : 20px;  
-    width:90%;
+    margin-bottom : 20px; 
+    width:calc(100% - 6px);
     position:relative;
     p
     {
@@ -63,7 +97,14 @@ textarea
         text-align:center;
         white-space:break-spaces;
     }
+    @media screen and (max-width: 1023px) {
+        max-width:30%;
+    }
+    @media screen and (max-width: 590px) {
+        max-width:80%;
+    }
 }
+
 
 //Bloc contenant les boutons d'édition et suppression
 .administration_ce

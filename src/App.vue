@@ -4,7 +4,8 @@
     <div id="hideBeforeConnexion" v-if="show == true && showParametre==false">
       <banniere @showModale="showModale" @showParametre="toggleParametre"></banniere>
       <blague></blague>
-      <main>
+      <main class="principal_corps_page">
+        
         <membersList></membersList>
         <posts @updateListPost="updateListPost" :key="listPostVersion"></posts>
         <cePosts></cePosts>
@@ -111,6 +112,17 @@ main
   justify-content: space-around;
   margin-top:1%;
   background-color:$couleur-primaire-opacite;
+        @media screen and (max-width: 1023px) {
+        padding-top:20px;
+        padding-bottom:20px;
+        align-content: center;
+        flex-direction: column;
+        flex-wrap:wrap;
+    }
+                @media screen and (max-width: 590px) {
+                width:100%;
+                margin-top:0;
+            }
 
 }
 

@@ -43,5 +43,9 @@ db.like.belongsTo(db.commentaire,{foreignKey:"idCommentaire",onDelete:"cascade"}
 db.user.hasMany(db.like,{foreignKey:"idUser",onDelete:"cascade"})
 db.like.belongsTo(db.user,{foreignKey:"idUser",onDelete:"cascade"})
 
+db.user.hasMany(db.annonce,{foreignKey:"idUser", onDelete:"cascade"})
+db.annonce.belongsTo(db.user,{foreignKey:"idUser", onDelete:"cascade"});
+
+
 
 module.exports=db

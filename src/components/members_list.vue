@@ -2,13 +2,10 @@
   <div class="conteneur_principal" >
   <div class="liste_membre" v-if="profilUnique===false">
     <h2>Liste des membres</h2>
-    <div
-      class="membre"
-      v-for="(member, index) of listMembers"
-      v-bind:key="index"
-      v-on:click="getMemberInformation(member.idUser)"
-    >
-      {{ member.firstName }} {{ member.lastName }}
+    <div class="conteneur_membre">
+      <div class="membre" v-for="(member,index) of listMembers" v-bind:key="index" >
+      <p v-bind:title="member.firstName +' ' + member.lastName" v-on:click="getMemberInformation(member.idUser)">{{ member.firstName }} {{ member.lastName }}</p>
+      </div>
     </div>
     </div>
     <!--Partie carte de visite-->
@@ -30,8 +27,8 @@
           alt="Avatar par défaut"
           v-if="this.infoMembre.avatar === '' || this.infoMembre.avatar === null"
         />
-      <h3 class="nom_profil">{{ infoMembre.firstname }} {{ infoMembre.lastname }}</h3>
-      <p class="email_profil"><i class="fa-solid fa-at"></i>{{ infoMembre.email }}</p>
+      <h3 class="nom_profil" v-bind:title="infoMembre.firstname +' ' + infoMembre.lastname">{{ infoMembre.firstname }} {{ infoMembre.lastname }}</h3>
+      <p class="email_profil"><a v-bind:href="'mailto:' + infoMembre.email">Envoyer un mail</a></p>
        <p class="telephone_profil"><i class="fa-solid fa-phone"></i>{{ infoMembre.telephone }}</p>
       <p class="description_profil">{{ infoMembre.description}}</p>
      
@@ -46,6 +43,7 @@ export default {
   name: "members-list",
 
   methods: {
+
     getListMembers() {
       let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = "http://localhost:3000/api/auth/userList";

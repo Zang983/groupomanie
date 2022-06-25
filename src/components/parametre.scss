@@ -4,6 +4,7 @@ $couleur-tertiaire : #4E5166;
 $couleur-primaire-opacite: #fd2b0173;
 
 .parametre {
+    position:relative;
     border: 1px solid white;
     width: 45%;
     margin: auto;
@@ -97,6 +98,28 @@ $couleur-primaire-opacite: #fd2b0173;
     display:flex;
     align-items: center;
     justify-content: flex-start;
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+        
+    }
+}
+.fermeture_parametre
+{
+    background-color:inherit;
+    border:none;
+    display:flex;
+    right:50px;
+    justify-content: center;
+    align-items: center;
+    position:absolute;
+    width:20px;
+    height:20px;
+    font-size:100%;
+    @media screen and (max-width: 768px) {
+       right:20px;
+        
+    }
+
 }
 h2 {
 

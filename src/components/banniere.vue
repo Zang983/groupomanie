@@ -14,7 +14,7 @@
     </h1>
     <ul class="menu_header">
       <li v-on:click="toggleParametre">Paramètres</li>
-      <li v-on:click="showModale">Se déconnecter</li>
+      <li v-on:click="showModale">Déconnexion</li>
     </ul>
   </header>
 </template>

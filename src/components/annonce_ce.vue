@@ -27,6 +27,7 @@
         Envoyer
       </button>
     </div>
+    <div class="liste_message_ce">
     <div class="post_CE" v-for="(annonce, index) of annonceList" :key="index">
       <p class="message_post_ce" v-show="!annonce.editMode">
         {{ annonce.message }}
@@ -59,7 +60,7 @@
           <i class="fa-solid fa-trash-can suppression_ce"></i>
         </button>
       </div>
-    </div>
+    </div></div>
   </div>
 </template>
 

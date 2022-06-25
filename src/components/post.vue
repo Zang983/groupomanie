@@ -5,7 +5,7 @@
       Écrit le : <strong>{{ postDateFr }}</strong>
     </p>
     <!-- Titre de larticle -->
-    <h3 class="titre_post_utilisateur">
+    <h3 class="titre_post_utilisateur" v-bind:title="this.newTitle">
       <span v-show="!modeEdit">{{ this.newTitle }}</span>
       <input
         type="text"
@@ -30,7 +30,7 @@
           alt="Avatar par défaut"
           v-if="avatar === '' || avatar === null"
         />
-        {{ this.author }}
+        <span v-bind:title="this.author">{{ this.author }}</span>
       </div>
       <div class="action_post">
         <button

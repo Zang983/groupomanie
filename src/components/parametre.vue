@@ -1,5 +1,6 @@
 <template>
   <div class="parametre">
+    <button class="fermeture_parametre"><i class="fa-solid fa-xmark" v-on:click="fermeture()"></i></button>
     <div class="header_parametre">
       <div class="avatar_utilisateur_parametre">
         <button class="edition_image" aria-label="Edition image">
@@ -33,7 +34,6 @@
       </div>
       <h2>
         {{ this.prenom }} {{ this.nom }}
-        <i class="fa-solid fa-xmark" v-on:click="fermeture()"></i>
       </h2>
     </div>
 
@@ -45,7 +45,7 @@
         type="tel"
         id="telephone"
         v-model="telephone"
-        autcomplete="new-username"
+        autocomplete="new-username"
       />
       <label for="description">Description :</label>
       <textarea id="description" v-model="description"></textarea>
@@ -142,7 +142,9 @@ export default {
       }
     },
     supprimerCompte() {
-      let token = this.$store.state.token + document.cookie.split("=")[1];
+    if(confirm("Voulez vous supprimer votre compte"))
+    {
+            let token = this.$store.state.token + document.cookie.split("=")[1];
       let requestPath = `http://localhost:3000/api/auth/delete/id=${this.$store.state.idUser}`;
       let corps = {
         userId: this.$store.state.idUser,
@@ -156,6 +158,9 @@ export default {
           this.showModale();
         })
         .catch((error) => console.log(error));
+
+    }
+
     },
     supprimeAvatar() {
       let token = this.$store.state.token + document.cookie.split("=")[1];
