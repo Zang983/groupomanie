@@ -39,7 +39,7 @@ CREATE TABLE `aimer` (
 
 LOCK TABLES `aimer` WRITE;
 /*!40000 ALTER TABLE `aimer` DISABLE KEYS */;
-INSERT INTO `aimer` VALUES (1,2,1),(1,3,0),(2,2,1),(2,3,1);
+INSERT INTO `aimer` VALUES (1,2,1),(1,3,0),(1,4,1),(1,5,0),(1,6,1),(1,7,1),(2,2,1),(2,3,1),(2,5,0),(2,6,1);
 /*!40000 ALTER TABLE `aimer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,9 +56,9 @@ CREATE TABLE `ce` (
   `idUser` int NOT NULL,
   `visible` tinyint DEFAULT '1',
   PRIMARY KEY (`idCE`),
-  KEY `fk_CE_users1` (`idUser`),
-  CONSTRAINT `fk_CE_users1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+  KEY `fk_CE_users1_idx` (`idUser`),
+  CONSTRAINT `fk_CE_users1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `ce` (
 
 LOCK TABLES `ce` WRITE;
 /*!40000 ALTER TABLE `ce` DISABLE KEYS */;
-INSERT INTO `ce` VALUES (1,'Récupération des tickets restaurant !',1,1),(2,'Réduction Parc Astérix !',1,1),(3,'Ceci\n\n\nEST\n\n\nUN\n\n\n\nTEST\n\n\n\nPOUR VOIR LE RENDU',1,1);
+INSERT INTO `ce` VALUES (4,'ohjouh',1,1),(5,'ouhouhouh',1,1),(7,'oulhouhuh',1,1),(8,'iygmiygmiyg\ngiygi\nhyuhgu\nyg\nyigyigiygi gyiug iyg iyg iyg iyg iygi ygiyg iygiy giyg iy g',1,1);
 /*!40000 ALTER TABLE `ce` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`idPost`),
   KEY `fk_posts_users1` (`idUser`),
   CONSTRAINT `fk_posts_users1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `users` (
   `userDescription` text,
   PRIMARY KEY (`idUser`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +193,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','Admin','$2b$10$mmW6qsWepxIIeRQi4YjQQOQtustX/oc2ahvzMxm0/A7tPjJf7FaH6',NULL,NULL,'0100000000','admin@groupomania.fr','00001','Je suis l\'admin du site, n\'hésitez pas à me contacter en cas de bug !!'),(2,'Laura','Clerc','$2b$10$bfQgxx/u2bNk/4asnc2RE.nnSNOsmLyqE76wLCodLN74isaoRs3Cq','http://localhost:3000/images/avatar-femme.png1656034593646.png',NULL,'0100000000','laura.clerc@groupomania.fr','00002','Je suis Laura Clerc, chargée de communication.'),(3,'Daniel','Jack','$2b$10$rzANwsk6yqZ9Lu17e0Fu7u1zqpSTlqPnFPCVIr3eK.v4nZN072O7S','http://localhost:3000/images/2002332-ablack-man-avatar-character-isolated-icon-gratuit-vectoriel.jpg1656035022153.jpg',NULL,'0160997788','jack.daniel@groupomania.fr','00002','Amateur de sensation forte, j\'aime boire un verre ou deux avec mes collègues.'),(4,'Edward','Elric','$2b$10$dT021jAPB/OAIhaGRPwHHugmjwsfWr/HVGhohJDoYSzJ9JaYbfr.C','http://localhost:3000/images/847169448593878462_1491224295.jpg1656035282165.jpg',NULL,'0100000000','elric.edward@groupomania.fr','00002','Coïncidence étrange, mon nom et prénom correspondent au personnage principal d\'un animé hors du commun !');
+INSERT INTO `users` VALUES (1,'Admin','Admin','$2b$10$mmW6qsWepxIIeRQi4YjQQOQtustX/oc2ahvzMxm0/A7tPjJf7FaH6','',NULL,'0100000000','admin@groupomania.fr','00001','Je suis l\'admin du site, n\'hésitez pas à me contacter en cas de bug !!\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nohouh'),(2,'Laura','Clerc','$2b$10$bfQgxx/u2bNk/4asnc2RE.nnSNOsmLyqE76wLCodLN74isaoRs3Cq','http://localhost:3000/images/avatar-femme.png1656034593646.png',NULL,'0100000000','laura.clerc@groupomania.fr','00002','Je suis Laura Clerc, chargée de communication.'),(3,'Daniel','Jack','$2b$10$rzANwsk6yqZ9Lu17e0Fu7u1zqpSTlqPnFPCVIr3eK.v4nZN072O7S','http://localhost:3000/images/2002332-ablack-man-avatar-character-isolated-icon-gratuit-vectoriel.jpg1656035022153.jpg',NULL,'0160997788','jack.daniel@groupomania.fr','00002','Amateur de sensation forte, j\'aime boire un verre ou deux avec mes collègues.'),(4,'Edward','Elric','$2b$10$dT021jAPB/OAIhaGRPwHHugmjwsfWr/HVGhohJDoYSzJ9JaYbfr.C','http://localhost:3000/images/847169448593878462_1491224295.jpg1656035282165.jpg',NULL,'0100000000','elric.edward@groupomania.fr','00002','Coïncidence étrange, mon nom et prénom correspondent au personnage principal d\'un animé hors du commun !');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -206,4 +206,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-24  3:52:41
+-- Dump completed on 2022-06-25  3:49:55
